@@ -1,0 +1,135 @@
+/* public/css/styles.css - Foodly Design System Enhancements */
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Tactile Soft Shadow & Hover Effects */
+.card-shadow {
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-shadow:hover {
+  box-shadow: 0px 12px 32px rgba(170, 55, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+/* Hide scrollbar while keeping scrollability */
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+.hide-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Pulse animation for delivery rider marker on live map */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  80%, 100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Animated dashed delivery path */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+.route-dash-animated {
+  stroke-dasharray: 8 8;
+  animation: dash-flow 1.5s linear infinite;
+}
+
+/* Timeline connecting line */
+.timeline-item {
+  position: relative;
+}
+
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 36px;
+  bottom: -16px;
+  width: 2px;
+  background-color: #e2e8f8;
+  z-index: 1;
+}
+
+.timeline-item.completed:not(:last-child)::after {
+  background-color: #ff5e18;
+}
+
+/* View transitions */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Toast animation */
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-animate {
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Payment panel smooth reveal */
+@keyframes panelReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+}
+
+.payment-method-card [class*="-panel"]:not(.hidden) {
+  animation: panelReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Card number mono font */
+#card-number-input {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em;
+}

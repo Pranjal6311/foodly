@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Tracking - Foodly</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#2aa778",
+                    "primary-fixed": "#ffdbcf",
+                    "on-tertiary-fixed": "#002114",
+                    "on-surface-variant": "#5b4138",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#003422",
+                    "inverse-on-surface": "#ebf1ff",
+                    "on-primary-container": "#551700",
+                    "surface-container": "#e7eefe",
+                    "tertiary-fixed": "#85f8c4",
+                    "on-secondary-fixed": "#141b2b",
+                    "on-background": "#151c27",
+                    "secondary-fixed": "#dce2f7",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#575e70",
+                    "on-surface": "#151c27",
+                    "inverse-surface": "#2a313d",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#dce2f3",
+                    "surface": "#f9f9ff",
+                    "primary-container": "#ff5e18",
+                    "surface-container-high": "#e2e8f8",
+                    "on-primary-fixed": "#380d00",
+                    "tertiary-fixed-dim": "#68dba9",
+                    "surface-tint": "#aa3700",
+                    "outline": "#8f7066",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#c0c6db",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f0f3ff",
+                    "on-secondary-fixed-variant": "#404758",
+                    "on-tertiary-fixed-variant": "#005137",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary": "#ffffff",
+                    "primary": "#aa3700",
+                    "primary-fixed-dim": "#ffb59b",
+                    "background": "#f9f9ff",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#822800",
+                    "on-secondary-container": "#5c6274",
+                    "surface-dim": "#d3daea",
+                    "outline-variant": "#e4beb2",
+                    "tertiary": "#006c4a",
+                    "surface-container-highest": "#dce2f3",
+                    "secondary-container": "#d9dff5",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#ffb59b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "stack-sm": "4px",
+                    "margin-desktop": "64px",
+                    "base": "8px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-sm": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-lg": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-lg": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 23px;
+            top: 24px;
+            bottom: -24px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            80%, 100% { transform: scale(2.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-sans antialiased overflow-x-hidden">
+<!-- Top Navigation Area (Shell) -->
+<header class="bg-surface-container-lowest fixed top-0 w-full z-50 shadow-sm">
+<div class="flex justify-between items-center h-20 px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-display-lg text-headline-md font-extrabold text-primary" href="#">Foodly</a>
+<!-- Desktop Nav Links -->
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95 font-body-md text-body-md" href="#">Browse</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95 font-body-md text-body-md" href="#">Offers</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 font-body-md text-body-md" href="#">Orders</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95 font-body-md text-body-md" href="#">Help</a>
+</nav>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden cursor-pointer hover:ring-2 ring-primary transition-all">
+<img class="w-full h-full object-cover" data-alt="A close up portrait photo of a young professional smiling warmly, with soft natural lighting and a blurred modern office background. High resolution, bright and friendly mood, corporate yet approachable aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSlsdt1B1blUJoRH0rx3Aoh2XA_tQ-amRwXwnmJGeIuug17fC8xB5Yf8dDQyKa3-0USmLAPhoc_zVdh8eNDhOd6Nb6Tfl3RGVzSgSuGiCLhulOFNSLIOXyUWNlZTfyYq87asgTU-tJ5kX1BIIBhXgCxtxMGykj7ekHJlL73NO-PKrxitD0YskG5En6BJfJsoFAHTdsVd12KHn8MBCrvGghlltcvdnFAi_gwu_evu7pn8rW12AOHfHO"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-20 min-h-screen h-screen flex flex-col md:flex-row">
+<!-- Left Side: Map (Sticky/Full Height on Desktop) -->
+<section class="flex-1 relative bg-surface-container-low h-[512px] md:h-auto border-r border-surface-variant/50">
+<!-- Simulated Map Image Location -->
+<img class="w-full h-full object-cover grayscale opacity-90 mix-blend-multiply" data-location="San Francisco" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIbPVXQx0JfimIThXqfc34s0Pn8QDJN3KmoIVZZAczOgAdDeiMVD4iKZgfXGlasB4iFrGFVrDFO9SrmAaVfn5q7h7GoVDxcER9RwNrFy90zcuYNn-fcnCkIOz5jyc3xpHRBDwyGp5t-XF081SLXxZBaJJtk2T-wvXc4zpWh-v5Bnc_cII4gPuJQs1a4eCK5V9mFGjqXjmojfPnlI6RcD6--Aa06YFYN093MB4jfDD4tXavZsTYno3n"/>
+<!-- Map Overlays -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/40 to-transparent"></div>
+<!-- Delivery Partner Marker -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
+<div class="relative">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg relative z-10 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-on-primary" data-icon="directions_bike" style="font-variation-settings: 'FILL' 1;">directions_bike</span>
+</div>
+<div class="absolute inset-0 bg-primary/30 rounded-full pulse-ring -z-10"></div>
+</div>
+<div class="mt-2 bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm border border-surface-variant font-label-sm text-label-sm text-on-surface font-semibold flex items-center gap-1">
+<span>Rahul is 5 mins away</span>
+</div>
+</div>
+<!-- Destination Marker -->
+<div class="absolute top-[40%] left-[65%] flex flex-col items-center">
+<div class="w-8 h-8 bg-surface-container-lowest rounded-full flex items-center justify-center shadow-md border border-surface-variant z-10">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<div class="w-2 h-2 bg-primary rounded-full mt-1"></div>
+</div>
+<!-- Route Line (Decorative SVG) -->
+<svg class="absolute top-0 left-0 w-full h-full pointer-events-none" preserveaspectratio="none">
+<path class="opacity-60" d="M 50% 50% Q 60% 45% 65% 40%" fill="none" stroke="#FF5E18" stroke-dasharray="8 8" stroke-width="4"></path>
+</svg>
+</section>
+<!-- Right Side: Order Status Timeline -->
+<section class="w-full md:w-[480px] lg:w-[540px] bg-surface-container-lowest h-full overflow-y-auto shrink-0 flex flex-col shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.05)] z-20">
+<!-- Header Sticky -->
+<div class="sticky top-0 bg-surface-container-lowest/95 backdrop-blur-sm z-30 p-8 border-b border-surface-variant/50 pt-10">
+<div class="flex items-center gap-3 mb-2">
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant rounded-full font-label-sm text-label-sm">Order #FD-8924</span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-variant"></span>
+<span class="font-label-sm text-label-sm text-secondary">Placed at 12:45 PM</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Arriving in 12-15 min</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Your food is on the way from <span class="font-semibold text-on-surface">Spice Symphony</span>.</p>
+</div>
+<!-- Content Container -->
+<div class="p-8 flex-1 flex flex-col gap-stack-lg">
+<!-- Driver Card -->
+<div class="bg-surface-container-low rounded-xl p-4 flex items-center justify-between border border-surface-variant/30 transition-shadow hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-14 h-14 rounded-full bg-surface-variant overflow-hidden border-2 border-surface-container-lowest shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A portrait photograph of a smiling Indian delivery driver in his 30s wearing an orange uniform polo shirt. The lighting is bright daylight, outdoors, conveying a friendly, reliable, and active mood. The background is slightly blurred." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ460Au19yP2xGEaHbn8Hy1h-E2b-9Cu-YYf1sa-yPRoWkAnWs7n3Ds5RBTu2ynnOwbxAcqFKkXPSrD2Ve6K0fu44rJkMlAxMMROPYYAdeOpRUlTONdJ5IvJRpEkGU7yuolEr5qY3rXG5k-ZhksL4ONf-pwqsNYipslyox3Q9MUdSwTVDLGqDLaLEPaK5keQvCSZbBxt5M3fKm7R-7QHJLmJx_jir9uWKlBtGviLQgmhvHNwiFKd5e"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container text-xs font-bold px-1.5 py-0.5 rounded-md flex items-center shadow-sm border border-surface-container-lowest">
+                                4.9 <span class="material-symbols-outlined text-[10px] ml-0.5" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-semibold">Rahul Sharma</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Honda Activa • DL 3S CB 1234</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-secondary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-surface-tint transition-colors shadow-md shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+</button>
+</div>
+</div>
+<!-- Timeline -->
+<div class="bg-surface-container-lowest rounded-xl p-6 border border-surface-variant/50">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 text-xl">Order Status</h3>
+<div class="relative flex flex-col gap-8">
+<!-- Step 1: Confirmed -->
+<div class="timeline-item relative flex gap-6 z-10 opacity-60">
+<div class="timeline-line flex-shrink-0 flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center z-10 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="pt-2">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Order Confirmed</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Restaurant accepted your order.</p>
+<p class="font-label-sm text-label-sm text-secondary mt-1">12:46 PM</p>
+</div>
+</div>
+<!-- Step 2: Preparing -->
+<div class="timeline-item relative flex gap-6 z-10 opacity-60">
+<div class="timeline-line flex-shrink-0 flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center z-10 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-tertiary" data-icon="soup_kitchen">soup_kitchen</span>
+</div>
+</div>
+<div class="pt-2">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Preparing Food</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Your order is being cooked.</p>
+<p class="font-label-sm text-label-sm text-secondary mt-1">12:50 PM</p>
+</div>
+</div>
+<!-- Step 3: Out for Delivery (Active) -->
+<div class="timeline-item relative flex gap-6 z-10">
+<div class="timeline-line flex-shrink-0 flex flex-col items-center">
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center z-10 shadow-md shadow-primary/20 border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined" data-icon="pedal_bike" style="font-variation-settings: 'FILL' 1;">pedal_bike</span>
+</div>
+<div class="absolute inset-0 bg-primary/20 rounded-full pulse-ring -z-10"></div>
+</div>
+</div>
+<div class="pt-2">
+<h4 class="font-body-md text-body-md font-bold text-primary">Out for Delivery</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Rahul is on the way with your food.</p>
+<p class="font-label-sm text-label-sm text-primary mt-1 font-semibold">Current Status</p>
+</div>
+</div>
+<!-- Step 4: Delivered (Pending) -->
+<div class="timeline-item relative flex gap-6 z-10 opacity-40">
+<div class="timeline-line flex-shrink-0 flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center z-10 border-2 border-surface-container-lowest text-secondary">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+</div>
+</div>
+<div class="pt-2">
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Delivered</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Estimated delivery by 1:15 PM.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Summary Teaser -->
+<div class="mt-auto pt-4 border-t border-surface-variant/50">
+<div class="flex justify-between items-center cursor-pointer hover:bg-surface-container-low p-3 rounded-lg transition-colors -mx-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="receipt_long">receipt_long</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">View Order Details</span>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

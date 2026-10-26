@@ -1,0 +1,3592 @@
+// server/db.js - Real Indian Restaurants & Cafes Store with Geolocation & Rupee Pricing
+const fs = require('fs');
+const path = require('path');
+
+const DB_FILE = path.join(__dirname, 'data.json');
+
+// Haversine formula to compute distance in kilometers between two GPS coordinates
+function computeDistanceKm(lat1, lon1, lat2, lon2) {
+  if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return Math.round(R * c * 10) / 10;
+}
+
+const INITIAL_DATA = {
+  categories: [
+    { id: "biryani", name: "Biryani", icon: "rice_bowl", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80" },
+    { id: "cafe", name: "Cafes & Coffee", icon: "local_cafe", image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80" },
+    { id: "south-indian", name: "South Indian", icon: "bakery_dining", image: "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80" },
+    { id: "north-indian", name: "North Indian", icon: "skillet", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80" },
+    { id: "burgers", name: "Burgers & Fast Food", icon: "lunch_dining", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+    { id: "desserts", name: "Desserts & Shakes", icon: "icecream", image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" },
+    { id: "vrat-special", name: "Navratri Vrat Special", icon: "flare", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80" }
+  ],
+  restaurants: [
+    {
+      "id": "navratri-vrat-rasoi",
+      "name": "Navratri Vrat & Satvik Rasoi 🪔",
+      "type": "restaurant",
+      "headline": "100% Pure Satvik, Sendha Namak & Desi Ghee Vrat Feasts, Kuttu Pooris, and Makhana Delicacies",
+      "rating": 4.9,
+      "reviewsCount": "3.8k+",
+      "deliveryTime": "15-25 min",
+      "priceTier": "₹₹",
+      "priceTierNumeric": 2,
+      "minOrder": 99,
+      "deliveryFee": 0,
+      "cuisines": [
+        "Navratri Vrat Special",
+        "Satvik",
+        "North Indian",
+        "Fasting Feasts"
+      ],
+      "dietary": [
+        "Pure Veg",
+        "Satvik Certified",
+        "No Onion No Garlic",
+        "Sendha Namak"
+      ],
+      "featured": true,
+      "bestseller": true,
+      "isCafe": false,
+      "area": "Campus Gate & Knowledge Park III",
+      "city": "Greater Noida",
+      "lat": 12.9784,
+      "lng": 77.6408,
+      "heroImage": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1200&q=80",
+      "menu": [
+        {
+          "id": "vrat-1",
+          "name": "Shahi Sabudana Khichdi (Desi Ghee)",
+          "category": "Navratri Vrat Specials",
+          "price": 140,
+          "description": "Slow-roasted tapioca pearls cooked in Shahi A2 Desi Ghee with crunchy roasted peanuts, green chilies, curry leaves, and Sendha Namak (Rock Salt).",
+          "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Bestseller", "Vrat Special", "Desi Ghee"],
+          "spicy": false,
+          "veg": true,
+          "isVrat": true
+        },
+        {
+          "id": "vrat-2",
+          "name": "Kuttu Ki Poori with Aloo Rassa (4 Pooris)",
+          "category": "Navratri Vrat Specials",
+          "price": 160,
+          "description": "Crisp puffed buckwheat (kuttu) pooris served with aromatic spiced tomato-potato curry simmered with cumin and Sendha Namak.",
+          "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Must Try", "Vrat Classic"],
+          "spicy": true,
+          "veg": true,
+          "isVrat": true
+        },
+        {
+          "id": "vrat-3",
+          "name": "Crispy Sabudana Vada with Mint Curd Dip (4 Pcs)",
+          "category": "Crispy Vrat Snacks",
+          "price": 130,
+          "description": "Crisp golden patties made of sago pearls, mashed potatoes, crushed peanuts, and fresh coriander served with chilled rock-salt mint curd.",
+          "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Crunchy", "Popular"],
+          "spicy": false,
+          "veg": true,
+          "isVrat": true
+        },
+        {
+          "id": "vrat-4",
+          "name": "Royal Navratri Falhari Maha Thali",
+          "category": "Festive Grand Thalis",
+          "price": 250,
+          "description": "Grand festive meal: 4 Kuttu Pooris, Samak Ke Chawal Pulao, Paneer Makhana Korma, Cucumber Raita, Sabudana Vada, and Singhara Halwa.",
+          "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Royal Feast", "Complete Meal"],
+          "spicy": false,
+          "veg": true,
+          "isVrat": true
+        },
+        {
+          "id": "vrat-5",
+          "name": "Singhara Atta Desi Ghee Halwa",
+          "category": "Satvik Desserts",
+          "price": 120,
+          "description": "Velvety festive halwa made from water chestnut flour, slowly roasted in golden cow ghee, infused with green cardamom and cashews.",
+          "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Sweet", "Desi Ghee"],
+          "spicy": false,
+          "veg": true,
+          "isVrat": true
+        },
+        {
+          "id": "vrat-6",
+          "name": "Shahi Kesar Makhana Kheer with Dry Fruits",
+          "category": "Satvik Desserts",
+          "price": 140,
+          "description": "Rich slow-simmered milk kheer prepared with crunchy puffed lotus seeds, Kashmiri saffron, crushed pistachios, and almonds.",
+          "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Kesar Infused", "High Calcium"],
+          "spicy": false,
+          "veg": true,
+          "isVrat": true
+        },
+        {
+          "id": "vrat-7",
+          "name": "Fresh Tender Coconut Water & Fruit Chaat",
+          "category": "Hydration & Energy",
+          "price": 110,
+          "description": "Pure tender coconut water paired with a bowl of crisp apples, pomegranate seeds, bananas, and Sendha Namak chaat seasoning.",
+          "image": "https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&w=600&q=80",
+          "tags": ["Fresh", "Electrolyte Boost"],
+          "spicy": false,
+          "veg": true,
+          "isVrat": true
+        }
+      ]
+    },
+    {
+        "id": "toit-indiranagar",
+        "name": "Toit Kitchen & Pub",
+        "type": "restaurant",
+        "headline": "Famous wood-fired sourdough pizzas, artisanal burgers, and gourmet comfort food",
+        "rating": 4.8,
+        "reviewsCount": "14k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 250,
+        "deliveryFee": 30,
+        "cuisines": [
+            "Wood-Fired Pizza",
+            "Continental",
+            "Burgers",
+            "Finger Food"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Non-Veg"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "100 Feet Road, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9791,
+        "lng": 77.6405,
+        "heroImage": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Wood-Fired Pizzas",
+            "Appetizers & Wings",
+            "Burgers & Mains"
+        ],
+        "menu": [
+            {
+                "id": "toit-1",
+                "name": "The Toit Tint-in Wood-Fired Pizza (11-inch)",
+                "category": "Wood-Fired Pizzas",
+                "price": 540,
+                "description": "Hand-stretched sourdough crust loaded with smoked barbecue chicken, sun-dried tomatoes, roasted garlic, and melted mozzarella.",
+                "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Signature"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "toit-2",
+                "name": "Tartufo Wild Mushroom Pizza (11-inch)",
+                "category": "Wood-Fired Pizzas",
+                "price": 520,
+                "description": "Shiitake and button mushrooms, truffle essence, caramelized onions, thyme, and fresh buffalo bocconcini mozzarella.",
+                "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Gourmet",
+                    "Veg"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "toit-3",
+                "name": "Firecracker Buffalo Chicken Wings",
+                "category": "Appetizers & Wings",
+                "price": 360,
+                "description": "8 pieces of crispy tossed chicken wings drenched in tangy spicy hot pepper sauce, served with house blue cheese dip.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "toit-4",
+                "name": "Toit Classic Cheesy Nachos Supreme",
+                "category": "Appetizers & Wings",
+                "price": 320,
+                "description": "Crispy house-made corn tortilla chips smothered in warm queso sauce, refried beans, pico de gallo, and sour cream.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Shareable"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "toit-5",
+                "name": "Smoky Tenderloin / Lamb Smash Burger",
+                "category": "Burgers & Mains",
+                "price": 460,
+                "description": "Double seared juicy meat patties, aged English cheddar, crispy onion rings, smoked bacon jam, and brioche bun with fries.",
+                "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Chef Special"
+                ],
+                "spicy": false,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "keventers-indiranagar",
+        "name": "Keventers - The Milkshake Co.",
+        "type": "cafe",
+        "headline": "Serving India's iconic thick dairy shakes, hot chocolates, and sundaes in glass bottles since 1925",
+        "rating": 4.6,
+        "reviewsCount": "5.1k+",
+        "deliveryTime": "15-25 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 120,
+        "deliveryFee": 25,
+        "cuisines": [
+            "Beverages",
+            "Milkshakes",
+            "Desserts",
+            "Cafe"
+        ],
+        "dietary": [
+            "Vegetarian"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": true,
+        "area": "100ft Road, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9772,
+        "lng": 77.642,
+        "heroImage": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Classic Thick Shakes",
+            "Special Shakes",
+            "Hot Beverages"
+        ],
+        "menu": [
+            {
+                "id": "kev-1",
+                "name": "Classic Butterscotch Thick Shake (Medium)",
+                "category": "Classic Thick Shakes",
+                "price": 180,
+                "description": "Rich milkshake blended with real crunchy butterscotch pralines, served in our collectible vintage glass bottle.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "kev-2",
+                "name": "Chocolate Hazelnut Shake (Large)",
+                "category": "Special Shakes",
+                "price": 240,
+                "description": "Thick chocolate and toasted hazelnut blend drizzled with chocolate fudge sauce.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Rich & Creamy"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "kev-3",
+                "name": "Kit-Kat Thick Shake",
+                "category": "Special Shakes",
+                "price": 220,
+                "description": "Crisp Kit-Kat wafer fingers crushed and blended into rich vanilla cream shake with chocolate drizzle.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "kev-4",
+                "name": "Warm Belgian Hot Chocolate",
+                "category": "Hot Beverages",
+                "price": 160,
+                "description": "Steaming cup of pure 54% dark Belgian chocolate melted with whole milk and cocoa.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Cozy"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "meghana-foods",
+        "name": "Meghana Foods",
+        "type": "restaurant",
+        "headline": "Legendary Spicy Andhra Chicken Biryani, Paneer Biryani & Chilly Chicken",
+        "rating": 4.8,
+        "reviewsCount": "12.6k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 199,
+        "deliveryFee": 40,
+        "cuisines": [
+            "Biryani",
+            "Andhra",
+            "North Indian"
+        ],
+        "dietary": [
+            "Halal",
+            "Vegetarian Options"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "CMH Road, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9789,
+        "lng": 77.6385,
+        "heroImage": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Meghana Special Biryanis",
+            "Andhra Starters",
+            "Curries & Rotis",
+            "Accompaniments"
+        ],
+        "menu": [
+            {
+                "id": "mf-1",
+                "name": "Meghana Special Chicken Biryani",
+                "category": "Meghana Special Biryanis",
+                "price": 350,
+                "description": "Signature fragrant basmati rice layered with boneless fried chicken chunks tossed in secret spicy green Andhra masala. Served with rich salan and cooling raita.",
+                "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Cult Classic",
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "mf-2",
+                "name": "Meghana Paneer Dum Biryani",
+                "category": "Meghana Special Biryanis",
+                "price": 310,
+                "description": "Tender paneer cubes marinated in fiery red spices layered with dum-cooked aged basmati rice and golden fried onions.",
+                "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Vegetarian",
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "mf-3",
+                "name": "Andhra Style Chilly Chicken",
+                "category": "Andhra Starters",
+                "price": 330,
+                "description": "Tender chicken cooked with loads of spicy slit green chilies, curry leaves, ginger garlic and crushed pepper.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Extra Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "mf-4",
+                "name": "Butter Naan (2 pcs)",
+                "category": "Curries & Rotis",
+                "price": 90,
+                "description": "Charcoal oven baked soft flatbread layered with salted butter.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Vegetarian"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "khan-saheb-grills",
+        "name": "Khan Saheb Grills & Rolls",
+        "type": "food-cart",
+        "headline": "Popular grill cart specialized in sizzling charcoal tikkas, seekh kebabs, and rumali rolls",
+        "rating": 4.6,
+        "reviewsCount": "4.7k+",
+        "deliveryTime": "20-30 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 70,
+        "deliveryFee": 25,
+        "cuisines": [
+            "Kathi Rolls",
+            "Kebabs",
+            "Street Food",
+            "Mughlai"
+        ],
+        "dietary": [
+            "Halal",
+            "Non-Veg",
+            "Vegetarian Options"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.975,
+        "lng": 77.638,
+        "heroImage": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Charcoal Rolls",
+            "Tikka & Kebabs",
+            "Sides"
+        ],
+        "menu": [
+            {
+                "id": "ks-1",
+                "name": "Double Chicken Double Egg Roll",
+                "category": "Charcoal Rolls",
+                "price": 180,
+                "description": "Crispy pan-fried paratha lined with two eggs, loaded with charcoal-grilled chicken tikka, onions, and tangy chaat masala.",
+                "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Filling"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "ks-2",
+                "name": "Paneer Tikka Roll",
+                "category": "Charcoal Rolls",
+                "price": 150,
+                "description": "Soft cottage cheese cubes marinated in tandoori spices and smoked over coals, rolled in flaky paratha with mint relish.",
+                "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Vegetarian"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ks-3",
+                "name": "Mutton Seekh Kebab (4 Pcs)",
+                "category": "Tikka & Kebabs",
+                "price": 240,
+                "description": "Spiced minced lamb infused with aromatic herbs, skewered and grilled over charcoal embers.",
+                "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Chef Special"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "ks-4",
+                "name": "Malai Chicken Tikka (6 Pcs)",
+                "category": "Tikka & Kebabs",
+                "price": 220,
+                "description": "Boneless chicken marinated in rich clotted cream, cheese, white pepper, and green cardamom, gently char-grilled.",
+                "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Creamy & Mild"
+                ],
+                "spicy": false,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "third-wave-coffee",
+        "name": "Third Wave Coffee",
+        "type": "cafe",
+        "headline": "Artisanal Specialty Roasts, Avocado Toasts, Bagels & Frappes",
+        "rating": 4.8,
+        "reviewsCount": "4.2k+",
+        "deliveryTime": "20-25 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Cafe",
+            "Coffee",
+            "Desserts",
+            "Bakery"
+        ],
+        "dietary": [
+            "Vegetarian Options"
+        ],
+        "featured": true,
+        "bestseller": false,
+        "isCafe": true,
+        "area": "12th Main, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9734,
+        "lng": 77.6432,
+        "heroImage": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Signature Brews",
+            "Cold Coffees & Shakes",
+            "Sandwiches & Croissants",
+            "Desserts"
+        ],
+        "menu": [
+            {
+                "id": "twc-1",
+                "name": "Sea Salt Mocha Frappe",
+                "category": "Cold Coffees & Shakes",
+                "price": 285,
+                "description": "Signature cold espresso blended with dark Belgian chocolate, sea salt flakes, fresh dairy cream, and chocolate drizzle.",
+                "image": "https://images.unsplash.com/photo-1596450514735-2d9f584e3a47?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Chilled"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "twc-2",
+                "name": "Classic Vietnamese Iced Brew",
+                "category": "Signature Brews",
+                "price": 245,
+                "description": "Slow-dripped Arabica dark roast poured over sweet condensed milk and crushed ice.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Strong"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "twc-3",
+                "name": "Tandoori Paneer Sourdough Melt",
+                "category": "Sandwiches & Croissants",
+                "price": 295,
+                "description": "Marinated cottage cheese tossed in tandoori spices, smoked gouda, pickled onion, pressed on artisanal sourdough bread.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Warm & Toasty"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "twc-4",
+                "name": "Warm Belgian Chocolate Brownie with Fudge",
+                "category": "Desserts",
+                "price": 195,
+                "description": "Gooey, rich 70% dark cocoa brownie warmed to perfection with dark chocolate ganache swirl.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "truffles",
+        "name": "Truffles",
+        "type": "cafe",
+        "headline": "Bengaluru's Iconic Burgers, Cheesy Pasta, Loaded Nachos & Thick Shakes",
+        "rating": 4.7,
+        "reviewsCount": "9.2k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Burgers",
+            "Cafe",
+            "American",
+            "Continental"
+        ],
+        "dietary": [
+            "Vegetarian Options"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "Defence Colony, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9715,
+        "lng": 77.641,
+        "heroImage": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Legendary Burgers",
+            "Steaks & Mains",
+            "Sides & Munchies",
+            "Thick Shakes"
+        ],
+        "menu": [
+            {
+                "id": "tf-1",
+                "name": "All American Cheese Burger",
+                "category": "Legendary Burgers",
+                "price": 240,
+                "description": "Juicy grilled minced patty, double molten cheddar, gherkins, grilled onions, house mayo in a toasted sesame bun.",
+                "image": "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "tf-2",
+                "name": "Tandoori Chicken Burger",
+                "category": "Legendary Burgers",
+                "price": 250,
+                "description": "Desi spiced grilled chicken fillet, mint mayo, crunchy lettuce, and sliced red onions.",
+                "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "tf-3",
+                "name": "Peri Peri Cheesy French Fries",
+                "category": "Sides & Munchies",
+                "price": 175,
+                "description": "Crisp potato fries dusted with zesty African bird's eye chili seasoning and poured over with molten cheese sauce.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Vegetarian",
+                    "Cheesy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "tf-4",
+                "name": "Ferrero Rocher Decadence Shake",
+                "category": "Thick Shakes",
+                "price": 220,
+                "description": "Thick hand-churned chocolate hazelnut milkshake blended with whole crushed Ferrero balls and chocolate fudge.",
+                "image": "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Specialty"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "siddhi-vinayaka-chaat",
+        "name": "Siddhi Vinayaka Chaat Cart",
+        "type": "food-cart",
+        "headline": "Legendary neighborhood street food cart serving the crispiest Pani Puri, Sev Puri, and Dahi Puri",
+        "rating": 4.8,
+        "reviewsCount": "3.2k+",
+        "deliveryTime": "15-25 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 49,
+        "deliveryFee": 20,
+        "cuisines": [
+            "Street Food",
+            "Chaat",
+            "Fast Food"
+        ],
+        "dietary": [
+            "Pure Vegetarian"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "12th Main, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.971,
+        "lng": 77.6415,
+        "heroImage": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Crispy Puris",
+            "Special Chaats",
+            "Snack Bites"
+        ],
+        "menu": [
+            {
+                "id": "svc-1",
+                "name": "Special Mineral Water Pani Puri (8 Pcs)",
+                "category": "Crispy Puris",
+                "price": 60,
+                "description": "Ultra-crisp handmade puris stuffed with warm ragda peas & spiced potatoes, filled with cold mint-hing teekha pani & sweet imli chutney.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Crispy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "svc-2",
+                "name": "Royal Dahi Batata Puri (6 Pcs)",
+                "category": "Crispy Puris",
+                "price": 80,
+                "description": "Crispy puris filled with potato filling, drenched in thick sweetened creamy curd, date-tamarind chutney, and fine nylon sev.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Must Try"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "svc-3",
+                "name": "Loaded Mumbai Sev Puri (6 Pcs)",
+                "category": "Special Chaats",
+                "price": 70,
+                "description": "Flat papdis layered with boiled potatoes, finely chopped onions, raw mango, spicy garlic paste, green chutney, and towering sev.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "svc-4",
+                "name": "Bangalore Masala Puri",
+                "category": "Special Chaats",
+                "price": 65,
+                "description": "Crushed puris drowned in steaming hot, fragrant spiced dried green pea gravy, topped with onions, tomatoes, coriander, and crunchy sev.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Local Favorite"
+                ],
+                "spicy": true,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "glens-bakehouse",
+        "name": "Glen's Bakehouse",
+        "type": "cafe",
+        "headline": "Artisanal European bakery cafe world-famous for Red Velvet Cupcakes & sourdough bakes",
+        "rating": 4.7,
+        "reviewsCount": "9.1k+",
+        "deliveryTime": "20-30 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 100,
+        "deliveryFee": 30,
+        "cuisines": [
+            "Bakery",
+            "Cafe",
+            "Desserts",
+            "Italian"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Eggless Options"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9721,
+        "lng": 77.6465,
+        "heroImage": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Signature Cupcakes",
+            "Savoury Bakes & Pastas",
+            "Artisan Cheesecakes",
+            "Beverages"
+        ],
+        "menu": [
+            {
+                "id": "glen-1",
+                "name": "Signature Mini Red Velvet Cupcakes (Pack of 6)",
+                "category": "Signature Cupcakes",
+                "price": 210,
+                "description": "Glen's world-famous soft red sponge cupcakes crowned with a heavenly swirl of tangy cream cheese frosting.",
+                "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Legendary"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "glen-2",
+                "name": "Creamy Truffle Alfredo Penne Pasta",
+                "category": "Savoury Bakes & Pastas",
+                "price": 360,
+                "description": "Penne tossed in silky parmesan cream sauce with sauteed garlic mushrooms, broccoli florets, and toasted garlic sourdough.",
+                "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Comfort Food"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "glen-3",
+                "name": "New York Baked Blueberry Cheesecake Slice",
+                "category": "Artisan Cheesecakes",
+                "price": 240,
+                "description": "Dense, slow-baked Philadelphia cream cheese cake on butter biscuit base, topped with wild Canadian blueberry compote.",
+                "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Must Try"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "glen-4",
+                "name": "Iced Caramel Macchiato",
+                "category": "Beverages",
+                "price": 180,
+                "description": "Double espresso shot poured over chilled milk and Madagascar vanilla syrup, topped with buttery caramel ribbon.",
+                "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Cold Brew"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "fatty-bao-indiranagar",
+        "name": "The Fatty Bao",
+        "type": "restaurant",
+        "headline": "Chic Asian gastrobar offering innovative steamed fluffy baos, craft ramen, and sushi rolls",
+        "rating": 4.7,
+        "reviewsCount": "4.9k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 250,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Asian",
+            "Japanese",
+            "Dim Sum",
+            "Bao"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Non-Veg"
+        ],
+        "featured": true,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "12th Main, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9698,
+        "lng": 77.6425,
+        "heroImage": "https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Signature Baos",
+            "Ramen Bowls",
+            "Dim Sums"
+        ],
+        "menu": [
+            {
+                "id": "fb-1",
+                "name": "Char Siu Pork / Teriyaki Chicken Bao (2 Pcs)",
+                "category": "Signature Baos",
+                "price": 360,
+                "description": "Cloud-soft steamed lotus leaf bao stuffed with sweet glazed meat, pickled cucumbers, scallions, and toasted sesame.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Signature"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "fb-2",
+                "name": "Wild Mushroom & Truffle Dim Sum (4 Pcs)",
+                "category": "Dim Sums",
+                "price": 380,
+                "description": "Steamed crystal dumplings with wild porcini, shiitake mushrooms, water chestnuts, and fragrant truffle oil.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Gourmet",
+                    "Veg"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "fb-3",
+                "name": "Fatty Pho Chicken / Ramen Bowl",
+                "category": "Ramen Bowls",
+                "price": 490,
+                "description": "Slow-simmered aromatic broth, springy wheat noodles, grilled chicken, soft-boiled ajitsuke tamago egg, nori, and bok choy.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hearty Bowl"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "fb-4",
+                "name": "Crispy Fried Tofu Bao (2 Pcs)",
+                "category": "Signature Baos",
+                "price": 320,
+                "description": "Golden fried silken tofu tossed in spicy sriracha glaze with kimchi slaw in steamed fluffy bao buns.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Vegetarian"
+                ],
+                "spicy": true,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "chaayos",
+        "name": "Chaayos",
+        "type": "cafe",
+        "headline": "Custom Meri Wali Chai, Bun Maska, Kulhad Chai & Desi Street Snacks",
+        "rating": 4.6,
+        "reviewsCount": "3.5k+",
+        "deliveryTime": "15-25 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 80,
+        "deliveryFee": 25,
+        "cuisines": [
+            "Cafe",
+            "Tea",
+            "Snacks",
+            "Street Food"
+        ],
+        "dietary": [
+            "Vegetarian",
+            "Pure Veg"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": true,
+        "area": "HAL 2nd Stage, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9692,
+        "lng": 77.6498,
+        "heroImage": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Desi Chai",
+            "Bun Maska & Sandwiches",
+            "Snacks & Munchies"
+        ],
+        "menu": [
+            {
+                "id": "ch-1",
+                "name": "Desi Kulhad Adrak Tulsi Chai",
+                "category": "Desi Chai",
+                "price": 120,
+                "description": "Fresh crushed ginger, tulsi, and premium Assam tea leaves boiled with milk, served hot in an earthen kulhad flask.",
+                "image": "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hot Seller"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ch-2",
+                "name": "Irani Maska Bun with Fruit Jam",
+                "category": "Bun Maska & Sandwiches",
+                "price": 95,
+                "description": "Pillow-soft sweet bun toasted and stuffed with generous slabs of Amul butter and mixed fruit jam.",
+                "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Classic"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ch-3",
+                "name": "Paneer Cheese Loaded Samosa (2 pcs)",
+                "category": "Snacks & Munchies",
+                "price": 130,
+                "description": "Flaky golden samosas stuffed with spiced cottage cheese and mozzarella, served with sweet imli and mint chutney.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Snack"
+                ],
+                "spicy": true,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "corner-house",
+        "name": "Corner House Ice Creams",
+        "type": "cafe",
+        "headline": "Home of the Legendary 'Death by Chocolate' (DBC) & Hot Fudge Sundaes",
+        "rating": 4.9,
+        "reviewsCount": "15.8k+",
+        "deliveryTime": "20-30 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 120,
+        "deliveryFee": 30,
+        "cuisines": [
+            "Desserts",
+            "Ice Cream",
+            "Cafe"
+        ],
+        "dietary": [
+            "Vegetarian"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "Old Airport Road, Kodihalli",
+        "city": "Bengaluru",
+        "lat": 12.9602,
+        "lng": 77.649,
+        "heroImage": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Legendary Sundaes",
+            "Classic Scoops",
+            "Cakes & Pastries"
+        ],
+        "menu": [
+            {
+                "id": "ch-dbc",
+                "name": "Death By Chocolate (DBC)",
+                "category": "Legendary Sundaes",
+                "price": 280,
+                "description": "Generous scoops of vanilla ice cream cushioned between warm dark chocolate sponge, flooded with thick piping hot fudge sauce, topped with honey and roasted peanuts.",
+                "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Legendary",
+                    "Must Try"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ch-hotfudge",
+                "name": "Hot Chocolate Fudge Sundae",
+                "category": "Legendary Sundaes",
+                "price": 210,
+                "description": "Vanilla bean ice cream layered with signature hot melted chocolate fudge and toasted cashew nuts.",
+                "image": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "empire-church-street",
+        "name": "Empire Restaurant",
+        "type": "restaurant",
+        "headline": "Bengaluru's iconic late-night dining hub famous for Empire special chicken kebab & ghee rice",
+        "rating": 4.5,
+        "reviewsCount": "15k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "North Indian",
+            "Mughlai",
+            "Biryani",
+            "Kebabs"
+        ],
+        "dietary": [
+            "Halal"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "Church Street",
+        "city": "Bengaluru",
+        "lat": 12.9748,
+        "lng": 77.6074,
+        "heroImage": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Empire Specials",
+            "Biryani & Rice",
+            "Rolls & Shawarma",
+            "Curries & Breads"
+        ],
+        "menu": [
+            {
+                "id": "emp-1",
+                "name": "Empire Special Chicken Kebab (Bone)",
+                "category": "Empire Specials",
+                "price": 240,
+                "description": "Bengaluru's cult favorite deep-fried crispy chicken kebab coated in secret masala, curry leaves, and lemon squeeze.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "emp-2",
+                "name": "Chicken Dum Biryani with Salan",
+                "category": "Biryani & Rice",
+                "price": 290,
+                "description": "Long-grain fragrant basmati rice slow cooked on dum with succulent marinated chicken, saffron, mint and boiled egg.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "emp-3",
+                "name": "Malabar Ghee Rice with Dalcha",
+                "category": "Biryani & Rice",
+                "price": 180,
+                "description": "Aromatic short grain jeerakasala rice sautéed in pure ghee, caramelized onions, cashews, and golden raisins.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Comfort Food"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "emp-4",
+                "name": "Jumbo Chicken Shawarma Roll",
+                "category": "Rolls & Shawarma",
+                "price": 160,
+                "description": "Vertical-rotisserie carved spiced chicken wrapped in soft rumali roti with pickled veggies and garlic toum sauce.",
+                "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Quick Bite"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "emp-5",
+                "name": "Butter Chicken with 2 Butter Naans",
+                "category": "Curries & Breads",
+                "price": 330,
+                "description": "Tandoori chicken chunks simmered in a velvety makhani gravy enriched with butter, cashew cream, and dried fenugreek.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Chef Special"
+                ],
+                "spicy": false,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "nagarjuna-andhra",
+        "name": "Nagarjuna Andhra Restaurant",
+        "type": "restaurant",
+        "headline": "Unmatched fiery Andhra meals, Gongura mutton, and iconic Guntur chili chicken",
+        "rating": 4.7,
+        "reviewsCount": "8.8k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 200,
+        "deliveryFee": 40,
+        "cuisines": [
+            "Andhra",
+            "South Indian",
+            "Biryani"
+        ],
+        "dietary": [
+            "Halal Available",
+            "Non-Veg",
+            "Vegetarian Options"
+        ],
+        "featured": true,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "Residency Road",
+        "city": "Bengaluru",
+        "lat": 12.9719,
+        "lng": 77.608,
+        "heroImage": "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Signature Andhra Starters",
+            "Andhra Meals & Biryani",
+            "Fiery Curries"
+        ],
+        "menu": [
+            {
+                "id": "nag-1",
+                "name": "Nagarjuna Andhra Chili Chicken",
+                "category": "Signature Andhra Starters",
+                "price": 330,
+                "description": "Juicy chicken bites tossed with split green chillies, garlic, and special Andhra spices. Spicy and intensely flavorful.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Super Spicy",
+                    "Bestseller"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "nag-2",
+                "name": "Authentic Andhra Chicken Biryani",
+                "category": "Andhra Meals & Biryani",
+                "price": 340,
+                "description": "Spicy Andhra style kachi biryani packed with green chili masala, caramelized shallots, served with spicy gravy and raita.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "nag-3",
+                "name": "Gongura Mutton Curry",
+                "category": "Fiery Curries",
+                "price": 420,
+                "description": "Tender goat meat slow-simmered in tangy sorrel leaf (Gongura) paste and traditional coastal Andhra spices.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Must Try"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "nag-4",
+                "name": "Full Andhra Vegetarian Feast Box",
+                "category": "Andhra Meals & Biryani",
+                "price": 260,
+                "description": "Steaming sona masoori rice, authentic Pappu (dal), gunpowder podi, desi ghee, rasam, sambar, curd, and papad.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Pure Veg",
+                    "Hearty"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "savoury-frazer-town",
+        "name": "Savoury Restaurant",
+        "type": "restaurant",
+        "headline": "Iconic Arabian and Mughlai dining hub known for mutton mandi, juicy shawarmas, and grilled chicken",
+        "rating": 4.6,
+        "reviewsCount": "8.2k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Arabian",
+            "Mughlai",
+            "Biryani",
+            "BBQ"
+        ],
+        "dietary": [
+            "Halal",
+            "Non-Veg"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "Frazer Town",
+        "city": "Bengaluru",
+        "lat": 12.9972,
+        "lng": 77.6133,
+        "heroImage": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Arabian Mandi",
+            "Shawarmas & Grills",
+            "Curries"
+        ],
+        "menu": [
+            {
+                "id": "sav-1",
+                "name": "Arabian Chicken Mandi Rice (Special)",
+                "category": "Arabian Mandi",
+                "price": 340,
+                "description": "Fragrant Yemeni spiced basmati rice topped with tender wood-smoked whole chicken thigh, roasted almonds, and spicy tomato dip.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Signature"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "sav-2",
+                "name": "Special Arabian Grilled Chicken (Full)",
+                "category": "Shawarmas & Grills",
+                "price": 440,
+                "description": "Whole tender chicken marinated with Arabic herbs, char-grilled to golden juiciness, served with garlic paste and pita bread.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Juicy"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "sav-3",
+                "name": "Open Plate Chicken Shawarma with Kubbus",
+                "category": "Shawarmas & Grills",
+                "price": 220,
+                "description": "Plate full of juicy rotisserie chicken shreds, pickled turnips, french fries, authentic toum garlic dip, and 2 fresh kubbus.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Filling"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "sav-4",
+                "name": "Mutton Rogan Josh",
+                "category": "Curries",
+                "price": 380,
+                "description": "Kashmiri slow-cooked mutton shank in gravy flavored with alkanet root, ratan jot, and dry ginger.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Rich"
+                ],
+                "spicy": true,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "mainland-china-residency",
+        "name": "Mainland China",
+        "type": "restaurant",
+        "headline": "Premier fine-dining destination for authentic Cantonese, Sichuan, and dim sum masteries",
+        "rating": 4.7,
+        "reviewsCount": "5.4k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 300,
+        "deliveryFee": 40,
+        "cuisines": [
+            "Chinese",
+            "Asian",
+            "Dim Sum"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Non-Veg"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "Church Street / Residency Road",
+        "city": "Bengaluru",
+        "lat": 12.9744,
+        "lng": 77.6052,
+        "heroImage": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Dim Sums",
+            "Main Wok Curries",
+            "Noodles & Rice"
+        ],
+        "menu": [
+            {
+                "id": "mc-1",
+                "name": "Steamed Chicken & Basil Dumplings (6 Pcs)",
+                "category": "Dim Sums",
+                "price": 340,
+                "description": "Translucent crystal wrappers filled with tender chicken mince, Thai basil, and water chestnuts, served with chili dip.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Steamed"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "mc-2",
+                "name": "Crispy Lotus Stem with Honey & Dry Chilli",
+                "category": "Dim Sums",
+                "price": 320,
+                "description": "Thin crispy lotus stem slices wok-tossed in wild honey, scallions, and toasted red Sichuan chilies.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy",
+                    "Veg"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "mc-3",
+                "name": "Hakka Wok Noodles with Shredded Chicken",
+                "category": "Noodles & Rice",
+                "price": 295,
+                "description": "Hand-pulled egg noodles tossed in flaming wok with shredded chicken, crunchy carrots, cabbage, and light soya.",
+                "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Comfort"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "mc-4",
+                "name": "Kung Pao Chicken in Sichuan Pepper Sauce",
+                "category": "Main Wok Curries",
+                "price": 390,
+                "description": "Diced chicken wok-seared with roasted peanuts, Sichuan red chillies, and bell peppers in savory sweet-tangy sauce.",
+                "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "natural-ice-cream",
+        "name": "Natural Ice Cream",
+        "type": "cafe",
+        "headline": "India's favorite 100% natural artisan ice cream made with milk, sugar, and real seasonal fruits",
+        "rating": 4.9,
+        "reviewsCount": "16k+",
+        "deliveryTime": "15-25 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 90,
+        "deliveryFee": 30,
+        "cuisines": [
+            "Ice Cream",
+            "Desserts",
+            "Cafe"
+        ],
+        "dietary": [
+            "100% Vegetarian",
+            "Natural"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "St. Marks Road",
+        "city": "Bengaluru",
+        "lat": 12.9705,
+        "lng": 77.6025,
+        "heroImage": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Seasonal Fruits",
+            "All-Season Classics",
+            "Family Tubs (500ml)"
+        ],
+        "menu": [
+            {
+                "id": "nat-1",
+                "name": "Tender Coconut Ice Cream (Single Scoop)",
+                "category": "All-Season Classics",
+                "price": 85,
+                "description": "The iconic flavor that started it all. Rich creamy base churned with tender coconut malai chunks.",
+                "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Legendary"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "nat-2",
+                "name": "Sitaphal (Custard Apple) Ice Cream Scoop",
+                "category": "Seasonal Fruits",
+                "price": 85,
+                "description": "Made exclusively with hand-pulped seasonal fresh custard apples. Creamy, subtle, and natural.",
+                "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Seasonal Special"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "nat-3",
+                "name": "Alphonso Mango Ice Cream Tub (500ml)",
+                "category": "Family Tubs (500ml)",
+                "price": 330,
+                "description": "Prepared from pure Ratnagiri Alphonso mango pulp. Golden, luscious, and free of any artificial coloring or preservatives.",
+                "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Must Try"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "nat-4",
+                "name": "Roasted Almond Ice Cream Scoop",
+                "category": "All-Season Classics",
+                "price": 85,
+                "description": "Crunchy golden roasted California almond bits folded into smooth dairy ice cream.",
+                "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crunchy"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "sodabottleopenerwala",
+        "name": "SodaBottleOpenerWala",
+        "type": "cafe",
+        "headline": "Quintessential Bombay Irani cafe serving Parsi berry pulao, bun maska, and Irani chai",
+        "rating": 4.6,
+        "reviewsCount": "4.8k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 180,
+        "deliveryFee": 40,
+        "cuisines": [
+            "Parsi",
+            "Irani Cafe",
+            "Street Food"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Non-Veg"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": true,
+        "area": "Lavelle Road",
+        "city": "Bengaluru",
+        "lat": 12.9715,
+        "lng": 77.6012,
+        "heroImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Irani Classics",
+            "Parsi Delicacies",
+            "Beverages"
+        ],
+        "menu": [
+            {
+                "id": "soda-1",
+                "name": "Famous Mutton Berry Pulao",
+                "category": "Parsi Delicacies",
+                "price": 495,
+                "description": "Fragrant basmati rice cooked with succulent boneless mutton pieces, fragrant spices, and tart Iranian zereshk barberries.",
+                "image": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Signature",
+                    "Must Try"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "soda-2",
+                "name": "Authentic Bun Maska with Irani Chai",
+                "category": "Irani Classics",
+                "price": 130,
+                "description": "Puffy sweet round bun slathered with salted Amul butter, paired with slow-brewed spiced condensed milk Irani chai.",
+                "image": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Classic"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "soda-3",
+                "name": "Chicken Baida Roti",
+                "category": "Irani Classics",
+                "price": 275,
+                "description": "Pan-fried flakey paratha envelope stuffed with spiced minced chicken, beaten egg, and fresh green chilies.",
+                "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "soda-4",
+                "name": "Traditional Parsi Lagan Nu Custard",
+                "category": "Parsi Delicacies",
+                "price": 160,
+                "description": "Caramelized Parsi wedding pudding infused with nutmeg, green cardamom, and toasted almond slivers.",
+                "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "airlines-hotel",
+        "name": "Airlines Hotel (Open Air Cafe)",
+        "type": "cafe",
+        "headline": "Legendary open-air drive-in cafe under banyan trees serving Bangalore's best Channa Bhatura",
+        "rating": 4.6,
+        "reviewsCount": "11k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 100,
+        "deliveryFee": 35,
+        "cuisines": [
+            "South Indian",
+            "North Indian Snacks",
+            "Cafe"
+        ],
+        "dietary": [
+            "Pure Vegetarian"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "MG Road / Lavelle Road",
+        "city": "Bengaluru",
+        "lat": 12.9722,
+        "lng": 77.5958,
+        "heroImage": "https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Drive-In Hits",
+            "South Indian Classics",
+            "Juices & Shakes"
+        ],
+        "menu": [
+            {
+                "id": "air-1",
+                "name": "Airlines Special Giant Channa Bhatura",
+                "category": "Drive-In Hits",
+                "price": 180,
+                "description": "Huge puffed golden bhatura served with spicy slow-simmered Punjabi chickpea masala, sliced onions, and green chilli pickle.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Iconic"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "air-2",
+                "name": "Butter Paper Roast Dosa",
+                "category": "South Indian Classics",
+                "price": 120,
+                "description": "Extra crisp paper-thin dosa roasted with generous dollops of butter, served with fragrant sambar and coconut dip.",
+                "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "air-3",
+                "name": "Pav Bhaji (Double Butter)",
+                "category": "Drive-In Hits",
+                "price": 150,
+                "description": "Mashed vegetable curry prepared with special spices, topped with a slab of butter and served with 2 warm toasted pavs.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "air-4",
+                "name": "Fresh Mosambi Sweet Lime Juice",
+                "category": "Juices & Shakes",
+                "price": 90,
+                "description": "Freshly squeezed sweet lime juice with zero added water or sugar, sprinkled with black salt.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Healthy"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "punjab-grill",
+        "name": "Punjab Grill",
+        "type": "restaurant",
+        "headline": "Royal Punjabi Fine Dining: Butter Chicken, Dal Makhani & Dahi Ke Kebab",
+        "rating": 4.8,
+        "reviewsCount": "5.1k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 250,
+        "deliveryFee": 45,
+        "cuisines": [
+            "North Indian",
+            "Mughlai",
+            "Kebabs"
+        ],
+        "dietary": [
+            "Halal",
+            "Vegetarian Options"
+        ],
+        "featured": true,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "Koramangala 5th Block",
+        "city": "Bengaluru",
+        "lat": 12.9352,
+        "lng": 77.6245,
+        "heroImage": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Kebabs & Starters",
+            "Rich Curries",
+            "Clay Oven Breads",
+            "Desserts"
+        ],
+        "menu": [
+            {
+                "id": "pg-1",
+                "name": "Old Delhi Style Butter Chicken",
+                "category": "Rich Curries",
+                "price": 495,
+                "description": "Clay oven roasted boneless tandoori chicken simmered in rich velvety makhani gravy enriched with butter, honey and fenugreek.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Signature Dish"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "pg-2",
+                "name": "Dal Punjab Grill (Dal Makhani)",
+                "category": "Rich Curries",
+                "price": 395,
+                "description": "Black lentils slow-cooked overnight over live charcoal, finished with churned white butter and dairy cream.",
+                "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Legendary",
+                    "Pure Veg"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "pg-3",
+                "name": "Dahi Ke Kebab (6 pcs)",
+                "category": "Kebabs & Starters",
+                "price": 365,
+                "description": "Melt-in-mouth hung curd patties seasoned with cardamom, green chilies, and fresh coriander, pan-fried crisp.",
+                "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Chef Special"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "pg-4",
+                "name": "Garlic Chur Chur Naan",
+                "category": "Clay Oven Breads",
+                "price": 110,
+                "description": "Multi-layered flaky tandoor bread crushed with ghee and roasted garlic flakes.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "blue-tokai",
+        "name": "Blue Tokai Coffee Roasters",
+        "type": "cafe",
+        "headline": "Freshly Roasted Indian Arabica, Cold Brew Bottles, Croissants & Sourdough",
+        "rating": 4.8,
+        "reviewsCount": "3.9k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Cafe",
+            "Coffee",
+            "Bakery",
+            "European"
+        ],
+        "dietary": [
+            "Vegetarian Options"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": true,
+        "area": "Koramangala 4th Block",
+        "city": "Bengaluru",
+        "lat": 12.9341,
+        "lng": 77.6291,
+        "heroImage": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Cold Brews",
+            "Hot Specialty Coffee",
+            "Bakes & Sourdough"
+        ],
+        "menu": [
+            {
+                "id": "bt-1",
+                "name": "Nitro Cold Brew Coffee (Can)",
+                "category": "Cold Brews",
+                "price": 210,
+                "description": "Nitrogen-infused cold-steeped Arabica coffee giving a creamy Guinness-like head and ultra-smooth chocolate notes.",
+                "image": "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Nitro",
+                    "Zero Sugar"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "bt-2",
+                "name": "Butter Almond Croissant",
+                "category": "Bakes & Sourdough",
+                "price": 190,
+                "description": "Flaky 100% French butter croissant filled with frangipane almond cream and toasted sliced almonds.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Freshly Baked"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "social-koramangala",
+        "name": "Koramangala Social",
+        "type": "cafe",
+        "headline": "Vibrant all-day cafe offering quirky Indian street fusions, munchies, and artisan brews",
+        "rating": 4.6,
+        "reviewsCount": "6.2k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Cafe",
+            "Continental",
+            "Modern Indian",
+            "Finger Food"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Non-Veg"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "80 Feet Road, Koramangala",
+        "city": "Bengaluru",
+        "lat": 12.9352,
+        "lng": 77.6245,
+        "heroImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Social Munchies",
+            "Big Plates",
+            "Pao & Sandwiches",
+            "Desserts & Shakes"
+        ],
+        "menu": [
+            {
+                "id": "soc-1",
+                "name": "Butter Chicken Biryani Pao Slider (3 Pcs)",
+                "category": "Pao & Sandwiches",
+                "price": 290,
+                "description": "Soft butter-toasted ladi pavs stuffed with rich pulled butter chicken, crispy onions, and green mint mayonnaise.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "soc-2",
+                "name": "Awadhi Gosht Ki Galouti Kebab",
+                "category": "Social Munchies",
+                "price": 380,
+                "description": "Melt-in-mouth smoked minced lamb kebabs served on mini saffron sheermals with tangy pickled shallots.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Gourmet"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "soc-3",
+                "name": "Chilli Paneer Black Pepper Pepper Box",
+                "category": "Big Plates",
+                "price": 320,
+                "description": "Wok-tossed cottage cheese cubes with scallions, bell peppers, soy reduction, served over spicy egg-fried or veg fried rice.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Fusion"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "soc-4",
+                "name": "Ferrero Rocher & Nutella Thick Shake",
+                "category": "Desserts & Shakes",
+                "price": 240,
+                "description": "Creamy indulgence with roasted hazelnuts, whole Ferrero chocolates, vanilla cream, and melted Belgian chocolate drizzle.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "tibetan-momo-stall",
+        "name": "Tibetan Momo Food Cart",
+        "type": "food-cart",
+        "headline": "Authentic roadside Himalayan food cart serving piping hot steamed and fried momos with fiery red dip",
+        "rating": 4.7,
+        "reviewsCount": "4.1k+",
+        "deliveryTime": "15-25 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 49,
+        "deliveryFee": 20,
+        "cuisines": [
+            "Tibetan",
+            "Momos",
+            "Street Food"
+        ],
+        "dietary": [
+            "Non-Veg",
+            "Vegetarian Options"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "5th Block, Koramangala",
+        "city": "Bengaluru",
+        "lat": 12.936,
+        "lng": 77.622,
+        "heroImage": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Steamed Momos",
+            "Crispy Fried Momos",
+            "Soups"
+        ],
+        "menu": [
+            {
+                "id": "tms-1",
+                "name": "Steamed Chicken Juicy Momos (8 Pcs)",
+                "category": "Steamed Momos",
+                "price": 130,
+                "description": "Thin flour parcels stuffed with spiced minced chicken, scallions, and ginger broth, served with deadly hot red chili garlic chutney.",
+                "image": "https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Juicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "tms-2",
+                "name": "Pan Fried Veg Paneer Momos (8 Pcs)",
+                "category": "Crispy Fried Momos",
+                "price": 120,
+                "description": "Crispy bottom-seared dumplings packed with crumbled paneer, cabbage, onions, and mild spices with creamy mayo dip.",
+                "image": "https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "tms-3",
+                "name": "Kurkure Crunchy Chicken Momos (6 Pcs)",
+                "category": "Crispy Fried Momos",
+                "price": 150,
+                "description": "Momos coated in crispy spiced batter and cornflakes, deep fried for maximum crunch, dusted with peri-peri masala.",
+                "image": "https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Super Crunchy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "tms-4",
+                "name": "Comforting Himalayan Chicken Thukpa",
+                "category": "Soups",
+                "price": 140,
+                "description": "Hot Tibetan noodle soup simmering with shredded chicken, ginger, garlic broth, spring onions, and coriander.",
+                "image": "https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Warm Soup"
+                ],
+                "spicy": false,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "dyu-art-cafe",
+        "name": "DYU Art Cafe",
+        "type": "cafe",
+        "headline": "Peaceful traditional Kerala-style courtyard cafe known for banoffee pie and French toast",
+        "rating": 4.7,
+        "reviewsCount": "7.5k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Cafe",
+            "Continental",
+            "Bakery",
+            "Desserts"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Eggless Options"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": true,
+        "area": "5th Block, Koramangala",
+        "city": "Bengaluru",
+        "lat": 12.9344,
+        "lng": 77.619,
+        "heroImage": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Cafe Favorites",
+            "Artisan Bakery",
+            "Hot & Cold Brews"
+        ],
+        "menu": [
+            {
+                "id": "dyu-1",
+                "name": "Classic Banoffee Pie",
+                "category": "Artisan Bakery",
+                "price": 210,
+                "description": "Buttery graham cracker crust layered with house-made dulce de leche toffee, fresh banana slices, and whipped cream.",
+                "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "dyu-2",
+                "name": "Grilled Chicken & Pesto Panini",
+                "category": "Cafe Favorites",
+                "price": 280,
+                "description": "Herb marinated grilled chicken breast, fresh basil walnut pesto, sundried tomatoes, and melted mozzarella on toasted ciabatta.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Healthy"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "dyu-3",
+                "name": "Cinnamon French Toast with Maple Butter",
+                "category": "Cafe Favorites",
+                "price": 230,
+                "description": "Thick golden brioche soaked in vanilla egg custard, dusted with cinnamon sugar, served with pure butter and maple syrup.",
+                "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Comfort"
+                ],
+                "spicy": false,
+                "veg": false
+            },
+            {
+                "id": "dyu-4",
+                "name": "Cold Brew Tonic with Orange Zest",
+                "category": "Hot & Cold Brews",
+                "price": 190,
+                "description": "16-hour steeped single-origin Chikmagalur Arabica poured over sparkling tonic water and freshly expressed orange oil.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Refreshing"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "barbeque-nation-koramangala",
+        "name": "Barbeque Nation",
+        "type": "restaurant",
+        "headline": "India's pioneer in live-on-table charcoal grills, tandoori marinades, and grand buffets",
+        "rating": 4.6,
+        "reviewsCount": "13k+",
+        "deliveryTime": "35-45 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 250,
+        "deliveryFee": 40,
+        "cuisines": [
+            "Barbecue",
+            "North Indian",
+            "Tandoori",
+            "Kebabs"
+        ],
+        "dietary": [
+            "Halal Available",
+            "Vegetarian Options"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "Koramangala",
+        "city": "Bengaluru",
+        "lat": 12.9348,
+        "lng": 77.6185,
+        "heroImage": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Barbeque Grills",
+            "Biryani & Curries",
+            "Desserts Box"
+        ],
+        "menu": [
+            {
+                "id": "bbq-1",
+                "name": "BBQ Grilled Cajun Spiced Potatoes",
+                "category": "Barbeque Grills",
+                "price": 240,
+                "description": "Baby potatoes parboiled and tossed in fiery Cajun spice rub, topped with creamy mayonnaise drizzle and chopped scallions.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Crispy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "bbq-2",
+                "name": "Tandoori Chicken Tikka Feast (8 Pcs)",
+                "category": "Barbeque Grills",
+                "price": 360,
+                "description": "Tender boneless chicken morsels marinated in spiced curd, mustard oil, and Kashmiri chili, roasted to charred perfection.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Signature"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "bbq-3",
+                "name": "Barbeque Dum Chicken Biryani Box",
+                "category": "Biryani & Curries",
+                "price": 320,
+                "description": "Rich saffron basmati rice layered with juicy BBQ roasted chicken chunks, fried onions, and served with salan and burani raita.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Filling"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "bbq-4",
+                "name": "Hot Angoori Gulab Jamun (8 Pcs)",
+                "category": "Desserts Box",
+                "price": 150,
+                "description": "Bite-sized melt-in-mouth milk solid dumplings dipped in warm saffron-cardamom sugar syrup.",
+                "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "mtr-1924",
+        "name": "Mavalli Tiffin Room (MTR)",
+        "type": "restaurant",
+        "headline": "Bengaluru's legendary heritage tiffin room serving pure ghee classics since 1924",
+        "rating": 4.8,
+        "reviewsCount": "9.5k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 120,
+        "deliveryFee": 35,
+        "cuisines": [
+            "South Indian",
+            "Heritage",
+            "Pure Veg"
+        ],
+        "dietary": [
+            "Pure Vegetarian",
+            "No Onion Garlic Available"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "Lalbagh Road",
+        "city": "Bengaluru",
+        "lat": 12.9553,
+        "lng": 77.5855,
+        "heroImage": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Tiffin Specialties",
+            "Rice Meals",
+            "Sweets & Beverages"
+        ],
+        "menu": [
+            {
+                "id": "mtr-1",
+                "name": "MTR Pure Ghee Masala Dosa",
+                "category": "Tiffin Specialties",
+                "price": 145,
+                "description": "Signature golden brown crispy dosa cooked in pure aromatic desi ghee, served with spiced potato sagu and fresh coconut chutney.",
+                "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Legendary"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "mtr-2",
+                "name": "Steaming Rava Idli with Ghee",
+                "category": "Tiffin Specialties",
+                "price": 95,
+                "description": "Invented by MTR during WWII! Soft semolina cakes infused with mustard seeds, cashews, and coriander, served with melted butter and sagu.",
+                "image": "https://images.unsplash.com/photo-1596450514735-2d9f584e3a47?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Iconic",
+                    "Healthy"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "mtr-3",
+                "name": "Authentic Bisi Bele Bath",
+                "category": "Rice Meals",
+                "price": 130,
+                "description": "Traditional spicy Karnataka rice and lentil mash with garden vegetables, simmered in house-ground spice powder and topped with fried boondi.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "mtr-4",
+                "name": "MTR Special Badam Halwa",
+                "category": "Sweets & Beverages",
+                "price": 110,
+                "description": "Rich and decadent pudding made from California almonds, saffron, cardamom, and generous pure ghee.",
+                "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "mtr-5",
+                "name": "Traditional South Indian Filter Coffee",
+                "category": "Sweets & Beverages",
+                "price": 55,
+                "description": "Decoction brewed fresh from roasted Arabica-Chicory blend, frothed with full-cream milk in brass davarah.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hot Beverage"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "royal-andhra-spice",
+        "name": "Royal Andhra Spice",
+        "type": "restaurant",
+        "headline": "Authentic spice haven delivering fiery Rayalaseema curries, bamboo biryani, and crispy starters",
+        "rating": 4.5,
+        "reviewsCount": "3.8k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Andhra",
+            "Biryani",
+            "South Indian"
+        ],
+        "dietary": [
+            "Halal",
+            "Non-Veg"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "Marathahalli",
+        "city": "Bengaluru",
+        "lat": 12.9566,
+        "lng": 77.7009,
+        "heroImage": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Fiery Starters",
+            "Special Biryanis",
+            "Curries"
+        ],
+        "menu": [
+            {
+                "id": "ras-1",
+                "name": "Guntur Chilli Chicken",
+                "category": "Fiery Starters",
+                "price": 270,
+                "description": "Succulent chicken cooked with hand-pounded Guntur red and green chillies, curry leaves, and ginger.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hot & Spicy",
+                    "Bestseller"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "ras-2",
+                "name": "Royal Hyderabadi Dum Biryani",
+                "category": "Special Biryanis",
+                "price": 280,
+                "description": "Fragrant saffron rice layered with tender meat marinated overnight in spices, mint, and curd, steamed in sealed deg.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Aromatic"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "ras-3",
+                "name": "Rayalaseema Mutton Fry",
+                "category": "Fiery Starters",
+                "price": 360,
+                "description": "Tender boneless mutton pieces slow roasted dry on cast iron with coconut shavings, peppercorns, and garlic.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Chef Special"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "ras-4",
+                "name": "Paneer Sholay Kebab",
+                "category": "Fiery Starters",
+                "price": 230,
+                "description": "Crispy paneer strips tossed in a fiery yoghurt-based spicy red sauce with curry leaves and mustard seeds.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Veg Delight"
+                ],
+                "spicy": true,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "tossin-pizza",
+        "name": "Tossin Pizza",
+        "type": "restaurant",
+        "headline": "Signature Gourmet Pizzas, Peri Peri Chicken & Truffle Mushroom Crusts",
+        "rating": 4.7,
+        "reviewsCount": "2.8k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹₹",
+        "priceTierNumeric": 3,
+        "minOrder": 299,
+        "deliveryFee": 40,
+        "cuisines": [
+            "Pizza",
+            "Italian",
+            "Fast Food"
+        ],
+        "dietary": [
+            "Vegetarian Options"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "HSR Layout Sector 1",
+        "city": "Bengaluru",
+        "lat": 12.9121,
+        "lng": 77.6446,
+        "heroImage": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Gourmet Pizzas",
+            "Pasta & Sides",
+            "Beverages"
+        ],
+        "menu": [
+            {
+                "id": "tp-1",
+                "name": "Peri Peri Chicken Gourmet Pizza (11-inch)",
+                "category": "Gourmet Pizzas",
+                "price": 520,
+                "description": "Spiced peri peri chicken, roasted bell peppers, red paprika, mozzarella and spicy garlic drizzle on thin sourdough crust.",
+                "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "tp-2",
+                "name": "Exotic Truffle Mushroom Pizza (11-inch)",
+                "category": "Gourmet Pizzas",
+                "price": 490,
+                "description": "Sauteed button and shiitake mushrooms, thyme, white truffle oil, caramelized onions, and aged parmesan.",
+                "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Vegetarian"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "chulha-chauki-hsr",
+        "name": "Chulha Chauki Da Dhaba",
+        "type": "restaurant",
+        "headline": "Rustic highway dhaba experience with smoky tandoori naans, dal makhani, and clay pot curries",
+        "rating": 4.5,
+        "reviewsCount": "5.7k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹₹",
+        "priceTierNumeric": 2,
+        "minOrder": 150,
+        "deliveryFee": 35,
+        "cuisines": [
+            "North Indian",
+            "Punjabi",
+            "Dhaba",
+            "Tandoori"
+        ],
+        "dietary": [
+            "Vegetarian Options",
+            "Non-Veg"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "HSR Layout",
+        "city": "Bengaluru",
+        "lat": 12.9121,
+        "lng": 77.6445,
+        "heroImage": "https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Dhaba Curries",
+            "Tandoor Breads",
+            "Tandoori Starters"
+        ],
+        "menu": [
+            {
+                "id": "ccd-1",
+                "name": "Authentic Dal Makhani (Slow-Cooked Overnight)",
+                "category": "Dhaba Curries",
+                "price": 240,
+                "description": "Black urad lentils and kidney beans slow simmered for 18 hours with tomatoes, cream, and fresh white butter.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Pure Veg"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ccd-2",
+                "name": "Dhaba Style Kadhai Paneer",
+                "category": "Dhaba Curries",
+                "price": 290,
+                "description": "Fresh cottage cheese cubes tossed with chunky bell peppers, onions, and freshly roasted coriander-cumin spice masala.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "ccd-3",
+                "name": "Butter Garlic Naan",
+                "category": "Tandoor Breads",
+                "price": 65,
+                "description": "Clay oven baked flatbread brushed with garlic butter and fresh coriander.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hot Bread"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ccd-4",
+                "name": "Tandoori Murgh (Half)",
+                "category": "Tandoori Starters",
+                "price": 290,
+                "description": "Half chicken marinated in yogurt, Kashmiri chilli, and house-ground garam masala, roasted over glowing coals.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Smoky"
+                ],
+                "spicy": true,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "vv-puram-street-cart",
+        "name": "Shri Vasavi VV Puram Food Cart",
+        "type": "food-cart",
+        "headline": "Iconic VV Puram food street stall known for hot Paddus, Akki Rotti, and melting Ghee Dosas",
+        "rating": 4.8,
+        "reviewsCount": "6.3k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 49,
+        "deliveryFee": 30,
+        "cuisines": [
+            "Street Food",
+            "South Indian",
+            "Karnataka Specials"
+        ],
+        "dietary": [
+            "Pure Vegetarian"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "VV Puram Food Street",
+        "city": "Bengaluru",
+        "lat": 12.9515,
+        "lng": 77.5772,
+        "heroImage": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Karnataka Street Hits",
+            "Tawa Specials",
+            "Sweets"
+        ],
+        "menu": [
+            {
+                "id": "vv-1",
+                "name": "Crispy Hot Gully Paddu / Appe (8 Pcs)",
+                "category": "Karnataka Street Hits",
+                "price": 70,
+                "description": "Golden crisp bite-sized dumplings made from fermented batter, onions, curry leaves, and green chillies, served with coconut chutney.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Local Favorite"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "vv-2",
+                "name": "Authentic Karnataka Akki Rotti (2 Pcs)",
+                "category": "Tawa Specials",
+                "price": 80,
+                "description": "Hand-patted rice flour flatbread loaded with grated carrots, onions, dill leaves, and cumin, griddled with butter, served with Yennegai brinjal curry.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Authentic"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "vv-3",
+                "name": "Gulkand Ice Cream with Butter",
+                "category": "Sweets",
+                "price": 90,
+                "description": "VV Puram's legendary street dessert: sweet rose petal preserve (gulkand), freshly chopped bananas, butter, and vanilla scoop.",
+                "image": "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Viral Dessert"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "vv-4",
+                "name": "Congress Kadlekai Masala",
+                "category": "Karnataka Street Hits",
+                "price": 45,
+                "description": "Spicy roasted split peanuts tossed with fresh grated carrots, onions, coriander, green chili, and lemon juice.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crunchy Snack"
+                ],
+                "spicy": true,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "donne-biryani-jayanagar",
+        "name": "Donne Biryani Mane",
+        "type": "restaurant",
+        "headline": "Traditional Karnataka Donne Biryani made with short grain Seeraga Samba rice & mint-coriander masala",
+        "rating": 4.6,
+        "reviewsCount": "6.9k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 100,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Biryani",
+            "Karnataka",
+            "South Indian"
+        ],
+        "dietary": [
+            "Non-Veg",
+            "Halal"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "Jayanagar 4th Block",
+        "city": "Bengaluru",
+        "lat": 12.9254,
+        "lng": 77.5938,
+        "heroImage": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Donne Biryanis",
+            "Military Hotel Starters",
+            "Sides"
+        ],
+        "menu": [
+            {
+                "id": "donne-1",
+                "name": "Special Chicken Donne Biryani",
+                "category": "Donne Biryanis",
+                "price": 210,
+                "description": "Served traditionally in dried plantain leaf cup (donne). Fragrant Seeraga Samba rice infused with green chilli, coriander, and native chicken.",
+                "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Iconic"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "donne-2",
+                "name": "Mutton Donne Biryani",
+                "category": "Donne Biryanis",
+                "price": 290,
+                "description": "Tender goat meat slow cooked with herbal spices, ghee, and seasoned rice packed in aromatic leaf donne.",
+                "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Chef Special"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "donne-3",
+                "name": "Chicken Kshatriya Kebab",
+                "category": "Military Hotel Starters",
+                "price": 190,
+                "description": "Crispy fried boneless chicken bites seasoned with crushed peppercorns and curry leaves.",
+                "image": "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "donne-4",
+                "name": "Karnataka Style Egg Bonda (4 Pcs)",
+                "category": "Military Hotel Starters",
+                "price": 90,
+                "description": "Hard-boiled eggs dipped in spiced gram flour batter and deep fried until golden and crisp.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Street Food"
+                ],
+                "spicy": false,
+                "veg": false
+            }
+        ]
+    },
+    {
+        "id": "hari-super-sandwich",
+        "name": "Hari Super Sandwich Cart",
+        "type": "food-cart",
+        "headline": "Home of Bangalore's famous Chocolate Cheese Sandwich, Chilli Cheese Toast, and loaded bread rolls",
+        "rating": 4.7,
+        "reviewsCount": "5.8k+",
+        "deliveryTime": "20-30 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 49,
+        "deliveryFee": 25,
+        "cuisines": [
+            "Street Food",
+            "Sandwiches",
+            "Fast Food"
+        ],
+        "dietary": [
+            "Pure Vegetarian"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "3rd Block, Jayanagar",
+        "city": "Bengaluru",
+        "lat": 12.9308,
+        "lng": 77.5839,
+        "heroImage": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Signature Grilled Sandwiches",
+            "Cheese Delights",
+            "Beverages"
+        ],
+        "menu": [
+            {
+                "id": "hss-1",
+                "name": "Hari Special Chocolate Cheese Grilled Sandwich",
+                "category": "Signature Grilled Sandwiches",
+                "price": 90,
+                "description": "The viral creation! Three slices of bread loaded with decadent Cadbury dairy milk chocolate bars and melted Amul cheddar cheese.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Viral",
+                    "Sweet & Savory"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "hss-2",
+                "name": "Spicy Chilli Cheese Toast",
+                "category": "Cheese Delights",
+                "price": 80,
+                "description": "Open toasted bread smothered in green chillies, capsicum, secret spice blend, and bubbling golden baked cheese.",
+                "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Spicy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "hss-3",
+                "name": "Veg Cheese Dahi Toast Sandwich",
+                "category": "Signature Grilled Sandwiches",
+                "price": 85,
+                "description": "Golden grilled sandwich stuffed with potato bhaji, onions, cucumbers, grated cheese, and crowned with spiced dahi and sev.",
+                "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "hss-4",
+                "name": "Rose Milk with Basil Seeds",
+                "category": "Beverages",
+                "price": 50,
+                "description": "Chilled sweetened milk flavored with rose syrup and soaked sabja seeds.",
+                "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Refreshing"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "sairams-chaat-cart",
+        "name": "Sri Sairam's Chaat Cart",
+        "type": "food-cart",
+        "headline": "Malleshwaram's iconic street food cart famous for quirky wafers chaat, disco chaat, and crazy masala puris",
+        "rating": 4.8,
+        "reviewsCount": "4.5k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 49,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Street Food",
+            "Chaat",
+            "Fast Food"
+        ],
+        "dietary": [
+            "Pure Vegetarian"
+        ],
+        "featured": false,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "Margosa Road, Malleshwaram",
+        "city": "Bengaluru",
+        "lat": 13.0035,
+        "lng": 77.571,
+        "heroImage": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Quirky Chaats",
+            "Signature Masala Puris",
+            "Special Plates"
+        ],
+        "menu": [
+            {
+                "id": "ssc-1",
+                "name": "Famous Sairam Chips / Wafers Masala",
+                "category": "Quirky Chaats",
+                "price": 65,
+                "description": "Potato salted chips crushed and tossed with green spicy chutney, sweet dates sauce, onions, tomatoes, and coriander.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Crunchy"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "ssc-2",
+                "name": "Crazy Disco Chaat",
+                "category": "Quirky Chaats",
+                "price": 75,
+                "description": "Special medley of boondi, roasted peanuts, sev, sweet-sour chutneys, and spiced peas curry.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Popular"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "ssc-3",
+                "name": "Timepass Dahi Sev Puri",
+                "category": "Special Plates",
+                "price": 70,
+                "description": "Puffed puri shells filled with seasoned mashed potatoes, cold whisked curd, and tangy tamarind syrup.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Refreshing"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "ssc-4",
+                "name": "Malleshwaram Masala Puri",
+                "category": "Signature Masala Puris",
+                "price": 60,
+                "description": "Steaming hot spicy green pea gravy poured over crispy puris with chopped onions and grated carrot.",
+                "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Local Hit"
+                ],
+                "spicy": true,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "vidyarthi-bhavan",
+        "name": "Vidyarthi Bhavan",
+        "type": "restaurant",
+        "headline": "Iconic 1943 tiffin hall famous across India for golden-crust crispy butter dosas",
+        "rating": 4.9,
+        "reviewsCount": "12k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 90,
+        "deliveryFee": 40,
+        "cuisines": [
+            "South Indian",
+            "Breakfast",
+            "Snacks"
+        ],
+        "dietary": [
+            "Pure Vegetarian"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": false,
+        "area": "Gandhi Bazaar, Basavanagudi",
+        "city": "Bengaluru",
+        "lat": 12.9439,
+        "lng": 77.5739,
+        "heroImage": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Legendary Tiffins",
+            "Crispy Snacks",
+            "Beverages"
+        ],
+        "menu": [
+            {
+                "id": "vb-1",
+                "name": "VB Special Crispy Masala Dosa",
+                "category": "Legendary Tiffins",
+                "price": 90,
+                "description": "Thick, crunchy golden exterior with fluffy soft interior, red chutney smear and savoury potato bhaji. Slathered with artisanal butter.",
+                "image": "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Must Try"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "vb-2",
+                "name": "Crispy Medu Vada (2 Pcs)",
+                "category": "Crispy Snacks",
+                "price": 65,
+                "description": "Golden fried lentil doughnuts seasoned with black peppercorns, ginger, and curry leaves. Crunchy outside, cloud-soft inside.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "vb-3",
+                "name": "Poori Saagu Set (3 Pcs)",
+                "category": "Legendary Tiffins",
+                "price": 85,
+                "description": "Puffy golden whole wheat pooris served with mild aromatic vegetable saagu and spicy spiced coconut chutney.",
+                "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Filling"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "vb-4",
+                "name": "Chow Chow Bath",
+                "category": "Legendary Tiffins",
+                "price": 80,
+                "description": "The classic duo: sweet Kesari Bath flavored with pineapple and saffron alongside savoury Khara Bath packed with roasted spices.",
+                "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Signature"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "vb-5",
+                "name": "Strong Degree Filter Coffee",
+                "category": "Beverages",
+                "price": 45,
+                "description": "Freshly brewed heritage South Indian filter coffee with frothy golden crema.",
+                "image": "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hot Drink"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "brahmins-coffee-bar",
+        "name": "Brahmin's Coffee Bar",
+        "type": "cafe",
+        "headline": "1965 legendary standing breakfast bar famed for melt-in-mouth soft idlis and signature coconut chutney",
+        "rating": 4.9,
+        "reviewsCount": "14.5k+",
+        "deliveryTime": "25-35 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 60,
+        "deliveryFee": 35,
+        "cuisines": [
+            "South Indian",
+            "Breakfast",
+            "Cafe"
+        ],
+        "dietary": [
+            "Pure Vegetarian",
+            "No Onion Garlic"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "Shankarapura, Basavanagudi",
+        "city": "Bengaluru",
+        "lat": 12.954,
+        "lng": 77.569,
+        "heroImage": "https://images.unsplash.com/photo-1596450514735-2d9f584e3a47?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Classic Tiffins",
+            "Crispy Vada",
+            "Hot Beverages"
+        ],
+        "menu": [
+            {
+                "id": "bcb-1",
+                "name": "Steamed Button Idli (2 Pcs) with Unlimited Chutney",
+                "category": "Classic Tiffins",
+                "price": 50,
+                "description": "Super soft, pillow-textured steamed idlis served swimming in Brahmin's iconic fresh green coconut-mint chutney.",
+                "image": "https://images.unsplash.com/photo-1596450514735-2d9f584e3a47?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Legendary"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "bcb-2",
+                "name": "Crispy Uddin Vada (1 Pc)",
+                "category": "Crispy Vada",
+                "price": 40,
+                "description": "Hot crispy deep fried medu vada with black pepper and ginger bits, served with signature water-chutney.",
+                "image": "https://images.unsplash.com/photo-1596450514735-2d9f584e3a47?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Extra Crispy"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "bcb-3",
+                "name": "Brahmin's Pineapple Kesari Bath",
+                "category": "Classic Tiffins",
+                "price": 45,
+                "description": "Sweet semolina halwa cooked in pure ghee, studded with pineapple chunks, cashews, and saffron.",
+                "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Sweet"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "bcb-4",
+                "name": "Hot Filter Coffee",
+                "category": "Hot Beverages",
+                "price": 35,
+                "description": "Traditional south Indian chicory coffee frothed with boiling whole milk.",
+                "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Hot Drink"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "rolls-king-whitefield",
+        "name": "Rolls King Food Cart",
+        "type": "food-cart",
+        "headline": "Fast & crunchy Kolkata style kathi rolls with flaky lachha parathas and savory fillings",
+        "rating": 4.5,
+        "reviewsCount": "3.6k+",
+        "deliveryTime": "30-40 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 60,
+        "deliveryFee": 35,
+        "cuisines": [
+            "Kathi Rolls",
+            "Street Food",
+            "Fast Food"
+        ],
+        "dietary": [
+            "Non-Veg",
+            "Vegetarian Options"
+        ],
+        "featured": false,
+        "bestseller": false,
+        "isCafe": false,
+        "area": "ITPL Main Road, Whitefield",
+        "city": "Bengaluru",
+        "lat": 12.9698,
+        "lng": 77.7499,
+        "heroImage": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Classic Rolls",
+            "Egg & Chicken Rolls",
+            "Paneer & Soya Rolls"
+        ],
+        "menu": [
+            {
+                "id": "rk-1",
+                "name": "Kolkata Egg Chicken Kathi Roll",
+                "category": "Egg & Chicken Rolls",
+                "price": 150,
+                "description": "Flaky paratha coated with an egg, stuffed with spiced juicy chicken tikkas, sliced onions, lime juice, and green chillies.",
+                "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "rk-2",
+                "name": "Chilli Paneer Spicy Roll",
+                "category": "Paneer & Soya Rolls",
+                "price": 130,
+                "description": "Golden griddled cottage cheese tossed in Indo-Chinese chili sauce wrapped in a flaky handmade paratha.",
+                "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Spicy",
+                    "Veg"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "rk-3",
+                "name": "Double Mutton Bhuna Roll",
+                "category": "Classic Rolls",
+                "price": 220,
+                "description": "Slow-roasted tender minced lamb cooked with roasted spices, stuffed in twin-egg coated lachha paratha.",
+                "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Rich & Savory"
+                ],
+                "spicy": true,
+                "veg": false
+            },
+            {
+                "id": "rk-4",
+                "name": "Chatpata Aloo Cheese Roll",
+                "category": "Classic Rolls",
+                "price": 110,
+                "description": "Crispy spiced potato hash with melting cheese slice and green mint spread in toasted bread roll.",
+                "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Quick Bite"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    },
+    {
+        "id": "rameshwaram-cafe",
+        "name": "The Rameshwaram Cafe",
+        "type": "cafe",
+        "headline": "Iconic Ghee Podi Idlis, Crispy Masala Dosa & Pure Filter Coffee",
+        "rating": 4.9,
+        "reviewsCount": "8.4k+",
+        "deliveryTime": "15-20 min",
+        "priceTier": "₹",
+        "priceTierNumeric": 1,
+        "minOrder": 99,
+        "deliveryFee": 30,
+        "cuisines": [
+            "South Indian",
+            "Cafe",
+            "Breakfast",
+            "Snacks"
+        ],
+        "dietary": [
+            "Vegetarian",
+            "Pure Veg"
+        ],
+        "featured": true,
+        "bestseller": true,
+        "isCafe": true,
+        "area": "100 Feet Rd, Indiranagar",
+        "city": "Bengaluru",
+        "lat": 12.9784,
+        "lng": 77.6408,
+        "heroImage": "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=1200&q=80",
+        "menuCategories": [
+            "Signature Specials",
+            "Dosas",
+            "Idli & Vada",
+            "Hot Filter Beverages"
+        ],
+        "menu": [
+            {
+                "id": "rc-1",
+                "name": "Ghee Thatte Podi Idli (2 pcs)",
+                "category": "Signature Specials",
+                "price": 135,
+                "description": "Ultra-soft, thick Karnataka style plate idlis drenched in pure organic desi ghee and fiery gun powder podi. Served with 3 rich chutneys.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Bestseller",
+                    "Pure Desi Ghee"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "rc-2",
+                "name": "Open Butter Masala Dosa",
+                "category": "Dosas",
+                "price": 165,
+                "description": "Crispy golden fermented rice crepe smeared with spiced red chutney, topped with spiced aloo palya and generous dollops of white butter.",
+                "image": "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Must Try"
+                ],
+                "spicy": true,
+                "veg": true
+            },
+            {
+                "id": "rc-3",
+                "name": "Crispy Medu Vada with Sambar (2 pcs)",
+                "category": "Idli & Vada",
+                "price": 110,
+                "description": "Deep-fried golden lentil donuts, crunchy on the outside, fluffy inside, served with hot aromatic drumstick sambar and coconut chutney.",
+                "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Crispy",
+                    "Popular"
+                ],
+                "spicy": false,
+                "veg": true
+            },
+            {
+                "id": "rc-4",
+                "name": "Authentic Kumbakonam Degree Filter Coffee",
+                "category": "Hot Filter Beverages",
+                "price": 55,
+                "description": "Traditional South Indian frothy chicory-blended decoction frothed high with thick boiling farm milk in brass tumbler dabarah.",
+                "image": "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+                "tags": [
+                    "Signature"
+                ],
+                "spicy": false,
+                "veg": true
+            }
+        ]
+    }
+  ],
+  coupons: [
+    { code: "NAVRATRI25", discountPercent: 25, maxDiscount: 120, minOrder: 149, description: "🪔 Shubh Navratri! 25% OFF up to ₹120 on all Vrat & Satvik Feasts" },
+    { code: "VRATFREE", discountDelivery: true, minOrder: 99, description: "🪔 Free Delivery on All Navratri Fasting Specials & Thalis" },
+    { code: "JAYMATADI30", discountPercent: 30, maxDiscount: 150, minOrder: 199, description: "✨ Jai Mata Di! 30% OFF Special Festival Gift Coupon" },
+    { code: "DESI50", discountPercent: 50, maxDiscount: 100, minOrder: 199, description: "50% OFF up to ₹100 on orders above ₹199" },
+    { code: "FREEDEL", discountDelivery: true, minOrder: 149, description: "Free Delivery on orders above ₹149" },
+    { code: "FLAT100", discountPercent: 0, flatDiscount: 100, minOrder: 399, description: "Flat ₹100 OFF on feasts above ₹399" }
+  ],
+  orders: [
+    {
+      id: "FD-8924",
+      createdAt: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
+      restaurantId: "rameshwaram-cafe",
+      restaurantName: "The Rameshwaram Cafe",
+      status: "out_for_delivery",
+      statusText: "Rahul is arriving in 5 mins on his scooter",
+      estimatedDelivery: "5-8 min",
+      deliveryAddress: "Flat 402, Sunrise Towers, 100 Feet Rd, Indiranagar, Bengaluru",
+      driver: {
+        name: "Rahul Sharma",
+        phone: "+91 98765 43210",
+        rating: 4.9,
+        deliveriesCount: "1,240+",
+        photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJ460Au19yP2xGEaHbn8Hy1h-E2b-9Cu-YYf1sa-yPRoWkAnWs7n3Ds5RBTu2ynnOwbxAcqFKkXPSrD2Ve6K0fu44rJkMlAxMMROPYYAdeOpRUlTONdJ5IvJRpEkGU7yuolEr5qY3rXG5k-ZhksL4ONf-pwqsNYipslyox3Q9MUdSwTVDLGqDLaLEPaK5keQvCSZbBxt5M3fKm7R-7QHJLmJx_jir9uWKlBtGviLQgmhvHNwiFKd5e",
+        vehicle: "Honda Activa Scooter (KA-03-EX-9921)",
+        plate: "KA-03-EX-9921"
+      },
+      items: [
+        { id: "rc-1", name: "Ghee Thatte Podi Idli (2 pcs)", price: 135, quantity: 2 },
+        { id: "rc-4", name: "Authentic Kumbakonam Degree Filter Coffee", price: 55, quantity: 2 }
+      ],
+      bill: {
+        subtotal: 380,
+        deliveryFee: 30,
+        taxes: 19,
+        discount: 0,
+        total: 429
+      },
+      paymentMethod: "Google Pay (UPI)"
+    }
+  ]
+};
+
+class Database {
+  constructor() {
+    this.data = INITIAL_DATA;
+    this.load();
+  }
+
+  load() {
+    try {
+      // Overwrite/refresh data to ensure updated coordinates and rupees are present
+      this.data = INITIAL_DATA;
+      this.save();
+    } catch (e) {
+      console.warn("Using in-memory seed data:", e.message);
+    }
+  }
+
+  save() {
+    try {
+      fs.writeFileSync(DB_FILE, JSON.stringify(this.data, null, 2), 'utf8');
+    } catch (e) {
+      console.error("Could not persist database:", e.message);
+    }
+  }
+
+  getRestaurants(filters = {}) {
+    let list = [...this.data.restaurants];
+
+    // Reference coordinates for distance calculation
+    const userLat = parseFloat(filters.lat) || 12.9784; // Default Indiranagar, Bengaluru
+    const userLng = parseFloat(filters.lng) || 77.6408;
+
+    // Attach calculated distance to each restaurant
+    list = list.map(r => {
+      const dist = computeDistanceKm(userLat, userLng, r.lat, r.lng);
+      return {
+        ...r,
+        distanceKm: dist,
+        distanceText: dist !== null ? `${dist} km` : 'Near you',
+        isNearby: dist !== null ? dist <= 30.0 : false
+      };
+    });
+
+    if (filters.q) {
+      const q = filters.q.toLowerCase().trim();
+      list = list.filter(r => 
+        r.name.toLowerCase().includes(q) ||
+        r.headline.toLowerCase().includes(q) ||
+        r.area.toLowerCase().includes(q) ||
+        r.cuisines.some(c => c.toLowerCase().includes(q)) ||
+        r.menu.some(m => m.name.toLowerCase().includes(q) || m.description.toLowerCase().includes(q))
+      );
+    }
+
+    if (filters.type) {
+      list = list.filter(r => r.type === filters.type);
+    }
+
+    if (filters.cuisine) {
+      const c = filters.cuisine.toLowerCase().replace(/-/g, ' ');
+      list = list.filter(r =>
+        r.cuisines.some(item => item.toLowerCase().includes(c) || c.includes(item.toLowerCase())) ||
+        (r.type && r.type.toLowerCase().includes(c)) ||
+        (r.isCafe && (c === 'cafe' || c.includes('cafe')))
+      );
+    }
+
+    if (filters.price) {
+      const maxPriceNumeric = parseInt(filters.price, 10) || 3;
+      list = list.filter(r => r.priceTierNumeric <= maxPriceNumeric);
+    }
+
+    if (filters.rating) {
+      const minRating = parseFloat(filters.rating) || 0;
+      list = list.filter(r => r.rating >= minRating);
+    }
+
+    if (filters.dietary) {
+      const d = filters.dietary.toLowerCase();
+      list = list.filter(r => 
+        r.dietary.some(diet => diet.toLowerCase().includes(d)) ||
+        r.menu.some(item => item.tags.some(t => t.toLowerCase().includes(d)))
+      );
+    }
+
+    // Sorting
+    if (filters.sortBy === 'distance') {
+      list.sort((a, b) => (a.distanceKm || 999) - (b.distanceKm || 999));
+    } else if (filters.sortBy === 'rating') {
+      list.sort((a, b) => b.rating - a.rating);
+    } else if (filters.sortBy === 'deliveryTime') {
+      list.sort((a, b) => parseInt(a.deliveryTime) - parseInt(b.deliveryTime));
+    } else {
+      // Default: prioritize nearby first (distance ascending)
+      list.sort((a, b) => (a.distanceKm || 999) - (b.distanceKm || 999));
+    }
+
+    return list;
+  }
+
+  getRestaurantById(id, userCoords = {}) {
+    const r = this.data.restaurants.find(item => item.id === id);
+    if (!r) return null;
+
+    const userLat = parseFloat(userCoords.lat) || 12.9784;
+    const userLng = parseFloat(userCoords.lng) || 77.6408;
+    const dist = computeDistanceKm(userLat, userLng, r.lat, r.lng);
+
+    return {
+      ...r,
+      distanceKm: dist,
+      distanceText: dist !== null ? `${dist} km` : 'Near you',
+      isNearby: dist !== null ? dist <= 30.0 : false
+    };
+  }
+
+  getCategories() {
+    return this.data.categories;
+  }
+
+  getCoupons() {
+    return this.data.coupons;
+  }
+
+  getOrders() {
+    return this.data.orders;
+  }
+
+  getOrderById(id) {
+    return this.data.orders.find(o => o.id === id);
+  }
+
+  createOrder(orderData) {
+    const orderId = `FD-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newOrder = {
+      id: orderId,
+      createdAt: new Date().toISOString(),
+      restaurantId: orderData.restaurantId,
+      restaurantName: orderData.restaurantName,
+      status: "placed",
+      statusText: "Order received by kitchen",
+      estimatedDelivery: "20-30 min",
+      deliveryAddress: orderData.deliveryAddress || "Flat 402, Sunrise Towers, 100 Feet Rd, Indiranagar, Bengaluru",
+      driver: {
+        name: "Rahul Sharma",
+        phone: "+91 98765 43210",
+        rating: 4.9,
+        deliveriesCount: "1,240+",
+        photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJ460Au19yP2xGEaHbn8Hy1h-E2b-9Cu-YYf1sa-yPRoWkAnWs7n3Ds5RBTu2ynnOwbxAcqFKkXPSrD2Ve6K0fu44rJkMlAxMMROPYYAdeOpRUlTONdJ5IvJRpEkGU7yuolEr5qY3rXG5k-ZhksL4ONf-pwqsNYipslyox3Q9MUdSwTVDLGqDLaLEPaK5keQvCSZbBxt5M3fKm7R-7QHJLmJx_jir9uWKlBtGviLQgmhvHNwiFKd5e",
+        vehicle: "Honda Activa Scooter (KA-03-EX-9921)",
+        plate: "KA-03-EX-9921"
+      },
+      items: orderData.items || [],
+      bill: orderData.bill || {
+        subtotal: 0,
+        deliveryFee: 0,
+        taxes: 0,
+        discount: 0,
+        total: 0
+      },
+      paymentMethod: orderData.paymentMethod || "UPI (Google Pay)"
+    };
+
+    this.data.orders.unshift(newOrder);
+    this.save();
+    return newOrder;
+  }
+
+  updateOrderStatus(orderId, status, statusText) {
+    const order = this.getOrderById(orderId);
+    if (order) {
+      order.status = status;
+      if (statusText) order.statusText = statusText;
+      this.save();
+    }
+    return order;
+  }
+}
+
+module.exports = new Database();

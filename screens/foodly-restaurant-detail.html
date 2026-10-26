@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Biryani House - Foodly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#2aa778",
+                        "primary-fixed": "#ffdbcf",
+                        "on-tertiary-fixed": "#002114",
+                        "on-surface-variant": "#5b4138",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#003422",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-primary-container": "#551700",
+                        "surface-container": "#e7eefe",
+                        "tertiary-fixed": "#85f8c4",
+                        "on-secondary-fixed": "#141b2b",
+                        "on-background": "#151c27",
+                        "secondary-fixed": "#dce2f7",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#575e70",
+                        "on-surface": "#151c27",
+                        "inverse-surface": "#2a313d",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#dce2f3",
+                        "surface": "#f9f9ff",
+                        "primary-container": "#ff5e18",
+                        "surface-container-high": "#e2e8f8",
+                        "on-primary-fixed": "#380d00",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "surface-tint": "#aa3700",
+                        "outline": "#8f7066",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c0c6db",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f0f3ff",
+                        "on-secondary-fixed-variant": "#404758",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "primary": "#aa3700",
+                        "primary-fixed-dim": "#ffb59b",
+                        "background": "#f9f9ff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#822800",
+                        "on-secondary-container": "#5c6274",
+                        "surface-dim": "#d3daea",
+                        "outline-variant": "#e4beb2",
+                        "tertiary": "#006c4a",
+                        "surface-container-highest": "#dce2f3",
+                        "secondary-container": "#d9dff5",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#ffb59b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "stack-lg": "32px",
+                        "stack-sm": "4px",
+                        "margin-desktop": "64px",
+                        "base": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface-container-lowest text-primary font-body-md text-body-md fixed top-0 w-full z-50 shadow-sm">
+<div class="flex justify-between items-center h-20 px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-stack-md">
+<span class="font-display-lg text-headline-md font-extrabold text-primary">Foodly</span>
+</div>
+<nav class="hidden md:flex gap-gutter items-center h-full">
+<a class="h-full flex items-center text-primary font-bold border-b-2 border-primary pb-1" href="#">Browse</a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Offers</a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Orders</a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Help</a>
+</nav>
+<div class="flex items-center gap-stack-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow pt-20">
+<!-- Hero Section -->
+<section class="relative w-full h-[400px] bg-surface-container">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full" data-alt="A professional food photography shot of a lavish spread of Indian biryani in a traditional copper handi, surrounded by small bowls of raita, salan, and fresh lemon wedges. The scene is brightly lit with a warm, inviting glow, showcasing the vibrant orange and yellow hues of the rice and rich spices. The background is softly blurred to emphasize the main dish, fitting a modern, clean light-mode aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAEmtMEe2h7zmllzirJWf797NPYkfVSq8-1vhRDNxAdfZLnSSvCMcWPsWd8cTyzmT63sAcK-BOTdwykS6UTFeNF2WrFVsRAICr2CURhzQ4OgWiBq1evDOjnZcL6zvQSVXLEgV3nF-h86LYnc4eCy87mA-oA-khBjlrjjFf_-u9-PzftiZHfEmrcZvSSiuDFYuGtKCU08WIbaEXH9UcGHI9aB6s2uR-tJQEw-C6tiGWUfYTbg0QVAl_y')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-0 w-full px-margin-desktop max-w-container-max mx-auto pb-stack-lg">
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl shadow-lg border border-surface-variant inline-block">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-stack-sm">Biryani House</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">Authentic Hyderabadi Dum Biryani &amp; Indian Curries</p>
+<div class="flex gap-gutter items-center">
+<div class="flex items-center gap-base text-on-surface">
+<span class="material-symbols-outlined text-primary-container" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-lg text-label-lg">4.8 (2.4k+ reviews)</span>
+</div>
+<div class="h-4 w-px bg-surface-variant"></div>
+<div class="flex items-center gap-base text-on-surface">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-label-lg text-label-lg">35-45 min</span>
+</div>
+<div class="h-4 w-px bg-surface-variant"></div>
+<span class="font-label-sm text-label-sm px-3 py-1 bg-secondary-container/30 text-on-secondary-container rounded-full">$$$</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Layout -->
+<div class="px-margin-desktop max-w-container-max mx-auto py-stack-lg grid grid-cols-12 gap-gutter relative">
+<!-- Left Sidebar Menu Categories -->
+<aside class="col-span-2 hidden lg:block sticky top-28 h-fit">
+<h3 class="font-headline-md text-headline-md mb-stack-md text-on-surface">Menu</h3>
+<nav class="flex flex-col gap-stack-sm">
+<a class="font-label-lg text-label-lg px-4 py-3 bg-primary-container/10 text-primary font-bold rounded-lg transition-colors" href="#">Recommended</a>
+<a class="font-label-lg text-label-lg px-4 py-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">Chicken Biryani</a>
+<a class="font-label-lg text-label-lg px-4 py-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">Mutton Biryani</a>
+<a class="font-label-lg text-label-lg px-4 py-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">Vegetarian</a>
+<a class="font-label-lg text-label-lg px-4 py-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">Starters</a>
+<a class="font-label-lg text-label-lg px-4 py-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">Breads &amp; Sides</a>
+<a class="font-label-lg text-label-lg px-4 py-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">Beverages</a>
+</nav>
+</aside>
+<!-- Menu Item List -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-stack-lg">
+<!-- Category Section -->
+<section>
+<h2 class="font-headline-md text-headline-md mb-stack-md text-on-surface">Recommended</h2>
+<div class="flex flex-col gap-stack-md">
+<!-- Menu Item Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-stack-md flex gap-stack-md hover:shadow-sm transition-shadow duration-300">
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Hyderabadi Chicken Dum Biryani</h4>
+<p class="font-label-sm text-label-sm text-primary mb-stack-sm">$16.99</p>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Succulent pieces of chicken marinated in aromatic spices and slow-cooked with basmati rice. Served with raita and salan.</p>
+</div>
+<div class="mt-stack-sm">
+<span class="inline-block px-2 py-1 bg-primary-container/10 text-primary font-label-sm text-label-sm rounded-full mr-2">Bestseller</span>
+<span class="inline-block px-2 py-1 bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm rounded-full">Spicy</span>
+</div>
+</div>
+<div class="w-32 flex flex-col items-center gap-stack-sm">
+<img class="w-32 h-32 object-cover rounded-lg" data-alt="A close up shot of a portion of Hyderabadi Chicken Dum Biryani served on a white ceramic plate. The rice grains are distinct, showing a mix of white and vibrant saffron orange. Large, tender pieces of chicken are visible among the rice. A small bowl of creamy white raita sits beside the plate on a clean, light-colored wooden table. The lighting is bright and appetizing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIX48a_L5rU7mfqUfijNHxRv_ahUq0C0F_PcmLTQQ6qlsOgb0vVttTTz-QCVreOkOldPwzPAGsukXu9nPin4s15PmXrPforNAjkhJOhHLFQTbJULwcR93k8b6Qev-k-umI5CXTFBdz53NZNipOmO-lFdFC35vWG20hsl1xnQGJICEULEbQJdxrHs3XPVaty7v-bQe9JcwRM_uIFZi_QivDs08AifoPWFTsGCPBtglOqnFWMqM4hzOr"/>
+<button class="w-full bg-surface-container-lowest border border-primary-container text-primary-container font-label-lg text-label-lg py-2 rounded-lg hover:bg-primary-container hover:text-white transition-colors duration-200">Add</button>
+</div>
+</div>
+<!-- Menu Item Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-stack-md flex gap-stack-md hover:shadow-sm transition-shadow duration-300">
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Paneer Tikka Masala</h4>
+<p class="font-label-sm text-label-sm text-primary mb-stack-sm">$14.50</p>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Grilled cottage cheese cubes in a rich, creamy tomato gravy. Best paired with Garlic Naan.</p>
+</div>
+<div class="mt-stack-sm">
+<span class="inline-block px-2 py-1 bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm rounded-full">Vegetarian</span>
+</div>
+</div>
+<div class="w-32 flex flex-col items-center gap-stack-sm">
+<img class="w-32 h-32 object-cover rounded-lg" data-alt="A top-down view of Paneer Tikka Masala in a copper serving bowl. The dish features a vibrant, deep orange creamy sauce with visible chunks of grilled paneer cheese. A drizzle of fresh cream and chopped cilantro garnishes the top. The bowl rests on a pristine white surface, highlighting the rich colors of the food in a modern, well-lit setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmTP8YZfzHgGToO4scsOO7wjoa8glvB8WoBQ5p-zrPo8oHqdnAvo8qlN4d_nxx2KZDIxWxHOJJzip_LSQF584XUr_dUdV3eayhklOM_Xn89nEGNsCJjqg1k_WDUn5iiVObhzAHNlChRSilAaPEGJxi4lA6c5QyySVJ-Ps7dDE_XLpIM7b-xUJmnCHGyfFRVL3mTV1aUM9I02t5sSPNUN0noQjSnEaaRT596R1s2RJWzvUnr-57OEsb"/>
+<button class="w-full bg-surface-container-lowest border border-primary-container text-primary-container font-label-lg text-label-lg py-2 rounded-lg hover:bg-primary-container hover:text-white transition-colors duration-200">Add</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="font-headline-md text-headline-md mb-stack-md text-on-surface">Beverages</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Mini Item Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-stack-md flex items-center justify-between hover:shadow-sm transition-shadow duration-300">
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Mango Lassi</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">$4.99</p>
+</div>
+<button class="bg-surface-container-lowest border border-surface-variant text-on-surface font-label-lg text-label-lg px-4 py-2 rounded-lg hover:border-primary-container hover:text-primary-container transition-colors duration-200">Add</button>
+</div>
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-stack-md flex items-center justify-between hover:shadow-sm transition-shadow duration-300">
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Coke</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">$2.50</p>
+</div>
+<button class="bg-surface-container-lowest border border-surface-variant text-on-surface font-label-lg text-label-lg px-4 py-2 rounded-lg hover:border-primary-container hover:text-primary-container transition-colors duration-200">Add</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar Cart -->
+<aside class="col-span-12 lg:col-span-3">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl sticky top-28 shadow-sm flex flex-col max-h-[calc(100vh-120px)] overflow-hidden">
+<div class="p-stack-md border-b border-surface-variant bg-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center justify-between">
+                            Your Cart
+                            <span class="material-symbols-outlined text-primary" data-icon="shopping_basket">shopping_basket</span>
+</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Biryani House</p>
+</div>
+<!-- Cart Items -->
+<div class="flex-grow overflow-y-auto p-stack-md flex flex-col gap-stack-md">
+<!-- Cart Item -->
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-6 h-6 border border-surface-variant rounded flex items-center justify-center font-label-sm text-label-sm text-on-surface">1</div>
+<div>
+<h5 class="font-label-lg text-label-lg text-on-surface leading-tight">Hyderabadi Chicken Dum Biryani</h5>
+<button class="text-error font-label-sm text-label-sm mt-1 hover:underline text-left">Remove</button>
+</div>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface whitespace-nowrap">$16.99</span>
+</div>
+<!-- Cart Item -->
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-6 h-6 border border-surface-variant rounded flex items-center justify-center font-label-sm text-label-sm text-on-surface">2</div>
+<div>
+<h5 class="font-label-lg text-label-lg text-on-surface leading-tight">Coke</h5>
+<button class="text-error font-label-sm text-label-sm mt-1 hover:underline text-left">Remove</button>
+</div>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface whitespace-nowrap">$5.00</span>
+</div>
+</div>
+<!-- Bill Details & Checkout -->
+<div class="p-stack-md border-t border-surface-variant bg-surface-container-low">
+<div class="flex flex-col gap-2 mb-stack-md font-body-md text-body-md text-on-surface-variant">
+<div class="flex justify-between">
+<span>Subtotal</span>
+<span>$21.99</span>
+</div>
+<div class="flex justify-between">
+<span>Delivery Fee</span>
+<span>$3.50</span>
+</div>
+<div class="flex justify-between">
+<span>Taxes</span>
+<span>$2.00</span>
+</div>
+</div>
+<div class="flex justify-between items-center mb-stack-md font-headline-md text-headline-md text-on-surface">
+<span>Total</span>
+<span>$27.49</span>
+</div>
+<button class="w-full bg-primary-container text-white font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary transition-colors duration-200 flex items-center justify-center gap-2">
+                            Checkout <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-highest w-full py-12 mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div>
+<span class="font-headline-md text-headline-md font-bold text-primary mb-4 block">Foodly</span>
+<p class="font-body-md text-body-md text-on-surface-variant">© 2024 Foodly Inc. All rights reserved.</p>
+</div>
+<div class="flex flex-col gap-stack-sm font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-primary underline transition-all cursor-pointer" href="#">About Us</a>
+<a class="text-on-surface-variant hover:text-primary underline transition-all cursor-pointer" href="#">Partner with us</a>
+</div>
+<div class="flex flex-col gap-stack-sm font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-primary underline transition-all cursor-pointer" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary underline transition-all cursor-pointer" href="#">Privacy Policy</a>
+</div>
+<div class="flex flex-col gap-stack-sm font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-primary underline transition-all cursor-pointer" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

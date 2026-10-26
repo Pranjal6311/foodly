@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Foodly - Customer Support & Help Center</title>
+  <meta name="description" content="24/7 Foodly Customer Support, Live Chat, Order Resolution, and FAQ Help Center."/>
+  
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#aa3700",
+            "primary-container": "#ff5e18",
+            "primary-fixed": "#ffdbcf",
+            "primary-fixed-dim": "#ffb59b",
+            "on-primary": "#ffffff",
+            "secondary": "#575e70",
+            "secondary-container": "#d9dff5",
+            "tertiary": "#006c4a",
+            "tertiary-container": "#2aa778",
+            "background": "#f9f9ff",
+            "on-background": "#151c27",
+            "surface": "#f9f9ff",
+            "on-surface": "#151c27",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "surface-container-high": "#e2e8f8",
+            "on-surface-variant": "#5b4138",
+            "surface-variant": "#dce2f3"
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col font-sans">
+  <header id="navbar-container" class="bg-surface-container-lowest/95 backdrop-blur-md shadow-sm fixed top-0 w-full z-40 transition-all"></header>
+  <main id="app" class="flex-grow pt-20 pb-16 md:pb-0"></main>
+  <div id="cart-drawer-container"></div>
+  <div id="toast-container" class="fixed bottom-16 md:bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+  <footer id="footer-container" class="mt-auto pb-16 md:pb-0"></footer>
+
+  <script src="/js/store.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/components/navbar.js"></script>
+  <script src="/js/components/cartDrawer.js"></script>
+  <script src="/js/components/footer.js"></script>
+  <script src="/js/views/helpView.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.renderNavbar();
+      window.renderCartDrawer();
+      window.renderFooter();
+      window.renderHelpView(document.getElementById('app'));
+    });
+  </script>
+</body>
+</html>

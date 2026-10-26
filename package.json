@@ -1,0 +1,14 @@
+{
+  "name": "foodly-platform",
+  "version": "1.0.0",
+  "description": "Full-Stack Online Food Delivery Platform replicating Google Stitch designs",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

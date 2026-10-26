@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Foodly Project Presentation - G.L. Bajaj Institute of Technology &amp; Management</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Crimson+Pro:wght@600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #090d16;
+      color: #0f172a;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Presentation Viewport */
+    .deck-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 20px;
+    }
+
+    .slide {
+      width: 1200px;
+      height: 675px; /* 16:9 aspect ratio */
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 40px 50px;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+      z-index: 10;
+    }
+
+    /* Dark Theme Slides (Title & Conclusion) */
+    .slide.dark {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .slide.dark .header-category {
+      color: #f59e0b;
+    }
+
+    .slide.dark .header-title {
+      color: #ffffff;
+    }
+
+    .slide.dark .header-line {
+      background: #c22026;
+    }
+
+    .slide.dark .footer-text {
+      color: #94a3b8;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 24px;
+    }
+
+    .header-category {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #c22026;
+      margin-bottom: 6px;
+    }
+
+    .header-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    .header-line {
+      height: 3px;
+      width: 100%;
+      background: #c22026;
+      margin-top: 12px;
+      border-radius: 2px;
+    }
+
+    /* Slide Content */
+    .slide-body {
+      flex: 1;
+      position: relative;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .slide.dark .slide-footer {
+      border-top-color: #334155;
+    }
+
+    /* Layout Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 18px;
+      height: 100%;
+    }
+
+    /* UI Cards */
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .card.gray {
+      background: #f8fafc;
+    }
+
+    .card.dark-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title.red { color: #c22026; }
+    .card-title.navy { color: #0f172a; }
+    .card-title.amber { color: #d97706; }
+    .card-title.green { color: #16a34a; }
+
+    .card-p {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #334155;
+    }
+
+    .card.dark-card .card-p {
+      color: #cbd5e1;
+    }
+
+    /* Tables */
+    .slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-top: 5px;
+    }
+
+    .slide-table th {
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .slide-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+
+    .slide-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .tag-gain {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* Controls Bar */
+    .controls {
+      height: 60px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      z-index: 100;
+    }
+
+    .ctrl-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ctrl-btn:hover {
+      background: #334155;
+      border-color: #475569;
+    }
+
+    .ctrl-btn.primary {
+      background: #c22026;
+      border-color: #c22026;
+    }
+
+    .ctrl-btn.primary:hover {
+      background: #9d181d;
+    }
+
+    .slide-counter {
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .slide-counter span {
+      color: #f8fafc;
+      font-weight: 700;
+    }
+
+    .code-snippet {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 14px;
+      border-radius: 6px;
+      line-height: 1.45;
+      margin-top: 8px;
+    }
+
+    .img-preview {
+      width: 100%;
+      height: 380px;
+      object-fit: contain;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Floating Download Badge -->
+  <div style="position: fixed; top: 18px; right: 24px; z-index: 1000; display: flex; gap: 12px; align-items: center;">
+    <a href="FOODLY_PROJECT_PRESENTATION.pptx" download="FOODLY_PROJECT_PRESENTATION.pptx" style="background: linear-gradient(135deg, #c22026, #ea580c); color: #fff; padding: 10px 18px; border-radius: 30px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,0.35); display: flex; align-items: center; gap: 8px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+      </svg>
+      Download PowerPoint (.pptx)
+    </a>
+  </div>
+
+  <!-- Slide Deck -->
+  <div class="deck-container">
+
+    <!-- ================= SLIDE 1 ================= -->
+    <div class="slide dark active" id="slide-1">
+      <div style="height: 6px; width: 100%; background: #c22026; position: absolute; top: 0; left: 0;"></div>
+      <div style="margin-top: 20px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 2px; color: #f59e0b; text-transform: uppercase;">
+          G.L. BAJAJ INSTITUTE OF TECHNOLOGY &amp; MANAGEMENT • GREATER NOIDA
+        </div>
+        <h1 style="font-size: 32px; font-weight: 800; color: #ffffff; line-height: 1.25; margin-top: 15px;">
+          FOODLY: INTELLIGENT CAMPUS FOOD DISCOVERY &amp; REAL-TIME LOGISTICS PLATFORM
+        </h1>
+        <p style="font-size: 15px; color: #94a3b8; margin-top: 8px;">
+          A Hyper-Optimized Full-Stack Web Architecture with Haversine Spatial Routing &amp; Low-Latency SSE Telemetry
+        </p>
+      </div>
+
+      <div class="grid-2" style="margin-top: 40px; height: 320px;">
+        <div class="card dark-card">
+          <div class="card-title amber" style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+            🎓 Presented By (Student Team):
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+            <div style="font-size: 13.5px; color: #fff;"><strong>Priyanshu Verma</strong> <span style="color:#94a3b8;">(Roll: 2301920100256)</span></div>
+            <div style="font-size: 13.5px; color: #fff;"><strong>Shashwat Mishra</strong> <span style="color:#94a3b8;">(Roll: 2301920100305)</span></div>
+            <div style="font-size: 13.5px; color: #fff;"><strong>Pratyush Kashyap</strong> <span style="color:#94a3b8;">(Roll: 2301920100251)</span></div>
+            <div style="font-size: 13.5px; color: #fff;"><strong>Sakshi Sharma</strong> <span style="color:#94a3b8;">(Roll: 2301920100281)</span></div>
+          </div>
+          <div style="margin-top: auto; font-size: 12px; color: #f59e0b; font-weight: 600;">
+            B.Tech in Computer Science &amp; Engineering | Session 2025–2026
+          </div>
+        </div>
+
+        <div class="card dark-card">
+          <div class="card-title amber" style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+            👨‍🏫 Project Guidance &amp; Department:
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+            <div style="font-size: 15px; font-weight: 700; color: #fff;">Dr. Nikhil Sharma</div>
+            <div style="font-size: 12.5px; color: #cbd5e1;">Project Supervisor • Assistant Professor</div>
+            <div style="font-size: 12.5px; color: #cbd5e1; margin-top: 6px;">Head of Department: <strong>Dr. Sansar Singh Chauhan</strong></div>
+            <div style="font-size: 12px; color: #94a3b8; margin-top: 14px; line-height: 1.4;">
+              Department of Computer Science &amp; Engineering<br>
+              Affiliated to Dr. A.P.J. Abdul Kalam Technical University (AKTU), Lucknow
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer" style="margin-top: auto;">
+        <span>Mini Project Presentation</span>
+        <span>Slide 1 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 2 ================= -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <div class="header-category">Project Overview</div>
+        <div class="header-title">Executive Summary: What is Foodly?</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div style="font-size: 28px; margin-bottom: 10px;">🏫</div>
+            <div class="card-title red">Campus-First Design</div>
+            <div class="card-p">
+              Engineered specifically for institutional ecosystems like G.L. Bajaj and Knowledge Park III. Eliminates inflated commissions and optimizes logistics directly for college gates and hostel blocks.
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-size: 28px; margin-bottom: 10px;">⚡</div>
+            <div class="card-title navy">Zero-Framework Speed</div>
+            <div class="card-p">
+              Built with native Vanilla ES6+ and Node.js. Total client bundle payload is just <strong>145 KB</strong> (98.7% smaller than React/Angular apps), ensuring sub-100ms API speeds and instant 0ms DOM filtering.
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-size: 28px; margin-bottom: 10px;">📡</div>
+            <div class="card-title amber">Mathematical Telemetry</div>
+            <div class="card-p">
+              Computes spatial distances via the spherical <strong>Haversine Formula</strong> and streams driver coordinates every 1.5s using <strong>Server-Sent Events (SSE)</strong> with 85% less bandwidth than polling.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 2 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 3 ================= -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <div class="header-category">Problem Analysis</div>
+        <div class="header-title">Critical Deficiencies in Commercial Aggregators</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card gray">
+            <div class="card-title red">1. Monopolistic 25%–40% Markups</div>
+            <div class="card-p">
+              Commercial platforms impose high commissions on local food vendors, which are passed directly to students via inflated item rates, mandatory packaging fees, and surge surcharges.
+            </div>
+          </div>
+          <div class="card gray">
+            <div class="card-title red">2. Gate Congestion &amp; Redundancy</div>
+            <div class="card-p">
+              Couriers make individual trips to identical student hostels (Boys Hostel Block A/B, Girls Hostel D), causing severe security gate friction, dropped calls, and repeated delivery charges.
+            </div>
+          </div>
+          <div class="card gray">
+            <div class="card-title red">3. Massive Framework Bloat</div>
+            <div class="card-p">
+              Modern delivery apps transfer 12–15 MB of JavaScript libraries, exhausting mobile batteries and causing high bounce rates on congested campus Wi-Fi networks.
+            </div>
+          </div>
+          <div class="card gray">
+            <div class="card-title red">4. Inefficient HTTP Polling</div>
+            <div class="card-p">
+              Repetitive 3–5 second client polling drains device battery and congests cellular networks without offering smooth real-time telemetry coordinates.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 3 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 4 ================= -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <div class="header-category">Core Innovations</div>
+        <div class="header-title">Key Engineering Differentiators</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 5px solid #c22026;">
+            <div class="card-title red">🛵 Campus Batch Pooling</div>
+            <div class="card-p">
+              Aggregates student orders destined for GL Bajaj Hostels and Gate 2 into 15–20 minute arrival windows. Eliminates individual shipping charges, saving students ₹40–₹50 per meal.
+            </div>
+          </div>
+          <div class="card" style="border-left: 5px solid #0f172a;">
+            <div class="card-title navy">⚖️ FairPrice Audit Engine</div>
+            <div class="card-p">
+              Provides direct dine-in versus online menu price transparency, empowering students with verified dish costs and exposing hidden commissions.
+            </div>
+          </div>
+          <div class="card" style="border-left: 5px solid #d97706;">
+            <div class="card-title amber">🥗 Macro Nutritional Calculator</div>
+            <div class="card-p">
+              Automatically evaluates calorie count, protein (g), carbohydrates, fats, and health grades (A/B/C) to promote healthy eating habits during exams and intense study periods.
+            </div>
+          </div>
+          <div class="card" style="border-left: 5px solid #16a34a;">
+            <div class="card-title green">📡 Server-Sent Events (SSE) Pipe</div>
+            <div class="card-p">
+              Streams continuous driver GPS coordinates directly over persistent HTTP connections without duplex WebSocket handshakes or battery-draining polling.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 4 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 5 ================= -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <div class="header-category">System Architecture</div>
+        <div class="header-title">End-to-End Layered Micro-Architecture</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card gray" style="text-align: center;">
+            <div class="card-title navy" style="justify-content: center;">Client Layer</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 12px;">Vanilla JS SPA (Browser)</div>
+            <div style="text-align: left;" class="card-p">
+              • Reactive State Manager<br>
+              • Instant Search Filter (0ms)<br>
+              • Google Stitch CSS Design<br>
+              • Native EventSource API
+            </div>
+          </div>
+          <div class="card gray" style="text-align: center;">
+            <div class="card-title red" style="justify-content: center;">Application Layer</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 12px;">Node.js / Express Runtime</div>
+            <div style="text-align: left;" class="card-p">
+              • Express REST Micro-Router<br>
+              • Haversine Distance Engine<br>
+              • Campus Batch Dispatcher<br>
+              • Real-Time SSE Telemetry
+            </div>
+          </div>
+          <div class="card gray" style="text-align: center;">
+            <div class="card-title amber" style="justify-content: center;">Persistence Layer</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 12px;">In-Memory ACID JSON Store</div>
+            <div style="text-align: left;" class="card-p">
+              • Sub-millisecond queries<br>
+              • Atomic File Sync (data.json)<br>
+              • Multi-indexed categories<br>
+              • Transactional cart lock
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 5 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 6 ================= -->
+    <div class="slide" id="slide-6">
+      <div class="slide-header">
+        <div class="header-category">Mathematical Modeling</div>
+        <div class="header-title">Haversine Spatial Engine &amp; Dynamic Pricing</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title navy">1. Spherical Haversine Equation</div>
+            <div class="card-p">
+              Computes great-circle displacement between restaurant $(\phi_1, \lambda_1)$ and campus drop landmark $(\phi_2, \lambda_2)$:
+            </div>
+            <div class="code-snippet">
+a = sin²(Δφ/2) + cos(φ₁)⋅cos(φ₂)⋅sin²(Δλ/2)
+c = 2 ⋅ atan2( √a, √(1-a) )
+Distance (d) = R ⋅ c   [R = 6,371 km]
+            </div>
+            <div class="card-p" style="margin-top: 10px; font-size: 12px; color: #64748b;">
+              Eliminates paid third-party geolocation API dependencies.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title red">2. Dynamic Delivery Fee &amp; ETA Matrix</div>
+            <div class="code-snippet">
+// Transit ETA Calculation
+ETA = T_prep (15m) + (Distance / 24 km/h) * 60
+
+// Dynamic Distance Fee
+Fee = Base_Fee (₹20) + max(0, (d - 1.5) * ₹12)
+
+// Campus Batch Pool Exemption
+if (isCampusDropZone(address)) {
+  Fee = ₹0; // 100% Free Campus Delivery
+}
+            </div>
+            <div class="card-p" style="margin-top: 10px; font-size: 12px; color: #64748b;">
+              Ensures deterministic, student-friendly fee structures.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 6 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 7 ================= -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <div class="header-category">Experimental Results</div>
+        <div class="header-title">Performance Benchmark Comparison</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <table class="slide-table">
+          <thead>
+            <tr>
+              <th>Operation / Benchmark Metric</th>
+              <th>Conventional Framework</th>
+              <th>Foodly Platform</th>
+              <th>Net Improvement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Initial Page Load &amp; DOM Mount</strong></td>
+              <td>1,420 ms</td>
+              <td><strong>110 ms</strong></td>
+              <td><span class="tag-gain">92.2% Faster</span></td>
+            </tr>
+            <tr>
+              <td><strong>Catalog Query &amp; JSON Parse</strong></td>
+              <td>185 ms</td>
+              <td><strong>24 ms</strong></td>
+              <td><span class="tag-gain">87.0% Latency Drop</span></td>
+            </tr>
+            <tr>
+              <td><strong>Multi-Facet Filter &amp; Search</strong></td>
+              <td>65 ms</td>
+              <td><strong>&lt; 2 ms (Client State)</strong></td>
+              <td><span class="tag-gain">96.9% Faster</span></td>
+            </tr>
+            <tr>
+              <td><strong>Total Client JS Bundle Transfer</strong></td>
+              <td>11.4 MB (11,400 KB)</td>
+              <td><strong>145 KB</strong></td>
+              <td><span class="tag-gain">98.7% Smaller</span></td>
+            </tr>
+            <tr>
+              <td><strong>Google Lighthouse Score</strong></td>
+              <td>64 / 100</td>
+              <td><strong>99 / 100</strong></td>
+              <td><span class="tag-gain">+35 Points</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 7 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 8 ================= -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <div class="header-category">User Interface Showcase</div>
+        <div class="header-title">Campus Discovery &amp; Instant Search</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div>
+            <img class="img-preview" src="screens/foodly-home.png" alt="Home Screen">
+            <div style="font-size: 11px; text-align: center; color: #64748b; margin-top: 6px; font-weight: 600;">
+              Fig. 1: Foodly Home Discovery Dashboard
+            </div>
+          </div>
+          <div>
+            <img class="img-preview" src="screens/foodly-search-results.png" alt="Search Screen">
+            <div style="font-size: 11px; text-align: center; color: #64748b; margin-top: 6px; font-weight: 600;">
+              Fig. 2: Real-Time Multi-Facet Filter Results
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 8 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 9 ================= -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <div class="header-category">User Interface Showcase</div>
+        <div class="header-title">Nutritional Breakdown &amp; Real-Time Telemetry</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div>
+            <img class="img-preview" src="screens/foodly-restaurant-detail.png" alt="Menu Screen">
+            <div style="font-size: 11px; text-align: center; color: #64748b; margin-top: 6px; font-weight: 600;">
+              Fig. 3: Dish Catalog with Calorie &amp; Protein Breakdown
+            </div>
+          </div>
+          <div>
+            <img class="img-preview" src="screens/foodly-order-tracking.png" alt="Tracking Screen">
+            <div style="font-size: 11px; text-align: center; color: #64748b; margin-top: 6px; font-weight: 600;">
+              Fig. 4: Live Coordinate Telemetry &amp; 5-Stage Stepper
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 9 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 10 ================= -->
+    <div class="slide" id="slide-10">
+      <div class="slide-header">
+        <div class="header-category">Socio-Economic Impact</div>
+        <div class="header-title">Collegiate Economic Savings &amp; Sustainability</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 5px solid #c22026;">
+            <div class="card-title red">💰 ₹64 Net Savings per Order</div>
+            <div class="card-p">
+              Eliminating delivery surcharges (₹40) and commission inflation (₹24) yields substantial student savings exceeding ₹1,800 monthly.
+            </div>
+          </div>
+          <div class="card" style="border-left: 5px solid #0f172a;">
+            <div class="card-title navy">🚪 70% Drop in Gate Congestion</div>
+            <div class="card-p">
+              Batching orders into synchronized 15-minute drops at GL Bajaj Gate 2 removes chaotic courier crowding and improves security auditability.
+            </div>
+          </div>
+          <div class="card" style="border-left: 5px solid #16a34a;">
+            <div class="card-title green">🌱 Carbon Footprint Reduction</div>
+            <div class="card-p">
+              Fewer single-meal motorcycle trips cut localized carbon emissions and noise pollution across Knowledge Park III.
+            </div>
+          </div>
+          <div class="card" style="border-left: 5px solid #d97706;">
+            <div class="card-title amber">🧑‍🍳 Fair Kitchen Margins</div>
+            <div class="card-p">
+              Zero platform commissions allow local dhabas and cafeterias to thrive sustainably without inflating menu prices.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 10 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 11 ================= -->
+    <div class="slide" id="slide-11">
+      <div class="slide-header">
+        <div class="header-category">Limitations &amp; Future Scope</div>
+        <div class="header-title">Roadmap for Future Evolution</div>
+        <div class="header-line"></div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card gray">
+            <div class="card-title red">⚠️ Current Limitations</div>
+            <div class="card-p" style="font-size: 13px;">
+              • <strong>Static Road Geodesics:</strong> Haversine calculations do not account for live traffic snarls in Greater Noida.<br><br>
+              • <strong>Single-Node DB:</strong> In-memory JSON is optimal up to ~5,000 concurrent students before requiring PostgreSQL/Redis clustering.<br><br>
+              • <strong>Interpolated Tracking:</strong> Courier GPS movement is currently simulated via linear coordinate interpolation.
+            </div>
+          </div>
+          <div class="card gray">
+            <div class="card-title green">🚀 Future Roadmap</div>
+            <div class="card-p" style="font-size: 13px;">
+              • <strong>UPI 2.0 Smart Escrow:</strong> Automatic payment lock released only upon student OTP/QR verification at drop points.<br><br>
+              • <strong>IoT Smart Lockers:</strong> Solar-powered, heated delivery lockers installed at GL Bajaj Gate 2 for contact-free pickup.<br><br>
+              • <strong>Multi-Campus Federation:</strong> Connecting GL Bajaj, Galgotias, and Sharda universities into a shared logistics grid.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Foodly • B.Tech CSE Mini Project</span>
+        <span>Slide 11 of 12</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 12 ================= -->
+    <div class="slide dark" id="slide-12">
+      <div style="height: 6px; width: 100%; background: #c22026; position: absolute; top: 0; left: 0;"></div>
+      <div style="margin-top: 50px; text-align: center;">
+        <div style="font-size: 14px; font-weight: 700; color: #f59e0b; letter-spacing: 2px;">
+          PROJECT CONCLUSION
+        </div>
+        <h1 style="font-size: 36px; font-weight: 800; color: #ffffff; margin-top: 15px;">
+          High-Performance Engineering Meets Fair Campus Dining
+        </h1>
+        <p style="font-size: 16px; color: #cbd5e1; max-width: 800px; margin: 20px auto; line-height: 1.6;">
+          Foodly demonstrates that zero-framework architectures, mathematical dispatching, and campus batch pooling deliver superior, sub-100ms user experiences while returning financial equity back to students and local food vendors.
+        </p>
+
+        <div style="margin-top: 40px; font-size: 40px; font-weight: 800; color: #f59e0b;">
+          THANK YOU!
+        </div>
+        <p style="font-size: 15px; color: #94a3b8; margin-top: 10px;">
+          Questions &amp; Feedback from the Evaluation Committee are most welcome.
+        </p>
+      </div>
+
+      <div class="slide-footer" style="margin-top: auto;">
+        <span>Foodly • G.L. Bajaj Institute of Technology &amp; Management</span>
+        <span>Slide 12 of 12</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="controls">
+    <div style="display: flex; gap: 10px;">
+      <button class="ctrl-btn" onclick="prevSlide()">◀ Previous</button>
+      <button class="ctrl-btn primary" onclick="nextSlide()">Next ▶</button>
+    </div>
+
+    <div class="slide-counter">
+      Slide <span id="current-slide">1</span> of <span id="total-slides">12</span>
+    </div>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <a href="FOODLY_PROJECT_PRESENTATION.pptx" download="FOODLY_PROJECT_PRESENTATION.pptx" class="ctrl-btn" style="background: #2563eb; border-color: #1d4ed8; text-decoration: none; font-weight: 700; color: #fff;">
+        📥 Download PPT (.pptx)
+      </a>
+      <button class="ctrl-btn" onclick="toggleFullScreen()">⛶ Fullscreen</button>
+      <button class="ctrl-btn" onclick="window.print()">🖨️ Print Slides</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlideIndex = 1;
+    const totalSlides = 12;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlideIndex = index;
+
+      document.querySelectorAll('.slide').forEach((slide, idx) => {
+        if (idx + 1 === currentSlideIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      document.getElementById('current-slide').textContent = currentSlideIndex;
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < totalSlides) {
+        showSlide(currentSlideIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 1) {
+        showSlide(currentSlideIndex - 1);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'Home') {
+        showSlide(1);
+      } else if (e.key === 'End') {
+        showSlide(totalSlides);
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
+  </script>
+</body>
+</html>

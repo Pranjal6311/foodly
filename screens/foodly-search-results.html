@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Foodly - Discover Restaurants</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#2aa778",
+                      "primary-fixed": "#ffdbcf",
+                      "on-tertiary-fixed": "#002114",
+                      "on-surface-variant": "#5b4138",
+                      "on-error": "#ffffff",
+                      "on-tertiary-container": "#003422",
+                      "inverse-on-surface": "#ebf1ff",
+                      "on-primary-container": "#551700",
+                      "surface-container": "#e7eefe",
+                      "tertiary-fixed": "#85f8c4",
+                      "on-secondary-fixed": "#141b2b",
+                      "on-background": "#151c27",
+                      "secondary-fixed": "#dce2f7",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#575e70",
+                      "on-surface": "#151c27",
+                      "inverse-surface": "#2a313d",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#dce2f3",
+                      "surface": "#f9f9ff",
+                      "primary-container": "#ff5e18",
+                      "surface-container-high": "#e2e8f8",
+                      "on-primary-fixed": "#380d00",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "surface-tint": "#aa3700",
+                      "outline": "#8f7066",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#c0c6db",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f0f3ff",
+                      "on-secondary-fixed-variant": "#404758",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "surface-bright": "#f9f9ff",
+                      "on-primary": "#ffffff",
+                      "primary": "#aa3700",
+                      "primary-fixed-dim": "#ffb59b",
+                      "background": "#f9f9ff",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed-variant": "#822800",
+                      "on-secondary-container": "#5c6274",
+                      "surface-dim": "#d3daea",
+                      "outline-variant": "#e4beb2",
+                      "tertiary": "#006c4a",
+                      "surface-container-highest": "#dce2f3",
+                      "secondary-container": "#d9dff5",
+                      "error": "#ba1a1a",
+                      "inverse-primary": "#ffb59b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "container-max": "1280px",
+                      "stack-lg": "32px",
+                      "stack-sm": "4px",
+                      "margin-desktop": "64px",
+                      "base": "8px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-lg": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Soft tactile shadow for cards */
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .card-shadow-hover:hover {
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-surface-dim fixed top-0 w-full z-50 shadow-sm dark:shadow-none transition-all duration-300">
+<div class="flex justify-between items-center h-20 px-margin-desktop max-w-container-max mx-auto">
+<!-- Brand & Search -->
+<div class="flex items-center gap-gutter">
+<a class="font-display-lg text-headline-md font-extrabold text-primary dark:text-primary-fixed tracking-tight" href="#">Foodly</a>
+<div class="relative hidden lg:block w-80 ml-stack-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary-container focus:ring-1 focus:ring-primary-container rounded-full py-2.5 pl-10 pr-4 text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant transition-colors" placeholder="Search for restaurants, cuisines..." type="text"/>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="hidden md:flex items-center gap-stack-lg font-body-md text-body-md">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95" href="#">Browse</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95" href="#">Offers</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95" href="#">Orders</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors duration-200 cursor-pointer active:scale-95" href="#">Help</a>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-stack-md">
+<button class="p-2 rounded-full hover:bg-surface-container-low transition-colors relative cursor-pointer active:scale-95 text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary-container rounded-full"></span>
+</button>
+<button class="p-1 rounded-full border-2 border-transparent hover:border-primary-container transition-all cursor-pointer active:scale-95">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A polished headshot of a smiling person, used as a user profile picture, soft lighting, modern corporate style, light background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTVPjBUv_wcuhbheNrpWtOJTfwPc5mjW5LWm-zjNqKTUgTAL9UtstSBmeEyHbsI1cnBGZyyzkp6nW7uyo1vK4N9TBBv9wByq5BPFO4YKzYlTGi-49I1x7ElqwuoTy94NaofPVU-5lTgrJmCeNrao97jk4bPcTUxHx05ML5JJcWhvkpdVHfE9mMa3Zh6xc0DeyQdfs1NqHbxp6WndVzkREV6PtzcmeTryjtq2tH-difGhyow6tk9j7P"/>
+</div>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow pt-[104px] pb-margin-desktop px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full flex flex-col md:flex-row gap-gutter">
+<!-- SideNavBar (Filters) -->
+<aside class="hidden md:flex flex-col gap-stack-md p-6 bg-surface-container-low dark:bg-surface-container h-full w-80 sticky top-[104px] rounded-xl border border-surface-variant/50">
+<div class="flex justify-between items-baseline mb-2">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Filters</h2>
+<p class="font-body-md text-label-sm text-on-surface-variant mt-1">Narrow your search</p>
+</div>
+<button class="text-primary font-label-lg text-label-lg hover:underline">Clear All</button>
+</div>
+<nav class="flex flex-col gap-2 font-label-lg text-label-lg">
+<a class="flex items-center gap-3 p-3 text-primary bg-primary-container/10 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined filled-icon" data-icon="restaurant" data-weight="fill">restaurant</span>
+                    Cuisines
+                </a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                    Price Range
+                </a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+                    Ratings
+                </a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="leaf">animated_images</span>
+                    Dietary
+                </a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+                    Delivery Time
+                </a>
+</nav>
+</aside>
+<!-- Restaurant Grid Canvas -->
+<section class="flex-grow">
+<!-- Header for Canvas -->
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Trending Near You</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Explore the best spots in town</p>
+</div>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden card-shadow card-shadow-hover transition-all duration-300 border border-surface-variant/30 flex flex-col group cursor-pointer">
+<div class="relative w-full pt-[100%] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A mouth-watering overhead shot of authentic chicken biryani in a traditional brass bowl, garnished with fried onions and mint, accompanied by raita. Bright, warm, inviting light, high-end food photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC49QZTApBmmo74_Gp1Akcbg3rJ-kBlTgRmV-Ka41h3Xlqrafyb4giLcc3CP0WBoeGi0F5hOyT-tG4J_y3I7lG8M1tv1IDGp7diXhq8rNeUjH1JD9L01v0Yk0ZcdRwAV9C8PgsW_p8i3pE14zfkbN6WVghX73eUbi9YYU_ToRm9iKD_UOCpCS6uoBo2W-Kd76G_8D9FMyrzLmuWmBzXqtYGkJQ-U7K1IWPJfnb8W_B54XIIinf90ahK')"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary-container text-white font-label-sm text-label-sm px-2.5 py-1 rounded-full shadow-sm">Top Rated</span>
+</div>
+<button class="absolute top-4 right-4 w-8 h-8 bg-surface-container-lowest/80 backdrop-blur-sm rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary-container hover:bg-surface-container-lowest transition-colors">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+</div>
+<div class="p-stack-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface font-bold truncate pr-2">Biryani House</h3>
+<div class="flex items-center gap-1 bg-tertiary-container/10 text-tertiary px-1.5 py-0.5 rounded font-label-sm text-label-sm font-bold">
+<span>4.8</span>
+<span class="material-symbols-outlined text-[14px] filled-icon">star</span>
+</div>
+</div>
+<p class="font-body-md text-label-sm text-on-surface-variant mb-4 truncate">North Indian, Mughlai, Biryani</p>
+<div class="mt-auto pt-4 border-t border-surface-variant/50 flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                30-40 min
+                            </div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">local_offer</span>
+                                20% OFF
+                            </div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden card-shadow card-shadow-hover transition-all duration-300 border border-surface-variant/30 flex flex-col group cursor-pointer">
+<div class="relative w-full pt-[100%] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A delicious, cheesy pepperoni pizza straight out of a wood-fired oven, perfect crust with slightly charred edges, melty cheese pull. Warm lighting, appetizing, commercial food photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWRjQTrmxErOg-IUDt_TgfFpP-P3Ue7lxa9RXRDlQnqQLMgygXEDmg0ClzrcEqCS9_unqa62rOfJpzX0J0dX6ZRVrjQbFlUCGnr5HiQrNjg5p4rV8885HVh_jlQ2w33RE-g_eTWUE9HdSDWiu-SPnUm2LIeLehNk6zPiTdOTGn9dzgk2_3Z1xVoXLUViMdnZIJbPqJHnbuGZyqfEYB1TJJJDova3cPQVpKLnjtW7Aqj1n5i2J-HP8i')"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-tertiary-container text-white font-label-sm text-label-sm px-2.5 py-1 rounded-full shadow-sm">Fast Delivery</span>
+</div>
+</div>
+<div class="p-stack-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface font-bold truncate pr-2">La Pino'z Pizza</h3>
+<div class="flex items-center gap-1 bg-tertiary-container/10 text-tertiary px-1.5 py-0.5 rounded font-label-sm text-label-sm font-bold">
+<span>4.5</span>
+<span class="material-symbols-outlined text-[14px] filled-icon">star</span>
+</div>
+</div>
+<p class="font-body-md text-label-sm text-on-surface-variant mb-4 truncate">Italian, Pizza, Fast Food</p>
+<div class="mt-auto pt-4 border-t border-surface-variant/50 flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                25-35 min
+                            </div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">local_offer</span>
+                                BOGO
+                            </div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden card-shadow card-shadow-hover transition-all duration-300 border border-surface-variant/30 flex flex-col group cursor-pointer">
+<div class="relative w-full pt-[100%] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="A beautifully plated fresh poke bowl with vibrant pink salmon, bright green edamame, and colorful veggies over rice. Bright, airy lighting, healthy and fresh aesthetic, clean minimal background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChi7U2NGnEWgGDcNwUhPvNBo1o8g-6Q7fUmbgi3WdHYS19oRh69cnF2982NFsHGMDKih2kiIdPcP_v-V7lDyWyjfC1j_kWev9v1FmzVCttwHARXZHv1W0sZ8pcQFXbdw5a9oqMsG8xgWHUwxucZzj2yYEY9WEGWhtaSFgiQlMMKNiAg-FMw8U4t3t7MjkOxWE9ZbAGr-PJttqPbvmfNigQXo2Lfjsg99j1pCX-bxODozLNo-Q85GyP')"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-surface-container-lowest text-primary font-label-sm text-label-sm px-2.5 py-1 rounded-full shadow-sm border border-primary-container/20">New</span>
+</div>
+</div>
+<div class="p-stack-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface font-bold truncate pr-2">Ono Poke</h3>
+<div class="flex items-center gap-1 bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded font-label-sm text-label-sm font-bold">
+<span>New</span>
+</div>
+</div>
+<p class="font-body-md text-label-sm text-on-surface-variant mb-4 truncate">Hawaiian, Healthy, Seafood</p>
+<div class="mt-auto pt-4 border-t border-surface-variant/50 flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                40-50 min
+                            </div>
+<div class="flex items-center gap-1">
+                                Free Delivery
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface w-full py-12 mt-auto border-t border-surface-variant/50">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1 flex flex-col gap-4">
+<a class="font-headline-md text-headline-md font-bold text-primary tracking-tight" href="#">Foodly</a>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-secondary-fixed-dim">
+                    © 2024 Foodly Inc. All rights reserved.
+                </p>
+</div>
+<div class="col-span-1 md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8">
+<div class="flex flex-col gap-3 font-body-md text-body-md">
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary underline transition-all cursor-pointer" href="#">About Us</a>
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary underline transition-all cursor-pointer" href="#">Partner with us</a>
+</div>
+<div class="flex flex-col gap-3 font-body-md text-body-md">
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary underline transition-all cursor-pointer" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary underline transition-all cursor-pointer" href="#">Privacy Policy</a>
+</div>
+<div class="flex flex-col gap-3 font-body-md text-body-md">
+<a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary underline transition-all cursor-pointer" href="#">Contact</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

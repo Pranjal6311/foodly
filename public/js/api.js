@@ -1,0 +1,322 @@
+// public/js/api.js - Frontend API Service Client with GitHub Pages Fallback
+(function () {
+  const API_BASE = '/api';
+  let staticDataPromise = null;
+
+  async function getStaticData() {
+    if (!staticDataPromise) {
+      staticDataPromise = fetch('./data.json')
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null);
+    }
+    return await staticDataPromise;
+  }
+
+  const CAMPUS_DROP_ZONES = [
+    {
+      id: "glb-boys-hostel",
+      name: "GL Bajaj Boys Hostel (Block A & B)",
+      campus: "GL Bajaj Greater Noida",
+      deliveryFee: 0,
+      batchTime: "Next batch arrives in ~15 mins",
+      savingsText: "Save ₹40 Delivery Fee",
+      icon: "apartment"
+    },
+    {
+      id: "glb-girls-hostel",
+      name: "GL Bajaj Girls Hostel (Block D)",
+      campus: "GL Bajaj Greater Noida",
+      deliveryFee: 0,
+      batchTime: "Next batch arrives in ~20 mins",
+      savingsText: "Save ₹40 Delivery Fee",
+      icon: "apartment"
+    },
+    {
+      id: "glb-gate-2",
+      name: "GL Bajaj Main Academic Block Gate 2",
+      campus: "GL Bajaj Greater Noida",
+      deliveryFee: 0,
+      batchTime: "Express campus drop (~15 mins)",
+      savingsText: "Save ₹40 Delivery Fee",
+      icon: "school"
+    },
+    {
+      id: "kp3-hostel-hub",
+      name: "Knowledge Park III Student Housing Hub",
+      campus: "Knowledge Park III",
+      deliveryFee: 0,
+      batchTime: "Batch moped pool (~25 mins)",
+      savingsText: "Save ₹50 Delivery Fee",
+      icon: "local_shipping"
+    }
+  ];
+
+  const api = {
+    async getRestaurants(filters = {}) {
+      try {
+        const params = new URLSearchParams();
+        if (filters.q) params.set('q', filters.q);
+        if (filters.cuisine) params.set('cuisine', filters.cuisine);
+        if (filters.price) params.set('price', filters.price);
+        if (filters.rating) params.set('rating', filters.rating);
+        if (filters.dietary) params.set('dietary', filters.dietary);
+        if (filters.sortBy) params.set('sortBy', filters.sortBy);
+        if (filters.type) params.set('type', filters.type);
+
+        const coords = window.foodlyStore && window.foodlyStore.userCoords;
+        if (coords && coords.lat && coords.lng) {
+          params.set('lat', coords.lat);
+          params.set('lng', coords.lng);
+        }
+
+        const url = `${API_BASE}/restaurants?${params.toString()}`;
+        const res = await fetch(url);
+        if (res.ok) return await res.json();
+      } catch (e) {
+        // Fall back to static data for GitHub Pages
+      }
+
+      // Static fallback
+      const data = await getStaticData();
+      if (!data || !data.restaurants) return { success: true, count: 0, data: [] };
+
+      let list = [...data.restaurants];
+      if (filters.q) {
+        const q = filters.q.toLowerCase();
+        list = list.filter(r => r.name.toLowerCase().includes(q) || (r.cuisines || []).some(c => c.toLowerCase().includes(q)));
+      }
+      if (filters.cuisine) {
+        const c = filters.cuisine.toLowerCase();
+        list = list.filter(r => (r.cuisines || []).some(item => item.toLowerCase().includes(c)));
+      }
+      if (filters.dietary && filters.dietary.toLowerCase() === 'satvik') {
+        list = list.filter(r => r.isPureVeg || (r.dietaryFlags || []).includes('Satvik'));
+      }
+      return { success: true, count: list.length, data: list };
+    },
+
+    async getRestaurant(id) {
+      try {
+        const url = `${API_BASE}/restaurants/${encodeURIComponent(id)}`;
+        const res = await fetch(url);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      // Static fallback
+      const data = await getStaticData();
+      if (data && data.restaurants) {
+        const found = data.restaurants.find(r => r.id === id);
+        if (found) return { success: true, data: found };
+      }
+      throw new Error('Restaurant not found');
+    },
+
+    async getCategories() {
+      try {
+        const res = await fetch(`${API_BASE}/restaurants/meta/categories`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      const data = await getStaticData();
+      return { success: true, data: (data && data.categories) || [] };
+    },
+
+    async getCoupons() {
+      try {
+        const res = await fetch(`${API_BASE}/restaurants/meta/coupons`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      const data = await getStaticData();
+      return { success: true, data: (data && data.coupons) || [] };
+    },
+
+    async getOrders() {
+      try {
+        const res = await fetch(`${API_BASE}/orders`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      const saved = localStorage.getItem('foodly_orders_history');
+      return { success: true, count: 0, data: saved ? JSON.parse(saved) : [] };
+    },
+
+    async getOrder(id) {
+      try {
+        const res = await fetch(`${API_BASE}/orders/${encodeURIComponent(id)}`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      const saved = localStorage.getItem('foodly_orders_history');
+      const orders = saved ? JSON.parse(saved) : [];
+      const found = orders.find(o => o.id === id);
+      if (found) return { success: true, data: found };
+      throw new Error('Order not found');
+    },
+
+    async createOrder(orderPayload) {
+      try {
+        const res = await fetch(`${API_BASE}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      // Client-side fallback order creation for GitHub Pages
+      const newOrder = {
+        id: "ORD-" + Math.floor(1000 + Math.random() * 9000),
+        createdAt: new Date().toISOString(),
+        status: "placed",
+        ...orderPayload
+      };
+      const saved = localStorage.getItem('foodly_orders_history');
+      const list = saved ? JSON.parse(saved) : [];
+      list.unshift(newOrder);
+      localStorage.setItem('foodly_orders_history', JSON.stringify(list));
+      return { success: true, data: newOrder };
+    },
+
+    connectLiveTracking(orderId, onUpdate, onComplete) {
+      // Check if real SSE works
+      let hasReceivedSSE = false;
+      let source = null;
+
+      try {
+        source = new EventSource(`${API_BASE}/orders/${encodeURIComponent(orderId)}/live-tracking`);
+        source.onmessage = (event) => {
+          try {
+            hasReceivedSSE = true;
+            const data = JSON.parse(event.data);
+            onUpdate(data);
+            if (data.type === 'DELIVERED') {
+              if (onComplete) onComplete(data);
+              source.close();
+            }
+          } catch (e) {
+            console.error("SSE parse error", e);
+          }
+        };
+
+        source.onerror = (err) => {
+          if (!hasReceivedSSE) {
+            // Server SSE unavailable (GitHub Pages static host) -> simulate live stream smoothly
+            source.close();
+            simulateTracking(orderId, onUpdate, onComplete);
+          }
+        };
+        return source;
+      } catch (e) {
+        simulateTracking(orderId, onUpdate, onComplete);
+        return { close() {} };
+      }
+    },
+
+    async getCampusDropZones() {
+      try {
+        const res = await fetch(`${API_BASE}/innovations/campus-zones`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+      return { success: true, data: CAMPUS_DROP_ZONES };
+    },
+
+    async getAiMoodMatcher(mood = 'late_night', budget = '') {
+      try {
+        const params = new URLSearchParams({ mood });
+        if (budget) params.set('budget', budget);
+        const res = await fetch(`${API_BASE}/innovations/ai-mood-matcher?${params.toString()}`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      const data = await getStaticData();
+      const list = (data && data.restaurants) ? data.restaurants.slice(0, 4) : [];
+      return { success: true, mood, count: list.length, data: list };
+    },
+
+    async createGroupRoom(hostName, restaurantId, restaurantName) {
+      try {
+        const res = await fetch(`${API_BASE}/innovations/group-room/create`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hostName, restaurantId, restaurantName })
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {}
+
+      const code = "ROOM-" + Math.floor(100 + Math.random() * 900);
+      return {
+        success: true,
+        data: {
+          code,
+          hostName,
+          restaurantId,
+          restaurantName,
+          members: [hostName],
+          items: []
+        }
+      };
+    },
+
+    async getGroupRoom(code) {
+      try {
+        const res = await fetch(`${API_BASE}/innovations/group-room/${encodeURIComponent(code)}`);
+        if (res.ok) return await res.json();
+      } catch (e) {}
+      return { success: true, data: { code, members: ["You"], items: [] } };
+    },
+
+    async joinGroupRoom(code, memberName) {
+      try {
+        const res = await fetch(`${API_BASE}/innovations/group-room/${encodeURIComponent(code)}/join`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ memberName })
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {}
+      return { success: true, data: { code, memberName } };
+    },
+
+    async addItemToGroupRoom(code, item, memberName) {
+      try {
+        const res = await fetch(`${API_BASE}/innovations/group-room/${encodeURIComponent(code)}/item`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ item, memberName })
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {}
+      return { success: true };
+    }
+  };
+
+  // Realistic client-side simulation for static GitHub Pages
+  function simulateTracking(orderId, onUpdate, onComplete) {
+    const states = [
+      { status: 'placed', step: 1, message: 'Order placed with GL Bajaj Campus Store', etaMinutes: 24, progressPercent: 10, driverLat: 28.4710, driverLng: 77.4950 },
+      { status: 'confirmed', step: 2, message: 'Restaurant accepted order & kitchen fired up', etaMinutes: 20, progressPercent: 30, driverLat: 28.4715, driverLng: 77.4955 },
+      { status: 'preparing', step: 3, message: 'Chef packing fresh food in tamper-proof seal', etaMinutes: 14, progressPercent: 55, driverLat: 28.4722, driverLng: 77.4962 },
+      { status: 'out_for_delivery', step: 4, message: 'Driver en route towards GL Bajaj Gate 2 / Hostel', etaMinutes: 7, progressPercent: 80, driverLat: 28.4730, driverLng: 77.4970 },
+      { status: 'delivered', step: 5, message: 'Delivered at designated Campus Drop Zone! Enjoy your meal!', etaMinutes: 0, progressPercent: 100, driverLat: 28.4735, driverLng: 77.4975, type: 'DELIVERED' }
+    ];
+
+    let current = 0;
+    onUpdate({ orderId, ...states[0] });
+
+    const timer = setInterval(() => {
+      current++;
+      if (current < states.length) {
+        onUpdate({ orderId, ...states[current] });
+        if (states[current].type === 'DELIVERED') {
+          clearInterval(timer);
+          if (onComplete) onComplete(states[current]);
+        }
+      } else {
+        clearInterval(timer);
+      }
+    }, 3000);
+  }
+
+  window.foodlyApi = api;
+})();

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Foodly — Campus Food Delivery Platform | GL Bajaj</title>
+  <meta name="description" content="Discover delicious local restaurants, order food online, and track your delivery in real-time with Foodly."/>
+  
+  <!-- Tailwind CSS CDN with forms and container queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Custom Theme Config matching Stitch Design Tokens -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#aa3700",
+            "primary-container": "#ff5e18",
+            "primary-fixed": "#ffdbcf",
+            "primary-fixed-dim": "#ffb59b",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#551700",
+            "on-primary-fixed": "#380d00",
+            "secondary": "#575e70",
+            "secondary-container": "#d9dff5",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#5c6274",
+            "tertiary": "#006c4a",
+            "tertiary-container": "#2aa778",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#003422",
+            "background": "#f9f9ff",
+            "on-background": "#151c27",
+            "surface": "#f9f9ff",
+            "on-surface": "#151c27",
+            "surface-dim": "#d3daea",
+            "surface-bright": "#f9f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "surface-container": "#e7eefe",
+            "surface-container-high": "#e2e8f8",
+            "surface-container-highest": "#dce2f3",
+            "on-surface-variant": "#5b4138",
+            "surface-variant": "#dce2f3",
+            "outline": "#8f7066",
+            "outline-variant": "#e4beb2",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "margin-mobile": "20px",
+            "gutter": "24px",
+            "container-max": "1280px",
+            "stack-lg": "32px",
+            "stack-sm": "4px",
+            "margin-desktop": "64px",
+            "base": "8px",
+            "stack-md": "16px"
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="./css/styles.css"/>
+  <link rel="stylesheet" href="./css/effects.css"/>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col font-sans selection:bg-primary-fixed selection:text-primary">
+  <!-- Top Project Showcase Banner linking Report and PPT -->
+  <div class="bg-slate-900 text-white py-2 px-4 text-xs font-semibold flex flex-wrap items-center justify-between shadow-md z-50 relative border-b border-slate-800">
+    <div class="flex items-center gap-2">
+      <span class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px] tracking-wider uppercase font-bold">GL Bajaj B.Tech CSE</span>
+      <span class="hidden sm:inline">Foodly — Campus Discovery &amp; Logistics Platform</span>
+    </div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <a href="./GL_BAJAJ_PROJECT_REPORT_FOODLY.html" target="_blank" class="hover:bg-slate-800 transition flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700">
+        <span>📄 Report</span>
+      </a>
+      <a href="./FOODLY_PROJECT_PRESENTATION.html" target="_blank" class="hover:bg-slate-800 transition flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700">
+        <span>📊 Slide Deck</span>
+      </a>
+      <a href="./FOODLY_PROJECT_PRESENTATION.pptx" download="FOODLY_PROJECT_PRESENTATION.pptx" class="hover:bg-amber-300 transition flex items-center gap-1 bg-amber-400 text-slate-900 px-2.5 py-1 rounded font-bold shadow-sm">
+        <span>📥 PPTX</span>
+      </a>
+      <a href="./GL_BAJAJ_PROJECT_REPORT_FOODLY.pdf" download="GL_BAJAJ_PROJECT_REPORT_FOODLY.pdf" class="hover:bg-red-700 transition flex items-center gap-1 bg-red-600 text-white px-2.5 py-1 rounded font-bold shadow-sm">
+        <span>📥 PDF</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Shared Top Navigation -->
+  <header id="navbar-container" class="fixed top-8 w-full z-40 transition-all"></header>
+
+  <!-- Main View Router Container -->
+  <main id="app" class="flex-grow pt-24 md:pt-28 pb-20 md:pb-0"></main>
+
+  <!-- Mobile Bottom Navigation Bar (Visible on mobile/tablet) -->
+  <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-lg border-t border-surface-variant z-40 flex justify-around items-center py-2 px-3 shadow-2xl">
+    <a href="#home" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">home</span>
+      <span>Home</span>
+    </a>
+    <a href="#search" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">search</span>
+      <span>Search</span>
+    </a>
+    <a href="#orders" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">receipt_long</span>
+      <span>Orders</span>
+    </a>
+    <a href="#innovations" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">auto_awesome</span>
+      <span>Innovations</span>
+    </a>
+    <a href="#profile" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">person</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Slide-over Cart Drawer -->
+  <div id="cart-drawer-container"></div>
+
+  <!-- Group Order Room Modal -->
+  <div id="group-order-modal-container"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-16 md:bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- Shared Footer -->
+  <footer id="footer-container" class="mt-auto pb-16 md:pb-0"></footer>
+
+  <!-- Scripts -->
+  <script src="./js/store.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/components/navbar.js"></script>
+  <script src="./js/components/cartDrawer.js"></script>
+  <script src="./js/components/groupOrderModal.js"></script>
+  <script src="./js/components/footer.js"></script>
+  <script src="./js/views/homeView.js"></script>
+  <script src="./js/views/searchView.js"></script>
+  <script src="./js/views/restaurantView.js"></script>
+  <script src="./js/views/checkoutView.js"></script>
+  <script src="./js/views/trackingView.js"></script>
+  <script src="./js/views/ordersView.js"></script>
+  <script src="./js/views/offersView.js"></script>
+  <script src="./js/views/innovationsView.js"></script>
+  <script src="./js/views/partnerView.js"></script>
+  <script src="./js/views/profileView.js"></script>
+  <script src="./js/views/helpView.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/effects.js"></script>
+</body>
+</html>
