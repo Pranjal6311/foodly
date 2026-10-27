@@ -199,7 +199,7 @@
       <span class="material-symbols-outlined" style="font-size:22px;">electric_moped</span>
       <span style="font-size:10px;font-weight:800;">Delivery</span>
     </a>
-    <a href="#search" id="mob-nav-dining" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
+    <a href="#dining" id="mob-nav-dining" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
       <span class="material-symbols-outlined" style="font-size:22px;">restaurant</span>
       <span style="font-size:10px;font-weight:800;">Dining</span>
     </a>
@@ -228,7 +228,7 @@
       const p = document.getElementById('mob-nav-profile');
       if (h && (hash === '#home' || hash === '' || hash.startsWith('#restaurant'))) { h.style.color='#ff5e18'; h.style.background='rgba(255,94,24,0.08)'; }
       else if (h) { h.style.color='#575e70'; h.style.background='transparent'; }
-      if (d && hash.startsWith('#search')) { d.style.color='#ff5e18'; d.style.background='rgba(255,94,24,0.08)'; }
+      if (d && (hash.startsWith('#dining') || hash.startsWith('#search'))) { d.style.color='#ff5e18'; d.style.background='rgba(255,94,24,0.08)'; }
       else if (d) { d.style.color='#575e70'; d.style.background='transparent'; }
       if (o && (hash.startsWith('#orders') || hash.startsWith('#track'))) { o.style.color='#ff5e18'; o.style.background='rgba(255,94,24,0.08)'; }
       else if (o) { o.style.color='#575e70'; o.style.background='transparent'; }
@@ -252,25 +252,25 @@
   <footer id="footer-container" class="mt-auto pb-20 md:pb-0"></footer>
 
   <!-- Scripts -->
-  <script src="./js/store.js"></script>
-  <script src="./js/api.js"></script>
-  <script src="./js/components/navbar.js"></script>
-  <script src="./js/components/cartDrawer.js"></script>
-  <script src="./js/components/groupOrderModal.js"></script>
-  <script src="./js/components/footer.js"></script>
-  <script src="./js/views/homeView.js"></script>
-  <script src="./js/views/searchView.js"></script>
-  <script src="./js/views/restaurantView.js"></script>
-  <script src="./js/views/checkoutView.js"></script>
-  <script src="./js/views/trackingView.js"></script>
-  <script src="./js/views/ordersView.js"></script>
-  <script src="./js/views/offersView.js"></script>
-  <script src="./js/views/innovationsView.js"></script>
-  <script src="./js/views/partnerView.js"></script>
-  <script src="./js/views/profileView.js"></script>
-  <script src="./js/views/settingsView.js"></script>
-  <script src="./js/views/helpView.js"></script>
-  <script src="./js/app.js"></script>
-  <script src="./js/effects.js"></script>
+  <script src="./js/store.js?v=3.2"></script>
+  <script src="./js/api.js?v=3.2"></script>
+  <script src="./js/components/navbar.js?v=3.2"></script>
+  <script src="./js/components/cartDrawer.js?v=3.2"></script>
+  <script src="./js/components/groupOrderModal.js?v=3.2"></script>
+  <script src="./js/components/footer.js?v=3.2"></script>
+  <script src="./js/views/homeView.js?v=3.2"></script>
+  <script src="./js/views/searchView.js?v=3.2"></script>
+  <script src="./js/views/restaurantView.js?v=3.2"></script>
+  <script src="./js/views/checkoutView.js?v=3.2"></script>
+  <script src="./js/views/trackingView.js?v=3.2"></script>
+  <script src="./js/views/ordersView.js?v=3.2"></script>
+  <script src="./js/views/offersView.js?v=3.2"></script>
+  <script src="./js/views/innovationsView.js?v=3.2"></script>
+  <script src="./js/views/partnerView.js?v=3.2"></script>
+  <script src="./js/views/profileView.js?v=3.2"></script>
+  <script src="./js/views/settingsView.js?v=3.2"></script>
+  <script src="./js/views/helpView.js?v=3.2"></script>
+  <script src="./js/app.js?v=3.2"></script>
+  <script src="./js/effects.js?v=3.2"></script>
 </body>
 </html>

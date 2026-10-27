@@ -100,7 +100,8 @@
 
           <!-- Navigation Links -->
           <nav class="flex gap-gutter items-center">
-            <a class="${isBrowseActive ? 'text-primary font-bold border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary'} cursor-pointer active:scale-95 transition-colors duration-200" href="#home">Browse</a>
+            <a class="${isBrowseActive ? 'text-primary font-bold border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary'} cursor-pointer active:scale-95 transition-colors duration-200" href="#home">Delivery</a>
+            <a class="${(currentHash === '#dining' || currentHash.startsWith('#search')) ? 'text-primary font-bold border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary'} cursor-pointer active:scale-95 transition-colors duration-200" href="#dining">Dining Out</a>
             <a class="${isOffersActive ? 'text-primary font-bold border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary'} transition-colors duration-200 cursor-pointer active:scale-95" href="#offers">Offers</a>
             <a class="${isOrdersActive ? 'text-primary font-bold border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary'} transition-colors duration-200 cursor-pointer active:scale-95" href="#orders">Orders</a>
             <a class="${isHelpActive ? 'text-primary font-bold border-b-2 border-primary pb-1' : 'text-on-surface-variant hover:text-primary'} transition-colors duration-200 cursor-pointer active:scale-95" href="#help">Help</a>

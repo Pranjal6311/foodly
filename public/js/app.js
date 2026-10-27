@@ -60,7 +60,7 @@
     try {
       if (route === 'home') {
         if (typeof window.renderHomeView === 'function') window.renderHomeView(appContainer);
-      } else if (route === 'search') {
+      } else if (route === 'search' || route === 'dining') {
         if (typeof window.renderSearchView === 'function') window.renderSearchView(appContainer, query);
       } else if (route === 'restaurant') {
         if (param) {
