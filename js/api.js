@@ -144,14 +144,53 @@
     async getOrder(id) {
       try {
         const res = await fetch(`${API_BASE}/orders/${encodeURIComponent(id)}`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.data) return json;
+        }
       } catch (e) {}
 
       const saved = localStorage.getItem('foodly_orders_history');
       const orders = saved ? JSON.parse(saved) : [];
-      const found = orders.find(o => o.id === id);
-      if (found) return { success: true, data: found };
-      throw new Error('Order not found');
+      let found = orders.find(o => o.id === id);
+      if (!found && orders.length > 0) {
+        found = orders[0];
+      }
+      if (!found) {
+        found = {
+          id: id || "FD-9204",
+          createdAt: new Date().toISOString(),
+          status: "out_for_delivery",
+          restaurantName: "GL Bajaj Central Cafeteria",
+          deliveryAddress: "GL Bajaj Boys Hostel (Block A & B), Knowledge Park III, Greater Noida",
+          paymentMethod: "Foodly Wallet",
+          items: [
+            { name: "Paneer Butter Masala Combo", quantity: 1, price: 180 },
+            { name: "Butter Naan (2 pcs)", quantity: 1, price: 50 }
+          ],
+          bill: { total: 230, subtotal: 230, deliveryFee: 0, taxes: 12, discount: 12 }
+        };
+      }
+
+      const defaultDriver = {
+        name: "Rahul Sharma",
+        phone: "+91 98112 34567",
+        vehicle: "Bajaj Chetak EV • UP 16 BT 4821",
+        deliveriesCount: 342,
+        rating: "4.9",
+        photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+        lat: 28.4685,
+        lng: 77.4930
+      };
+
+      const enriched = {
+        ...found,
+        driver: found.driver || defaultDriver,
+        statusText: found.statusText || (found.status === 'delivered' ? 'Delivered at designated Campus Drop Zone! Enjoy your meal!' : 'Rider Rahul is zipping towards GL Bajaj Campus on EV Scooter'),
+        estimatedDelivery: found.estimatedDelivery || (found.status === 'delivered' ? '0 min' : '5-7 mins')
+      };
+
+      return { success: true, data: enriched };
     },
 
     async createOrder(orderPayload) {
@@ -291,14 +330,87 @@
     }
   };
 
-  // Realistic client-side simulation for static GitHub Pages
+  // Realistic client-side GPS simulation for static GitHub Pages and web preview
   function simulateTracking(orderId, onUpdate, onComplete) {
     const states = [
-      { status: 'placed', step: 1, message: 'Order placed with GL Bajaj Campus Store', etaMinutes: 24, progressPercent: 10, driverLat: 28.4710, driverLng: 77.4950 },
-      { status: 'confirmed', step: 2, message: 'Restaurant accepted order & kitchen fired up', etaMinutes: 20, progressPercent: 30, driverLat: 28.4715, driverLng: 77.4955 },
-      { status: 'preparing', step: 3, message: 'Chef packing fresh food in tamper-proof seal', etaMinutes: 14, progressPercent: 55, driverLat: 28.4722, driverLng: 77.4962 },
-      { status: 'out_for_delivery', step: 4, message: 'Driver en route towards GL Bajaj Gate 2 / Hostel', etaMinutes: 7, progressPercent: 80, driverLat: 28.4730, driverLng: 77.4970 },
-      { status: 'delivered', step: 5, message: 'Delivered at designated Campus Drop Zone! Enjoy your meal!', etaMinutes: 0, progressPercent: 100, driverLat: 28.4735, driverLng: 77.4975, type: 'DELIVERED' }
+      {
+        type: 'STATUS_UPDATE',
+        status: 'placed',
+        step: 1,
+        statusText: 'Order sent to GL Bajaj Central Kitchen',
+        remainingMinutes: 18,
+        speedKmh: 0,
+        distanceKm: '2.4 km',
+        driverLat: 28.4715,
+        driverLng: 77.4915,
+        driverEtaText: '18 mins',
+        progressPercent: 15
+      },
+      {
+        type: 'STATUS_UPDATE',
+        status: 'confirmed',
+        step: 2,
+        statusText: 'Kitchen confirmed order & chef preparing items',
+        remainingMinutes: 15,
+        speedKmh: 0,
+        distanceKm: '2.4 km',
+        driverLat: 28.4715,
+        driverLng: 77.4915,
+        driverEtaText: '15 mins',
+        progressPercent: 30
+      },
+      {
+        type: 'STATUS_UPDATE',
+        status: 'preparing',
+        step: 3,
+        statusText: 'Chef packing meal into eco-friendly tamper-proof thermal box',
+        remainingMinutes: 11,
+        speedKmh: 12,
+        distanceKm: '2.0 km',
+        driverLat: 28.4705,
+        driverLng: 77.4925,
+        driverEtaText: '11 mins',
+        progressPercent: 48
+      },
+      {
+        type: 'DRIVER_MOVE',
+        status: 'out_for_delivery',
+        step: 4,
+        statusText: 'Rahul picked up package; riding down Knowledge Park III Road',
+        remainingMinutes: 7,
+        speedKmh: 28,
+        distanceKm: '1.4 km',
+        driverLat: 28.4685,
+        driverLng: 77.4940,
+        driverEtaText: '7 mins away',
+        progressPercent: 68
+      },
+      {
+        type: 'DRIVER_MOVE',
+        status: 'out_for_delivery',
+        step: 4,
+        statusText: 'Approaching GL Bajaj Gate 2 / Academic Block Roundabout',
+        remainingMinutes: 3,
+        speedKmh: 20,
+        distanceKm: '0.5 km',
+        driverLat: 28.4655,
+        driverLng: 77.4970,
+        driverEtaText: '3 mins away',
+        progressPercent: 88
+      },
+      {
+        type: 'DELIVERED',
+        status: 'delivered',
+        step: 5,
+        statusText: 'Delivered at designated Campus Drop Zone! Enjoy your meal!',
+        remainingMinutes: 0,
+        speedKmh: 0,
+        distanceKm: '0.0 km',
+        driverLat: 28.4639,
+        driverLng: 77.4988,
+        driverEtaText: 'Delivered!',
+        progressPercent: 100
+      }
     ];
 
     let current = 0;
@@ -315,7 +427,13 @@
       } else {
         clearInterval(timer);
       }
-    }, 3000);
+    }, 4000);
+
+    return {
+      close() {
+        clearInterval(timer);
+      }
+    };
   }
 
   window.foodlyApi = api;

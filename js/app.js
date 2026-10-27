@@ -54,11 +54,8 @@
     } else if (route === 'checkout') {
       window.renderCheckoutView(appContainer);
     } else if (route === 'track') {
-      if (param) {
-        window.renderTrackingView(appContainer, param);
-      } else {
-        window.location.hash = '#orders';
-      }
+      const activeId = param || (window.foodlyStore && window.foodlyStore.orders && window.foodlyStore.orders[0] ? window.foodlyStore.orders[0].id : 'FD-9204');
+      window.renderTrackingView(appContainer, activeId);
     } else if (route === 'orders') {
       window.renderOrdersView(appContainer);
     } else if (route === 'offers') {
