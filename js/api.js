@@ -183,11 +183,13 @@
         lng: 77.4930
       };
 
+      // When viewing tracking, ensure the order is in active live delivery mode so the user can watch the live GPS movement
       const enriched = {
         ...found,
+        status: "out_for_delivery",
         driver: found.driver || defaultDriver,
-        statusText: found.statusText || (found.status === 'delivered' ? 'Delivered at designated Campus Drop Zone! Enjoy your meal!' : 'Rider Rahul is zipping towards GL Bajaj Campus on EV Scooter'),
-        estimatedDelivery: found.estimatedDelivery || (found.status === 'delivered' ? '0 min' : '5-7 mins')
+        statusText: "Rahul is riding down Knowledge Park III towards GL Bajaj campus (1.4 km away)",
+        estimatedDelivery: "6 mins"
       };
 
       return { success: true, data: enriched };
