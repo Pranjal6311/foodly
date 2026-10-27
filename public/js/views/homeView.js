@@ -77,14 +77,26 @@
     { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '🪔', title: 'Navratri Special', sub: 'Use code NAVRATRI25', code: 'NAVRATRI25', discount: 25, max: 120 },
   ];
 
-  function renderOfferBanner(offer, idx) {
+  function renderOfferSlide(offer, idx) {
     return `
-      <div class="offer-banner shrink-0 snap-start" onclick="window.foodlyStore.applyCoupon({code:'${offer.code}',discountPercent:${offer.discount},maxDiscount:${offer.max},description:'${offer.title}'}); window.foodlyStore.showToast('Coupon ${offer.code} applied!','success');" style="background:${offer.gradient};display:flex;align-items:center;padding:18px 20px;gap:14px;cursor:pointer;">
-        <div style="font-size:40px;line-height:1;">${offer.emoji}</div>
-        <div>
-          <div style="font-size:20px;font-weight:900;color:#fff;line-height:1.1;">${offer.title}</div>
-          <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.85);margin-top:3px;">${offer.sub}</div>
-          <div style="margin-top:8px;display:inline-block;background:rgba(255,255,255,0.2);border:1.5px dashed rgba(255,255,255,0.6);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:800;color:#fff;letter-spacing:0.06em;">${offer.code}</div>
+      <div class="offer-slide shrink-0 w-full" style="background:${offer.gradient};display:flex;align-items:center;justify-content:space-between;padding:22px 26px;cursor:pointer;position:relative;overflow:hidden;" onclick="window.foodlyStore.applyCoupon({code:'${offer.code}',discountPercent:${offer.discount},maxDiscount:${offer.max},description:'${offer.title}'}); window.foodlyStore.showToast('Coupon ${offer.code} applied!','success');">
+        <!-- Ambient circle decoration -->
+        <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.12);pointer-events:none;"></div>
+        
+        <div style="display:flex;align-items:center;gap:18px;position:relative;z-index:2;">
+          <div style="font-size:46px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.25));">${offer.emoji}</div>
+          <div>
+            <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.15;letter-spacing:-0.02em;">${offer.title}</div>
+            <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);margin-top:4px;">${offer.sub}</div>
+            <div style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.25);border:1.5px dashed rgba(255,255,255,0.8);border-radius:8px;padding:4px 12px;font-size:11px;font-weight:900;color:#fff;letter-spacing:0.06em;">
+              <span>TAP TO APPLY:</span>
+              <span style="text-decoration:underline;">${offer.code}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative;z-index:2;display:none;" class="sm:block">
+          <span style="background:#fff;color:#151c27;font-size:11px;font-weight:900;padding:8px 16px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.15);">Claim Deal →</span>
         </div>
       </div>
     `;
@@ -170,14 +182,37 @@
 
         <div style="max-width:1280px;margin:0 auto;padding:0 16px;" class="md:px-16">
 
-          <!-- ══ OFFER BANNERS ══════════════════════════════════════════════ -->
-          <section style="margin-top:20px;margin-bottom:24px;">
+          <!-- ══ OFFER BANNERS CAROUSEL WITH SLIDING TRANSITION ═══════════ -->
+          <section style="margin-top:20px;margin-bottom:28px;position:relative;">
             <div class="flex items-center justify-between mb-3">
-              <h2 class="section-title">Deals for you 🔥</h2>
-              <a href="#offers" class="text-xs font-bold text-primary flex items-center gap-0.5">All offers <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+              <div>
+                <h2 class="section-title">Deals for you 🔥</h2>
+                <p class="section-sub">Swipe or tap to apply exclusive campus coupons</p>
+              </div>
+              <!-- Carousel Controls: Prev / Next Buttons -->
+              <div class="flex items-center gap-1.5">
+                <button id="offer-carousel-prev" class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container border border-surface-variant flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer" title="Previous Deal">
+                  <span class="material-symbols-outlined text-sm">chevron_left</span>
+                </button>
+                <button id="offer-carousel-next" class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container border border-surface-variant flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer" title="Next Deal">
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </button>
+                <a href="#offers" class="text-xs font-bold text-primary flex items-center gap-0.5 ml-2 hover:underline">All offers <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+              </div>
             </div>
-            <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;" class="scrollbar-none snap-scroll">
-              ${OFFERS.map((o, i) => renderOfferBanner(o, i)).join('')}
+
+            <!-- Viewport & Sliding Track -->
+            <div id="offer-carousel-viewport" style="overflow:hidden;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);position:relative;">
+              <div id="offer-carousel-track" style="display:flex;transition:transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);will-change:transform;">
+                ${OFFERS.map((o, i) => renderOfferSlide(o, i)).join('')}
+              </div>
+            </div>
+
+            <!-- Carousel Pagination Dots -->
+            <div id="offer-carousel-dots" style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:10px;">
+              ${OFFERS.map((_, i) => `
+                <button class="offer-carousel-dot ${i === 0 ? 'active' : ''}" data-idx="${i}" style="width:${i === 0 ? '24px' : '8px'};height:8px;border-radius:99px;background:${i === 0 ? '#ff5e18' : '#dce2f3'};border:none;cursor:pointer;transition:all 0.3s ease;" title="Slide ${i + 1}"></button>
+              `).join('')}
             </div>
           </section>
 
@@ -383,6 +418,7 @@
     const addressInput = document.getElementById('hero-address-input');
     if (addressInput && store) addressInput.value = store.activeAddress || '';
 
+    initOfferCarousel();
     loadHomeData();
     bindMoodPills();
   }
@@ -511,6 +547,83 @@
         loadAiMoodDishes(pill.dataset.mood);
       });
     });
+  }
+
+  // ── Offer Carousel Slider Controller ─────────────────────────────────────
+  let offerSlideTimer = null;
+  function initOfferCarousel() {
+    const track = document.getElementById('offer-carousel-track');
+    const viewport = document.getElementById('offer-carousel-viewport');
+    const prevBtn = document.getElementById('offer-carousel-prev');
+    const nextBtn = document.getElementById('offer-carousel-next');
+    const dots = document.querySelectorAll('.offer-carousel-dot');
+    if (!track || !viewport) return;
+
+    if (offerSlideTimer) {
+      clearInterval(offerSlideTimer);
+      offerSlideTimer = null;
+    }
+
+    let currentIndex = 0;
+    const totalSlides = OFFERS.length;
+
+    function goToSlide(index) {
+      currentIndex = (index + totalSlides) % totalSlides;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      dots.forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.style.width = '24px';
+          dot.style.background = '#ff5e18';
+        } else {
+          dot.style.width = '8px';
+          dot.style.background = '#dce2f3';
+        }
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.onclick = (e) => {
+        e.stopPropagation();
+        goToSlide(currentIndex - 1);
+      };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = (e) => {
+        e.stopPropagation();
+        goToSlide(currentIndex + 1);
+      };
+    }
+
+    dots.forEach(dot => {
+      dot.onclick = (e) => {
+        e.stopPropagation();
+        const idx = parseInt(dot.dataset.idx, 10);
+        goToSlide(idx);
+      };
+    });
+
+    // Auto-slide every 3.5 seconds
+    function startAutoSlide() {
+      if (offerSlideTimer) clearInterval(offerSlideTimer);
+      offerSlideTimer = setInterval(() => {
+        goToSlide(currentIndex + 1);
+      }, 3500);
+    }
+
+    function stopAutoSlide() {
+      if (offerSlideTimer) {
+        clearInterval(offerSlideTimer);
+        offerSlideTimer = null;
+      }
+    }
+
+    viewport.addEventListener('mouseenter', stopAutoSlide);
+    viewport.addEventListener('mouseleave', startAutoSlide);
+    viewport.addEventListener('touchstart', stopAutoSlide, { passive: true });
+    viewport.addEventListener('touchend', startAutoSlide, { passive: true });
+
+    startAutoSlide();
   }
 
   window.renderHomeView = renderHomeView;

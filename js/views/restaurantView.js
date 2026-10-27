@@ -60,47 +60,60 @@
 
       function renderFullView() {
         container.innerHTML = `
-          <div class="fade-in">
-            <!-- Hero Section -->
-            <section class="relative w-full h-[360px] md:h-[420px] bg-surface-container overflow-hidden">
-              <div 
-                class="absolute inset-0 bg-cover bg-center w-full h-full transform hover:scale-105 transition-transform duration-700" 
-                style="background-image: url('${rest.heroImage || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'}')"
-              ></div>
-              <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
-              
-              <div class="absolute bottom-0 w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-6">
-                <div class="bg-surface-container-lowest/95 backdrop-blur-md p-6 md:p-8 rounded-2xl shadow-xl border border-surface-variant max-w-2xl inline-block">
-                  <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <span class="bg-primary-container text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                      ${rest.type === 'food-cart' ? 'Food Cart' : ((rest.type === 'cafe' || rest.isCafe) ? 'Cafe' : 'Restaurant')}
+          <div class="fade-in" style="background:#f9f9ff;min-height:100vh;">
+            <!-- Breadcrumbs Navigation -->
+            <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pt-4 pb-2">
+              <div class="flex items-center gap-1.5 text-xs text-secondary font-medium">
+                <a href="#home" class="hover:text-primary transition-colors">Home</a>
+                <span>/</span>
+                <a href="#search" class="hover:text-primary transition-colors">Restaurants</a>
+                <span>/</span>
+                <span class="text-on-surface font-bold truncate">${rest.name}</span>
+              </div>
+            </div>
+
+            <!-- Restaurant Summary Header Card -->
+            <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-6">
+              <div class="bg-surface-container-lowest rounded-2xl md:rounded-3xl p-5 md:p-7 border border-surface-variant/70 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2 flex-wrap">
+                    <span class="bg-primary/10 text-primary text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      ${rest.type === 'food-cart' ? 'Campus Cart 🛒' : ((rest.type === 'cafe' || rest.isCafe) ? 'Cafe ☕' : ((rest.cuisines || []).some(c => c.toLowerCase().includes('hotel')) ? 'Hotel Kitchen 🏨' : 'Restaurant 🍽️'))}
                     </span>
-                    <span class="text-xs font-semibold text-secondary">${rest.area ? rest.area + ' &bull; ' : ''}${(rest.cuisines || []).join(' &bull; ')}</span>
+                    <span class="text-xs font-semibold text-secondary">${rest.area || 'Knowledge Park III, Greater Noida'}</span>
                   </div>
-                  <h1 class="text-2xl md:text-4xl font-extrabold text-on-surface mb-2 tracking-tight">${rest.name}</h1>
-                  <p class="text-xs md:text-sm text-on-surface-variant mb-4 font-medium">${rest.headline || ''}</p>
-                  
-                  <div class="flex flex-wrap gap-4 items-center text-xs md:text-sm font-bold text-on-surface">
-                    <div class="flex items-center gap-1.5 text-primary">
-                      <span class="material-symbols-outlined text-primary-container text-lg filled">star</span>
-                      <span>${rest.rating || '4.8'} (${rest.reviewsCount || '1.2k+'})</span>
+                  <h1 class="text-2xl md:text-3xl font-black text-on-surface tracking-tight mb-2">${rest.name}</h1>
+                  <p class="text-xs md:text-sm text-secondary font-medium mb-3 max-w-2xl">${(rest.cuisines || []).join(' • ')}</p>
+
+                  <div class="flex flex-wrap items-center gap-2.5 text-xs font-bold text-on-surface">
+                    <div class="flex items-center gap-1 bg-emerald-600 text-white px-2.5 py-1 rounded-lg">
+                      <span class="material-symbols-outlined text-xs filled">star</span>
+                      <span>${rest.rating || '4.8'}</span>
+                      <span class="text-[10px] text-emerald-100 font-normal">(${rest.reviewsCount || '1.2k+'})</span>
                     </div>
-                    <div class="h-4 w-px bg-surface-variant"></div>
-                    <div class="flex items-center gap-1.5 text-secondary">
-                      <span class="material-symbols-outlined text-base">schedule</span>
+                    <div class="flex items-center gap-1 text-secondary bg-surface-container-low px-2.5 py-1 rounded-lg">
+                      <span class="material-symbols-outlined text-sm">schedule</span>
                       <span>${rest.deliveryTime || '20-30 min'}</span>
                     </div>
-                    <div class="h-4 w-px bg-surface-variant"></div>
-                    <span class="px-2.5 py-0.5 bg-secondary-container/50 text-on-secondary-container rounded-full">${rest.priceTier || '₹₹'}</span>
-                    <div class="h-4 w-px bg-surface-variant"></div>
-                    <span class="text-secondary font-medium">Delivery: ${rest.deliveryFee === 0 ? '<strong class="text-emerald-700">₹0 Free Campus Pool</strong>' : '₹' + rest.deliveryFee}</span>
+                    <div class="bg-surface-container-low px-2.5 py-1 rounded-lg text-secondary">
+                      <span>${rest.priceTier || '₹₹'}</span>
+                    </div>
+                    <div class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                      <span class="material-symbols-outlined text-sm">school</span>
+                      <span>${rest.deliveryFee === 0 ? '₹0 Free Campus Delivery' : '₹' + rest.deliveryFee + ' Delivery'}</span>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Right Food Image Thumbnail -->
+                <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-32 rounded-2xl overflow-hidden shrink-0 shadow-md border border-surface-variant/40">
+                  <img src="${rest.heroImage || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'}" alt="${rest.name}" class="w-full h-full object-cover"/>
+                </div>
               </div>
-            </section>
+            </div>
 
             <!-- Main Layout: Sidebar Categories + Menu Items + Live Sticky Cart -->
-            <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-8 grid grid-cols-12 gap-gutter relative">
+            <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-12 grid grid-cols-12 gap-gutter relative">
               <!-- Left Sticky Category Navigation (Desktop) -->
               <aside class="col-span-12 lg:col-span-2 hidden lg:block sticky top-28 h-fit">
                 <h3 class="text-lg font-extrabold mb-3 text-on-surface flex items-center justify-between">

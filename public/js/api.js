@@ -202,6 +202,59 @@
       throw new Error('Restaurant not found');
     },
 
+    async searchDishes(query = '', filters = {}) {
+      const data = await getStaticData();
+      if (!data || !data.restaurants) return { success: true, count: 0, data: [] };
+
+      const q = (query || '').toLowerCase().trim();
+      const matchedDishes = [];
+
+      data.restaurants.forEach(rest => {
+        const menu = rest.menu || [];
+        menu.forEach(dish => {
+          let matches = false;
+          if (!q) {
+            matches = true;
+          } else {
+            const nameMatch = dish.name.toLowerCase().includes(q);
+            const descMatch = (dish.description || '').toLowerCase().includes(q);
+            const catMatch = (dish.category || '').toLowerCase().includes(q);
+            const tagMatch = (dish.tags || []).some(t => t.toLowerCase().includes(q));
+            const restMatch = rest.name.toLowerCase().includes(q);
+            const cuisineMatch = (rest.cuisines || []).some(c => c.toLowerCase().includes(q));
+            matches = nameMatch || descMatch || catMatch || tagMatch || restMatch || cuisineMatch;
+          }
+
+          if (filters.dietary && (filters.dietary.toLowerCase() === 'vegetarian' || filters.dietary.toLowerCase() === 'pure veg') && !dish.veg) {
+            matches = false;
+          }
+
+          if (matches) {
+            matchedDishes.push({
+              dish,
+              restaurant: {
+                id: rest.id,
+                name: rest.name,
+                type: rest.type,
+                isCafe: rest.isCafe,
+                rating: rest.rating,
+                deliveryTime: rest.deliveryTime,
+                deliveryFee: rest.deliveryFee,
+                area: rest.area,
+                heroImage: rest.heroImage
+              }
+            });
+          }
+        });
+      });
+
+      return {
+        success: true,
+        count: matchedDishes.length,
+        data: matchedDishes
+      };
+    },
+
     async getCategories() {
       try {
         const res = await fetch(`${API_BASE}/restaurants/meta/categories`);
