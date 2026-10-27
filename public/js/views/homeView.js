@@ -122,60 +122,210 @@
     container.innerHTML = `
       <div class="fade-in" style="background:#f9f9ff;min-height:100vh;">
 
-        <!-- ══ SWIGGY-STYLE HERO BANNER ════════════════════════════════════ -->
-        <section style="background:linear-gradient(135deg,#ff5e18 0%,#aa3700 100%);padding:20px 20px 36px;position:relative;overflow:hidden;" class="md:hidden">
-          <!-- Background circles -->
-          <div style="position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.08);pointer-events:none;"></div>
-          <div style="position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;border-radius:50%;background:rgba(0,0,0,0.08);pointer-events:none;"></div>
+        <!-- ══ CREATIVE VIBRANT MOBILE HERO BANNER (md:hidden) ════════════ -->
+        <section style="background:linear-gradient(135deg,#130601 0%,#290d02 32%,#aa3700 70%,#ff5e18 100%);padding:22px 18px 32px;position:relative;overflow:hidden;" class="md:hidden">
+          <!-- Background ambient circles -->
+          <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,110,30,0.3) 0%,transparent 70%);filter:blur(20px);pointer-events:none;"></div>
+          <div style="position:absolute;bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:rgba(0,0,0,0.2);pointer-events:none;"></div>
 
           <div style="position:relative;z-index:1;">
-            <p style="color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;margin-bottom:4px;">🍔 Good food, fast delivery</p>
-            <h1 style="color:#fff;font-size:24px;font-weight:900;line-height:1.2;margin-bottom:16px;">Craving something <br>delicious? 🔥</h1>
-            <!-- Search bar -->
-            <div class="search-bar-hero" onclick="window.location.hash='#search'" style="cursor:pointer;">
-              <span class="material-symbols-outlined" style="color:#ff5e18;font-size:20px;">search</span>
-              <span style="color:#9ca3af;font-size:13px;font-weight:500;">Search restaurants, dishes...</span>
-              <div style="margin-left:auto;background:#ff5e18;color:#fff;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:800;">Search</div>
+            <!-- Live Status Pill -->
+            <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.14);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:99px;padding:3px 10px;margin-bottom:10px;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4ade80;"></span>
+              <span style="color:#fff;font-size:11px;font-weight:800;">GL Bajaj Campus Express • 20-35m</span>
             </div>
-            <!-- Delivery time badge -->
-            <div style="margin-top:12px;display:flex;align-items:center;gap:6px;">
-              <div style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:99px;padding:4px 12px;display:inline-flex;align-items:center;gap:5px;">
-                <span class="material-symbols-outlined" style="font-size:13px;color:#fff;">electric_moped</span>
-                <span style="color:#fff;font-size:11px;font-weight:700;">Deliver in 20-40 min</span>
-              </div>
-              <div style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:99px;padding:4px 12px;display:inline-flex;align-items:center;gap:5px;">
-                <span class="material-symbols-outlined filled" style="font-size:13px;color:#fff;">location_on</span>
-                <span style="color:#fff;font-size:11px;font-weight:700;">GL Bajaj Campus</span>
-              </div>
+
+            <h1 style="color:#fff;font-size:26px;font-weight:900;line-height:1.15;margin-bottom:14px;letter-spacing:-0.02em;">
+              Craving Something <br><span style="background:linear-gradient(90deg,#ffedd5,#fde047,#ff9800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Delicious? 🔥</span>
+            </h1>
+
+            <!-- Search Bar Capsule -->
+            <div class="search-bar-hero" onclick="window.location.hash='#search'" style="cursor:pointer;background:#fff;border-radius:14px;padding:6px 6px 6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 10px 25px rgba(0,0,0,0.25);">
+              <span class="material-symbols-outlined" style="color:#ff5e18;font-size:20px;">search</span>
+              <span style="color:#9ca3af;font-size:12px;font-weight:600;flex:1;">Search dishes, restros, cafes...</span>
+              <div style="background:linear-gradient(135deg,#ff5e18,#d44000);color:#fff;padding:6px 14px;border-radius:10px;font-size:11px;font-weight:800;">Search</div>
+            </div>
+
+            <!-- Quick Mobile Chips -->
+            <div style="margin-top:10px;display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;" class="scrollbar-none">
+              ${[
+                { label: 'Biryani', icon: '🍲', q: 'biryani' },
+                { label: 'Pizza', icon: '🍕', q: 'pizza' },
+                { label: 'Burgers', icon: '🍔', q: 'burger' },
+                { label: 'Cold Coffee', icon: '🧋', q: 'coffee' },
+              ].map(c => `
+                <a href="#search?q=${c.q}" style="display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.25);border-radius:99px;padding:3px 9px;color:#fff;font-size:10px;font-weight:700;text-decoration:none;white-space:nowrap;">
+                  <span>${c.icon}</span><span>${c.label}</span>
+                </a>
+              `).join('')}
             </div>
           </div>
         </section>
 
-        <!-- Desktop Hero -->
-        <section class="hidden md:block" style="background:linear-gradient(135deg,#ff5e18 0%,#aa3700 100%);padding:48px 64px;position:relative;overflow:hidden;">
-          <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none;"></div>
-          <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;">
-            <div style="max-width:520px;">
-              <p style="color:rgba(255,255,255,0.85);font-size:14px;font-weight:600;margin-bottom:8px;">🍔 Foodly Campus Express</p>
-              <h1 style="color:#fff;font-size:42px;font-weight:900;line-height:1.15;margin-bottom:20px;">Food you love,<br>delivered in minutes.</h1>
-              <div class="search-bar-hero" style="max-width:500px;">
-                <span class="material-symbols-outlined" style="color:#ff5e18;font-size:22px;">search</span>
-                <input id="hero-search-desktop" type="text" placeholder="Search for restaurants, dishes, cuisines..." onclick="window.location.hash='#search'" readonly style="cursor:pointer;"/>
-                <div onclick="window.location.hash='#search'" style="background:#ff5e18;color:#fff;padding:8px 20px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">Find Food</div>
+        <!-- ══ CREATIVE 3D DESKTOP HERO SHOWCASE (hidden md:block) ═══════════ -->
+        <section class="hidden md:block" style="position:relative;overflow:hidden;background:linear-gradient(135deg,#110501 0%,#260c02 28%,#6f1a00 65%,#ff5e18 100%);padding:52px 48px 60px;">
+          
+          <!-- Ambient 3D Glowing Mesh Spheres in Background -->
+          <div style="position:absolute;top:-80px;right:15%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,110,30,0.32) 0%,rgba(255,94,24,0) 70%);filter:blur(40px);pointer-events:none;animation:heroAuraPulse 6s ease-in-out infinite;"></div>
+          <div style="position:absolute;bottom:-60px;left:8%;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(234,88,12,0.22) 0%,rgba(0,0,0,0) 70%);filter:blur(50px);pointer-events:none;"></div>
+          <!-- Geometric Grid Subtle Pattern -->
+          <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px);background-size:24px 24px;opacity:0.3;pointer-events:none;"></div>
+
+          <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;position:relative;z-index:2;">
+            
+            <!-- LEFT COLUMN: Typography & Interactive Search -->
+            <div style="flex:1;max-width:580px;">
+              
+              <!-- Live Campus Status Pill -->
+              <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.24);padding:6px 14px;border-radius:99px;margin-bottom:16px;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+                <span style="position:relative;display:flex;height:8px;width:8px;">
+                  <span style="position:absolute;display:inline-flex;height:100%;width:100%;border-radius:99px;background:#4ade80;opacity:0.75;animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
+                  <span style="position:relative;display:inline-flex;border-radius:99px;height:8px;width:8px;background:#22c55e;"></span>
+                </span>
+                <span style="color:#fff;font-size:12px;font-weight:800;letter-spacing:0.02em;">GL Bajaj Campus Express • Average 18-28 mins drop</span>
               </div>
-              <div style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                <div style="background:rgba(255,255,255,0.18);border-radius:99px;padding:6px 14px;display:flex;align-items:center;gap:6px;">
-                  <span class="material-symbols-outlined" style="font-size:15px;color:#fff;">electric_moped</span>
-                  <span style="color:#fff;font-size:12px;font-weight:700;">20-40 min delivery</span>
+
+              <!-- Main Hero Headline with Slogan & Gradient -->
+              <h1 style="color:#fff;font-size:45px;font-weight:900;line-height:1.12;margin-bottom:14px;letter-spacing:-0.03em;">
+                Craving Hot Feasts? <br>
+                <span style="background:linear-gradient(90deg,#ffedd5 0%,#fde047 50%,#ff9800 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 10px 30px rgba(255,152,0,0.3);">Fast Fresh Food</span>, Delivered.
+              </h1>
+
+              <p style="color:rgba(255,255,255,0.85);font-size:14px;font-weight:500;line-height:1.5;margin-bottom:22px;">
+                Direct from top campus restros, canteens, cafes & night carts right to your hostel room or gate.
+              </p>
+
+              <!-- Interactive Floating Search Capsule -->
+              <div class="hero-search-capsule" style="background:#fff;border-radius:18px;padding:6px 8px 6px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 16px 40px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.9);max-width:520px;transition:all 0.3s ease;">
+                <span class="material-symbols-outlined" style="color:#ff5e18;font-size:24px;">search</span>
+                <input 
+                  id="hero-search-desktop" 
+                  type="text" 
+                  placeholder="Search for Biryani, Pizza, Burger, Dosa, Cafes..." 
+                  onclick="window.location.hash='#search'" 
+                  readonly 
+                  style="flex:1;border:none;outline:none;font-size:14px;font-weight:600;color:#151c27;background:transparent;cursor:pointer;"
+                />
+                <button onclick="window.location.hash='#search'" style="background:linear-gradient(135deg,#ff5e18,#d44000);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:13px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(255,94,24,0.4);transition:transform 0.2s ease;">
+                  <span>Find Food</span>
+                  <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+                </button>
+              </div>
+
+              <!-- Quick Trending Search Chips (Clickable) -->
+              <div style="margin-top:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.05em;margin-right:2px;">Trending:</span>
+                ${[
+                  { label: 'Biryani', icon: '🍲', query: 'biryani' },
+                  { label: 'Pizza', icon: '🍕', query: 'pizza' },
+                  { label: 'Burgers', icon: '🍔', query: 'burger' },
+                  { label: 'Cold Coffee', icon: '🧋', query: 'coffee' },
+                  { label: 'Momos', icon: '🥟', query: 'rolls' },
+                ].map(c => `
+                  <a href="#search?q=${c.query}" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.14);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:99px;padding:4px 11px;color:#fff;font-size:11px;font-weight:700;text-decoration:none;transition:all 0.2s ease;" class="hero-chip-hover">
+                    <span>${c.icon}</span>
+                    <span>${c.label}</span>
+                  </a>
+                `).join('')}
+              </div>
+
+              <!-- Campus Stats Row -->
+              <div style="margin-top:22px;display:flex;align-items:center;gap:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.15);">
+                <div>
+                  <div style="font-size:19px;font-weight:900;color:#fff;letter-spacing:-0.02em;">12,000+</div>
+                  <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.75);">Orders Delivered</div>
                 </div>
-                <div style="background:rgba(255,255,255,0.18);border-radius:99px;padding:6px 14px;display:flex;align-items:center;gap:6px;">
-                  <span class="material-symbols-outlined filled" style="font-size:15px;color:#fff;">location_on</span>
-                  <span style="color:#fff;font-size:12px;font-weight:700;">GL Bajaj Campus & Hostels</span>
+                <div style="width:1px;height:26px;background:rgba(255,255,255,0.2);"></div>
+                <div>
+                  <div style="font-size:19px;font-weight:900;color:#fff;letter-spacing:-0.02em;display:flex;align-items:center;gap:4px;">
+                    <span>4.8</span>
+                    <span style="color:#fde047;font-size:15px;">★</span>
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.75);">Campus Rating</div>
+                </div>
+                <div style="width:1px;height:26px;background:rgba(255,255,255,0.2);"></div>
+                <div>
+                  <div style="font-size:19px;font-weight:900;color:#fff;letter-spacing:-0.02em;">0 Fee</div>
+                  <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.75);">Select Campus Deals</div>
                 </div>
               </div>
+
             </div>
-            <div style="width:280px;height:220px;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);flex-shrink:0;" class="hidden lg:block">
-              <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Delicious food" style="width:100%;height:100%;object-fit:cover;"/>
+
+            <!-- RIGHT COLUMN: 3D INTERACTIVE FOOD SHOWCASE & FLOATING BADGES -->
+            <div class="hero-3d-scene" id="hero-3d-interactive-zone" style="flex:1;max-width:540px;height:380px;position:relative;display:flex;align-items:center;justify-content:center;">
+              
+              <!-- Floating 3D Emojis with Parallax -->
+              <div class="hero-emoji-float float-e1" style="position:absolute;top:10px;left:20px;font-size:32px;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3));pointer-events:none;">🍕</div>
+              <div class="hero-emoji-float float-e2" style="position:absolute;bottom:30px;left:10px;font-size:30px;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3));pointer-events:none;">🍔</div>
+              <div class="hero-emoji-float float-e3" style="position:absolute;top:20px;right:25px;font-size:28px;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3));pointer-events:none;">🥟</div>
+              <div class="hero-emoji-float float-e4" style="position:absolute;bottom:40px;right:20px;font-size:30px;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3));pointer-events:none;">🍟</div>
+
+              <!-- Central 3D Perspective Hero Card -->
+              <div class="hero-3d-card" id="hero-3d-card" style="width:360px;height:290px;border-radius:28px;position:relative;background:linear-gradient(145deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,0.35);box-shadow:0 30px 70px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.6);overflow:hidden;cursor:pointer;" onclick="window.location.hash='#search?q=pizza'">
+                
+                <!-- Food Image inside 3D Card with Shimmer & Steam -->
+                <img 
+                  src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80" 
+                  alt="Delicious Campus Pizza Feast" 
+                  style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;"
+                  class="hero-card-img"
+                />
+                
+                <!-- Gradient overlay -->
+                <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(17,6,1,0.85) 0%, rgba(17,6,1,0.2) 50%, transparent 100%);pointer-events:none;"></div>
+                
+                <!-- Sizzling Hot Badge Top Right of Image -->
+                <div style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:99px;padding:4px 10px;font-size:11px;font-weight:800;display:flex;align-items:center;gap:4px;">
+                  <span style="font-size:13px;">🔥</span>
+                  <span>Woodfired & Fresh</span>
+                </div>
+
+                <!-- Bottom Label inside card -->
+                <div style="position:absolute;bottom:16px;left:18px;right:18px;color:#fff;">
+                  <div style="font-size:11px;font-weight:800;color:#fde047;text-transform:uppercase;letter-spacing:0.06em;">Campus Bestseller</div>
+                  <div style="font-size:18px;font-weight:900;line-height:1.2;margin-top:2px;">Gourmet Cheesy Loaded Pizza</div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+                    <span style="font-size:13px;font-weight:800;color:#fff;">Starting ₹189</span>
+                    <span style="background:#ff5e18;color:#fff;padding:3px 10px;border-radius:8px;font-size:10px;font-weight:900;">Order Now →</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3D FLOATING GLASS BADGE 1: Rating (Top-Left) -->
+              <div class="hero-float-badge badge-pos-tl" style="position:absolute;top:-8px;left:12px;z-index:4;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.8);border-radius:18px;padding:10px 14px;box-shadow:0 18px 40px rgba(0,0,0,0.25);display:flex;align-items:center;gap:10px;pointer-events:none;">
+                <div style="width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#006c4a,#059669);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;box-shadow:0 4px 12px rgba(5,150,105,0.3);">
+                  4.9★
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:900;color:#151c27;line-height:1.2;">Top Student Pick</div>
+                  <div style="font-size:10px;font-weight:600;color:#575e70;">5,400+ reviews</div>
+                </div>
+              </div>
+
+              <!-- 3D FLOATING GLASS BADGE 2: Superfast Delivery (Bottom-Left) -->
+              <div class="hero-float-badge badge-pos-bl" style="position:absolute;bottom:-12px;left:24px;z-index:4;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.8);border-radius:18px;padding:10px 14px;box-shadow:0 18px 40px rgba(0,0,0,0.25);display:flex;align-items:center;gap:10px;pointer-events:none;">
+                <div style="width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#ff5e18,#d44000);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 4px 12px rgba(255,94,24,0.35);">
+                  🛵
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:900;color:#151c27;line-height:1.2;display:flex;align-items:center;gap:4px;">
+                    <span>⚡ 18 Min Drop</span>
+                    <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;"></span>
+                  </div>
+                  <div style="font-size:10px;font-weight:600;color:#575e70;">Direct to Hostel Gate</div>
+                </div>
+              </div>
+
+              <!-- 3D FLOATING GLASS BADGE 3: Flat 50% OFF (Top-Right) -->
+              <div class="hero-float-badge badge-pos-tr" style="position:absolute;top:16px;right:-14px;z-index:4;background:rgba(21,28,39,0.92);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);border-radius:16px;padding:8px 14px;box-shadow:0 18px 40px rgba(0,0,0,0.35);color:#fff;pointer-events:none;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:14px;">🏷️</span>
+                  <span style="font-size:11px;font-weight:900;color:#fde047;letter-spacing:0.04em;">FLAT 50% OFF</span>
+                </div>
+                <div style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.8);margin-top:2px;">Use code: <b style="color:#fff;text-decoration:underline;">FIRST50</b></div>
+              </div>
+
             </div>
           </div>
         </section>
@@ -408,6 +558,22 @@
     initOfferCarousel();
     loadHomeData();
     bindMoodPills();
+
+    // 3D Card Interactive Mouse Parallax
+    const heroZone = document.getElementById('hero-3d-interactive-zone');
+    const heroCard = document.getElementById('hero-3d-card');
+    if (heroZone && heroCard) {
+      heroZone.addEventListener('mousemove', (e) => {
+        const rect = heroZone.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        heroCard.style.animation = 'none';
+        heroCard.style.transform = `perspective(1000px) rotateY(${x * 24}deg) rotateX(${-y * 20}deg) translateY(-8px) scale(1.03)`;
+      });
+      heroZone.addEventListener('mouseleave', () => {
+        heroCard.style.animation = 'heroCardFloat3D 5.5s ease-in-out infinite';
+      });
+    }
   }
 
   // ── Load dynamic data ──────────────────────────────────────────────────
