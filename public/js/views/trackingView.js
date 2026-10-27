@@ -61,7 +61,7 @@
         { lat: 28.4639, lng: 77.4988, name: order.deliveryAddress || "GL Bajaj Campus Drop Zone", eta: 0, dist: "0.0 km", speed: 0, status: "delivered", statusText: "Arrived at your designated drop zone! Share OTP to collect meal." }
       ];
 
-      simulationIndex = order.status === 'delivered' ? routeWaypoints.length - 1 : 2;
+      simulationIndex = 2; // Active Out for Delivery so user immediately sees rider moving along road!
 
       container.innerHTML = `
         <div class="fade-in min-h-[calc(100vh-80px)] flex flex-col lg:flex-row bg-background">
@@ -459,14 +459,21 @@
         if (!activeLeafletMap) return;
         if (currentTileLayer) activeLeafletMap.removeLayer(currentTileLayer);
 
-        let tileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+        // Google Maps Street (Standard Swiggy / Zomato vector style - 100% free, NO watermark)
+        let tileUrl = 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
+        
         if (style === 'sat') {
-          tileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+          // Google Maps Hybrid Satellite with road names & building outlines
+          tileUrl = 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}';
         } else if (style === 'dark') {
-          tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+          // High-contrast clean dark canvas without API key
+          tileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}';
         }
 
-        currentTileLayer = L.tileLayer(tileUrl, { maxZoom: 19, subdomains: 'abcd' }).addTo(activeLeafletMap);
+        currentTileLayer = L.tileLayer(tileUrl, {
+          maxZoom: 20,
+          attribution: '&copy; Google Maps'
+        }).addTo(activeLeafletMap);
 
         // Update active layer button styles
         document.querySelectorAll('.map-layer-btn').forEach(b => {
@@ -664,10 +671,8 @@
         });
       });
 
-      // Auto-start live movement if active order
-      if (order.status !== 'delivered') {
-        setTimeout(startSimulation, 1000);
-      }
+      // Always auto-start live movement on load so user sees rider gliding along map!
+      setTimeout(startSimulation, 800);
 
     } catch (e) {
       console.error("Error loading order tracking", e);
