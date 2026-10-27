@@ -4263,6 +4263,19 @@
   ],
   "coupons": [
     {
+      "code": "DIWALI30",
+      "discountPercent": 30,
+      "maxDiscount": 150,
+      "minOrder": 149,
+      "description": "🪔 Shubh Deepavali! 30% OFF up to ₹150 on Festive Mithai, Feasts & Gift Boxes"
+    },
+    {
+      "code": "DIWALIFREE",
+      "discountDelivery": true,
+      "minOrder": 99,
+      "description": "✨ Shubh Diwali! Free Express Delivery on all Sweets & Campus Feasts"
+    },
+    {
       "code": "NAVRATRI25",
       "discountPercent": 25,
       "maxDiscount": 120,

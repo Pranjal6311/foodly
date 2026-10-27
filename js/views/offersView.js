@@ -7,11 +7,11 @@
           <div class="flex items-center gap-2.5 mb-2">
             <span class="diya-flame-glow text-3xl">🪔</span>
             <span class="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 font-extrabold text-xs rounded-full uppercase tracking-wider shadow-sm">
-              Navratri Mahotsav 2026
+              Shubh Deepavali Mahotsav 2026 ✨
             </span>
           </div>
-          <h1 class="text-2xl md:text-4xl font-black mt-2 mb-2 tracking-tight">Festive Offers &amp; Vrat Discounts</h1>
-          <p class="text-xs md:text-sm text-amber-100/90 font-medium">Celebrate with flat 25% OFF on Vrat feasts, ₹0 campus delivery fee, and exclusive GL Bajaj hostel codes.</p>
+          <h1 class="text-2xl md:text-4xl font-black mt-2 mb-2 tracking-tight">Diwali Offers &amp; Festive Feasts Discounts</h1>
+          <p class="text-xs md:text-sm text-amber-100/90 font-medium">Celebrate with flat 30% OFF with code DIWALI30 on fresh Desi Ghee Mithai, ₹0 campus delivery fee, and exclusive GL Bajaj festive gift hampers.</p>
         </div>
 
         <div id="offers-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">

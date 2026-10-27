@@ -3369,6 +3369,8 @@ const INITIAL_DATA = {
     }
   ],
   coupons: [
+    { code: "DIWALI30", discountPercent: 30, maxDiscount: 150, minOrder: 149, description: "🪔 Shubh Deepavali! 30% OFF up to ₹150 on Festive Mithai, Feasts & Gift Boxes" },
+    { code: "DIWALIFREE", discountDelivery: true, minOrder: 99, description: "✨ Shubh Diwali! Free Express Delivery on all Sweets & Campus Feasts" },
     { code: "NAVRATRI25", discountPercent: 25, maxDiscount: 120, minOrder: 149, description: "🪔 Shubh Navratri! 25% OFF up to ₹120 on all Vrat & Satvik Feasts" },
     { code: "VRATFREE", discountDelivery: true, minOrder: 99, description: "🪔 Free Delivery on All Navratri Fasting Specials & Thalis" },
     { code: "JAYMATADI30", discountPercent: 30, maxDiscount: 150, minOrder: 199, description: "✨ Jai Mata Di! 30% OFF Special Festival Gift Coupon" },

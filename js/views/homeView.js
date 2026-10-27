@@ -111,16 +111,16 @@
       emoji: '🧋'
     },
     {
-      code: 'NAVRATRI25',
-      discount: 25,
-      max: 120,
-      tag: '🪔 100% SATVIK • DESI GHEE PREPARED',
-      title: 'Shubh Navratri Fasting Feast (25% OFF)',
-      sub: 'Pure Desi Ghee Sabudana Khichdi, Kuttu Pooris & Makhana Kheer with Sendha Namak',
-      gradient: 'linear-gradient(135deg, #1b0700 0%, #451a03 30%, #9a3412 68%, #f59e0b 100%)',
-      img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=400&q=80',
-      badge1: '🪔 100% Satvik Pure',
-      badge2: 'Desi Ghee Sendha Namak',
+      code: 'DIWALI30',
+      discount: 30,
+      max: 150,
+      tag: '🪔 SHUBH DEEPAVALI • PURE DESI GHEE',
+      title: 'Grand Diwali Mithai & Feasts (30% OFF)',
+      sub: 'Kaju Katli, Desi Ghee Gulab Jamun, Motichoor Ladoos & Royal Celebration Hampers',
+      gradient: 'linear-gradient(135deg, #1f0b00 0%, #4a1300 32%, #852202 70%, #d97706 100%)',
+      img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=400&q=80',
+      badge1: '🪔 Shubh Deepavali 2026',
+      badge2: 'Pure Desi Ghee Sweets',
       emoji: '✨'
     }
   ];
@@ -468,51 +468,55 @@
             </div>
           </section>
 
-          <!-- ══ NAVRATRI SPECIAL SECTION (COMPACT & MOBILE-FIRST) ══════ -->
+          <!-- ══ SHUBH DEEPAVALI SPECIAL SECTION (COMPACT & MOBILE-FIRST) ══════ -->
           <section style="margin-bottom:22px;">
-            <div style="background:linear-gradient(135deg,#1c0a00 0%,#3d1400 100%);border-radius:18px;overflow:hidden;position:relative;padding:14px 16px;">
-              <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:rgba(251,191,36,0.06);pointer-events:none;"></div>
+            <div style="background:radial-gradient(circle at 92% 18%, rgba(251,191,36,0.18) 0%, transparent 55%), radial-gradient(circle at 8% 85%, rgba(249,115,22,0.12) 0%, transparent 45%), linear-gradient(135deg,#1d0900 0%,#3a1100 38%,#6a1c02 78%,#9a3412 100%);border-radius:18px;overflow:hidden;position:relative;padding:14px 16px;border:1px solid rgba(245,158,11,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.22);">
+              <div style="position:absolute;top:-20px;right:-20px;width:130px;height:130px;border-radius:50%;background:rgba(251,191,36,0.08);pointer-events:none;"></div>
               
               <div style="position:relative;z-index:1;">
                 <!-- Compact Header -->
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
                   <div style="display:flex;align-items:center;gap:8px;">
-                    <span class="diya-flame-glow" style="font-size:20px;">🪔</span>
+                    <span class="diya-flame-glow" style="font-size:22px;filter:drop-shadow(0 0 8px rgba(251,191,36,0.8));">🪔</span>
                     <div>
                       <div style="display:flex;align-items:center;gap:6px;">
-                        <h3 style="color:#fff;font-size:14px;font-weight:900;line-height:1.2;">Navratri Fasting Feasts</h3>
-                        <span style="color:#86efac;font-size:9px;font-weight:700;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);padding:1px 6px;border-radius:99px;">100% Satvik</span>
+                        <h3 style="color:#fff;font-size:14px;font-weight:900;line-height:1.2;">Shubh Deepavali Mithai &amp; Feasts ✨</h3>
+                        <span style="color:#fef08a;font-size:9px;font-weight:800;background:rgba(234,179,8,0.22);border:1px solid rgba(234,179,8,0.5);padding:1px 6px;border-radius:99px;box-shadow:0 0 8px rgba(250,204,21,0.25);">✨ 100% Desi Ghee</span>
                       </div>
-                      <p style="color:rgba(255,255,255,0.65);font-size:10px;font-weight:500;">Desi Ghee Sabudana, Kuttu Pooris & Kheer</p>
+                      <p style="color:rgba(255,255,255,0.72);font-size:10px;font-weight:500;">Fresh Kaju Katli, Hot Gulab Jamun, Ladoos &amp; Royal Hampers</p>
                     </div>
                   </div>
                   
                   <!-- Compact Coupon Pill -->
-                  <button onclick="window.foodlyStore.applyCoupon({code:'NAVRATRI25',discountPercent:25,maxDiscount:120,description:'25% OFF Navratri Special'});window.foodlyStore.showToast('Coupon NAVRATRI25 applied! 25% OFF','success');" style="background:rgba(255,255,255,0.12);border:1px dashed rgba(251,191,36,0.6);border-radius:99px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;color:#fff;font-size:10px;font-weight:800;" title="Tap to apply 25% OFF">
-                    <span>🎟️</span>
-                    <span style="color:#fde68a;">NAVRATRI25</span>
-                    <span style="background:#f97316;color:#fff;font-size:9px;padding:1px 6px;border-radius:99px;margin-left:2px;">25% OFF</span>
+                  <button onclick="window.foodlyStore.applyCoupon({code:'DIWALI30',discountPercent:30,maxDiscount:150,description:'30% OFF Shubh Diwali Grand Feasts'});window.foodlyStore.showToast('Coupon DIWALI30 applied! 30% OFF ✨','success');" style="background:rgba(255,255,255,0.12);border:1px dashed rgba(251,191,36,0.7);border-radius:99px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;color:#fff;font-size:10px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,0.2);" title="Tap to apply 30% OFF">
+                    <span>🪔</span>
+                    <span style="color:#fde68a;">DIWALI30</span>
+                    <span style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;font-size:9px;padding:1px 6px;border-radius:99px;margin-left:2px;font-weight:900;">30% OFF</span>
                   </button>
                 </div>
 
-                <!-- Compact Horizontal Scrollable Dish Row -->
+                <!-- Compact Horizontal Scrollable Dish Row with More Dishes -->
                 <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;" class="scrollbar-none">
                   ${[
-                    { name: 'Sabudana Khichdi', price: 140, img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=300&q=80', id: 'vrat-1', badge: 'Desi Ghee' },
-                    { name: 'Kuttu Poori + Aloo', price: 160, img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=300&q=80', id: 'vrat-2', badge: '4 Pooris' },
-                    { name: 'Navratri Thali', price: 250, img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=300&q=80', id: 'vrat-4', badge: 'Complete' },
-                    { name: 'Makhana Kheer', price: 140, img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=300&q=80', id: 'vrat-6', badge: 'Kesar' },
+                    { name: 'Kaju Katli (250g)', price: 220, img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=300&q=80', id: 'diwali-1', badge: 'Silver Vark' },
+                    { name: 'Desi Ghee Gulab Jamun', price: 140, img: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=300&q=80', id: 'diwali-2', badge: '4 Pcs Hot' },
+                    { name: 'Motichoor Ladoo Box', price: 180, img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=300&q=80', id: 'diwali-3', badge: 'Desi Ghee' },
+                    { name: 'Kesari Rasmalai (2 Pcs)', price: 130, img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=300&q=80', id: 'diwali-4', badge: 'Kesar Pista' },
+                    { name: 'Diwali Royal Feast Thali', price: 280, img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=300&q=80', id: 'diwali-5', badge: 'Grand Feast' },
+                    { name: 'Mini Samosa Platter (6 Pcs)', price: 110, img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=300&q=80', id: 'diwali-6', badge: 'Crispy Snack' },
+                    { name: 'Kesari Jalebi & Rabdi', price: 150, img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80', id: 'diwali-7', badge: 'Fresh & Crisp' },
+                    { name: 'Celebration Sweet Hamper', price: 340, img: 'https://images.unsplash.com/photo-1596450514735-2d9f584e3a47?auto=format&fit=crop&w=300&q=80', id: 'diwali-8', badge: 'Gift Box' },
                   ].map(d => `
-                    <div class="navratri-card-gold" style="width:138px;min-width:138px;border-radius:12px;overflow:hidden;background:#fff;border:1px solid rgba(254,215,170,0.5);box-shadow:0 2px 8px rgba(0,0,0,0.15);flex-shrink:0;">
+                    <div class="diwali-card-gold" style="width:140px;min-width:140px;border-radius:12px;overflow:hidden;background:#fff;border:1px solid rgba(254,215,170,0.5);box-shadow:0 2px 8px rgba(0,0,0,0.15);flex-shrink:0;">
                       <div style="position:relative;height:68px;">
                         <img src="${d.img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;"/>
-                        <span style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.65);color:#fff;font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:99px;">${d.badge}</span>
+                        <span style="position:absolute;top:4px;left:4px;background:rgba(28,10,0,0.8);color:#fef08a;border:1px solid rgba(251,191,36,0.35);font-size:8px;font-weight:800;padding:1px 5px;border-radius:99px;backdrop-filter:blur(4px);">${d.badge}</span>
                       </div>
                       <div style="padding:6px 8px 6px;">
                         <h4 style="font-size:10.5px;font-weight:800;color:#1c0a00;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${d.name}</h4>
                         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                          <span style="font-size:12px;font-weight:900;color:#aa3700;">₹${d.price}</span>
-                          <button onclick="event.stopPropagation();window.foodlyStore.addToCart({id:'${d.id}',name:'${d.name}',price:${d.price},restaurantId:'navratri-vrat-rasoi',restaurantName:'Navratri Vrat & Satvik Rasoi 🪔',isVeg:true,calories:350,protein:12});window.foodlyStore.showToast('Added ${d.name}','success');" style="background:#f97316;color:#fff;border:none;border-radius:6px;padding:2px 7px;font-size:10px;font-weight:800;cursor:pointer;transition:transform 0.15s ease;" class="active:scale-90">+ Add</button>
+                          <span style="font-size:12px;font-weight:900;color:#b45309;">₹${d.price}</span>
+                          <button onclick="event.stopPropagation();window.foodlyStore.addToCart({id:'${d.id}',name:'${d.name}',price:${d.price},restaurantId:'shubh-diwali-rasoi',restaurantName:'Shubh Deepavali Grand Rasoi 🪔',isVeg:true,calories:320,protein:8});window.foodlyStore.showToast('Added ${d.name} to feast!','success');" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:6px;padding:2px 7px;font-size:10px;font-weight:800;cursor:pointer;transition:transform 0.15s ease;" class="active:scale-90 hover:brightness-110">+ Add</button>
                         </div>
                       </div>
                     </div>
