@@ -468,52 +468,55 @@
             </div>
           </section>
 
-          <!-- ══ NAVRATRI SPECIAL SECTION ════════════════════════════════ -->
-          <section style="margin-bottom:28px;">
-            <div style="background:linear-gradient(135deg,#1c0a00,#3d1400);border-radius:20px;overflow:hidden;position:relative;padding:20px;">
-              <div style="position:absolute;top:-30px;right:-30px;width:150px;height:150px;border-radius:50%;background:rgba(251,191,36,0.08);pointer-events:none;"></div>
-              <div style="position:absolute;bottom:-20px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(239,68,68,0.08);pointer-events:none;"></div>
+          <!-- ══ NAVRATRI SPECIAL SECTION (COMPACT & MOBILE-FIRST) ══════ -->
+          <section style="margin-bottom:22px;">
+            <div style="background:linear-gradient(135deg,#1c0a00 0%,#3d1400 100%);border-radius:18px;overflow:hidden;position:relative;padding:14px 16px;">
+              <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:rgba(251,191,36,0.06);pointer-events:none;"></div>
+              
               <div style="position:relative;z-index:1;">
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-                  <span class="diya-flame-glow" style="font-size:28px;">🪔</span>
-                  <div>
-                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                      <span style="background:linear-gradient(90deg,#f59e0b,#ef4444);color:#fff;font-size:10px;font-weight:900;padding:2px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:0.08em;">✨ Navratri 2026 Special</span>
-                      <span style="color:#86efac;font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);padding:2px 8px;border-radius:99px;">100% Satvik • Sendha Namak</span>
-                    </div>
-                    <h3 style="color:#fff;font-size:18px;font-weight:900;margin-top:4px;">Shubh Navratri Fasting Feasts 🥢</h3>
-                    <p style="color:rgba(255,255,255,0.7);font-size:11px;font-weight:500;">Pure Desi Ghee Sabudana, Kuttu Pooris & Makhana Kheer</p>
-                  </div>
-                </div>
-                <!-- Dish Grid -->
-                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;" class="md:grid-cols-4">
-                  ${[
-                    { name: 'Sabudana Khichdi', price: 140, img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=400&q=80', id: 'vrat-1', badge: 'Desi Ghee' },
-                    { name: 'Kuttu Poori + Aloo', price: 160, img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=400&q=80', id: 'vrat-2', badge: '4 Pooris' },
-                    { name: 'Navratri Thali', price: 250, img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=80', id: 'vrat-4', badge: 'Complete Meal' },
-                    { name: 'Makhana Kheer', price: 140, img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=400&q=80', id: 'vrat-6', badge: 'Kesar Infused' },
-                  ].map(d => `
-                    <div class="navratri-card-gold" style="border-radius:14px;overflow:hidden;">
-                      <div style="position:relative;height:90px;">
-                        <img src="${d.img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;"/>
-                        <span style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.6);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:99px;">${d.badge}</span>
+                <!-- Compact Header -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="diya-flame-glow" style="font-size:20px;">🪔</span>
+                    <div>
+                      <div style="display:flex;align-items:center;gap:6px;">
+                        <h3 style="color:#fff;font-size:14px;font-weight:900;line-height:1.2;">Navratri Fasting Feasts</h3>
+                        <span style="color:#86efac;font-size:9px;font-weight:700;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);padding:1px 6px;border-radius:99px;">100% Satvik</span>
                       </div>
-                      <div style="padding:10px 10px 8px;">
-                        <h4 style="font-size:12px;font-weight:800;color:#1c0a00;line-height:1.3;">${d.name}</h4>
-                        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-                          <span style="font-size:14px;font-weight:900;color:#aa3700;">₹${d.price}</span>
-                          <button onclick="event.stopPropagation();window.foodlyStore.addToCart({id:'${d.id}',name:'${d.name}',price:${d.price},restaurantId:'navratri-vrat-rasoi',restaurantName:'Navratri Vrat & Satvik Rasoi 🪔',isVeg:true,calories:350,protein:12});" style="background:#f97316;color:#fff;border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;">+ Add</button>
+                      <p style="color:rgba(255,255,255,0.65);font-size:10px;font-weight:500;">Desi Ghee Sabudana, Kuttu Pooris & Kheer</p>
+                    </div>
+                  </div>
+                  
+                  <!-- Compact Coupon Pill -->
+                  <button onclick="window.foodlyStore.applyCoupon({code:'NAVRATRI25',discountPercent:25,maxDiscount:120,description:'25% OFF Navratri Special'});window.foodlyStore.showToast('Coupon NAVRATRI25 applied! 25% OFF','success');" style="background:rgba(255,255,255,0.12);border:1px dashed rgba(251,191,36,0.6);border-radius:99px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;color:#fff;font-size:10px;font-weight:800;" title="Tap to apply 25% OFF">
+                    <span>🎟️</span>
+                    <span style="color:#fde68a;">NAVRATRI25</span>
+                    <span style="background:#f97316;color:#fff;font-size:9px;padding:1px 6px;border-radius:99px;margin-left:2px;">25% OFF</span>
+                  </button>
+                </div>
+
+                <!-- Compact Horizontal Scrollable Dish Row -->
+                <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;" class="scrollbar-none">
+                  ${[
+                    { name: 'Sabudana Khichdi', price: 140, img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=300&q=80', id: 'vrat-1', badge: 'Desi Ghee' },
+                    { name: 'Kuttu Poori + Aloo', price: 160, img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=300&q=80', id: 'vrat-2', badge: '4 Pooris' },
+                    { name: 'Navratri Thali', price: 250, img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=300&q=80', id: 'vrat-4', badge: 'Complete' },
+                    { name: 'Makhana Kheer', price: 140, img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=300&q=80', id: 'vrat-6', badge: 'Kesar' },
+                  ].map(d => `
+                    <div class="navratri-card-gold" style="width:138px;min-width:138px;border-radius:12px;overflow:hidden;background:#fff;border:1px solid rgba(254,215,170,0.5);box-shadow:0 2px 8px rgba(0,0,0,0.15);flex-shrink:0;">
+                      <div style="position:relative;height:68px;">
+                        <img src="${d.img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;"/>
+                        <span style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,0.65);color:#fff;font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:99px;">${d.badge}</span>
+                      </div>
+                      <div style="padding:6px 8px 6px;">
+                        <h4 style="font-size:10.5px;font-weight:800;color:#1c0a00;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${d.name}</h4>
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+                          <span style="font-size:12px;font-weight:900;color:#aa3700;">₹${d.price}</span>
+                          <button onclick="event.stopPropagation();window.foodlyStore.addToCart({id:'${d.id}',name:'${d.name}',price:${d.price},restaurantId:'navratri-vrat-rasoi',restaurantName:'Navratri Vrat & Satvik Rasoi 🪔',isVeg:true,calories:350,protein:12});window.foodlyStore.showToast('Added ${d.name}','success');" style="background:#f97316;color:#fff;border:none;border-radius:6px;padding:2px 7px;font-size:10px;font-weight:800;cursor:pointer;transition:transform 0.15s ease;" class="active:scale-90">+ Add</button>
                         </div>
                       </div>
                     </div>
                   `).join('')}
-                </div>
-                <div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-                  <div style="background:rgba(255,255,255,0.1);border:1.5px dashed rgba(251,191,36,0.5);border-radius:8px;padding:4px 12px;display:inline-flex;align-items:center;gap:8px;">
-                    <span style="color:#fde68a;font-size:10px;font-weight:600;">Festive Coupon</span>
-                    <span style="color:#fff;font-size:13px;font-weight:900;letter-spacing:0.05em;">NAVRATRI25</span>
-                  </div>
-                  <button onclick="window.foodlyStore.applyCoupon({code:'NAVRATRI25',discountPercent:25,maxDiscount:120,description:'25% OFF Navratri Special'});window.foodlyStore.toggleCart(true);" style="background:linear-gradient(90deg,#f59e0b,#ef4444);color:#fff;border:none;border-radius:10px;padding:7px 16px;font-size:12px;font-weight:800;cursor:pointer;">Apply 25% OFF →</button>
                 </div>
               </div>
             </div>
