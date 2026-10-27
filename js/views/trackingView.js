@@ -143,31 +143,6 @@
             <!-- Real Leaflet Map Container -->
             <div id="live-map-leaflet" class="w-full h-full min-h-[500px] lg:min-h-full z-0"></div>
 
-            <!-- Top Left: Live Distance & Arrival HUD Card -->
-            <div class="absolute top-4 left-4 z-20 pointer-events-auto">
-              <div class="bg-surface-container-lowest/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-2xl border border-surface-variant/80 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-container text-white flex items-center justify-center shadow-md shrink-0">
-                  <span class="material-symbols-outlined text-2xl filled animate-pulse">electric_moped</span>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-black uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">⚡ Live GPS Tracking</span>
-                    <span class="text-[10px] text-tertiary font-bold flex items-center gap-0.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span> Active
-                    </span>
-                  </div>
-                  <div class="flex items-baseline gap-1.5 mt-0.5">
-                    <span class="text-2xl font-black text-on-surface tracking-tight" id="hud-eta-heading">
-                      Arriving in ${initialPt.eta} mins
-                    </span>
-                  </div>
-                  <p class="text-[11px] text-secondary font-medium truncate max-w-[240px]" id="hud-eta-sub">
-                    ${initialPt.statusText}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <!-- Top Right: ONLY Street View or Satellite View Toggle -->
             <div class="absolute top-4 right-4 z-20 pointer-events-auto">
               <div class="bg-surface-container-lowest/95 backdrop-blur-md p-1.5 rounded-2xl shadow-2xl border border-surface-variant flex items-center gap-1.5">
@@ -179,17 +154,6 @@
                   <span class="material-symbols-outlined text-base">satellite_alt</span>
                   <span>Satellite View</span>
                 </button>
-              </div>
-            </div>
-
-            <!-- Floating Live Distance Pill in Center Map Overlay -->
-            <div class="absolute top-24 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
-              <div class="bg-surface-container-lowest/95 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl border-2 border-primary/40 flex items-center gap-2 text-xs font-black text-on-surface whitespace-nowrap">
-                <span class="material-symbols-outlined text-base text-primary">distance</span>
-                <span>Distance to Drop Zone:</span>
-                <span class="text-primary font-black text-sm" id="hud-map-distance">${initialPt.dist}</span>
-                <span class="text-secondary font-medium">•</span>
-                <span class="text-tertiary font-bold" id="hud-map-speed">${initialPt.speed} km/h</span>
               </div>
             </div>
 
@@ -420,43 +384,35 @@
 
           L.control.zoom({ position: 'bottomright' }).addTo(activeLeafletMap);
 
-          // 1. Restaurant Pin (Kitchen)
+          // 1. Restaurant Pin (Kitchen) - Sleek, round & compact
           const restIcon = L.divIcon({
             className: 'custom-map-icon',
             html: `
-              <div class="flex flex-col items-center">
-                <div class="w-10 h-10 bg-surface-container-lowest rounded-2xl border-2 border-primary shadow-2xl flex items-center justify-center text-primary">
-                  <span class="material-symbols-outlined text-xl">restaurant</span>
-                </div>
-                <div class="bg-surface-container-lowest text-[10px] font-black px-2 py-0.5 rounded-md shadow-md border border-surface-variant text-on-surface whitespace-nowrap mt-1">
-                  ${order.restaurantName || 'Kitchen'}
+              <div class="relative flex items-center justify-center w-7 h-7">
+                <div class="w-7 h-7 rounded-full bg-slate-900 border-2 border-white shadow-lg flex items-center justify-center text-white ring-1 ring-slate-700/50">
+                  <span class="material-symbols-outlined text-xs filled">restaurant</span>
                 </div>
               </div>
             `,
-            iconSize: [42, 60],
-            iconAnchor: [21, 52]
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
           });
           restMarker = L.marker([restPt.lat, restPt.lng], { icon: restIcon }).addTo(activeLeafletMap)
             .bindPopup(`<b>${order.restaurantName || 'Campus Kitchen'}</b><br/>Order dispatched hot`);
 
-          // 2. Customer Destination Marker (Always prominently visible!)
+          // 2. Customer Destination Marker (Drop Zone) - Sleek, round & compact
           const destIcon = L.divIcon({
             className: 'custom-map-icon',
             html: `
-              <div class="flex flex-col items-center">
-                <div class="relative">
-                  <div class="w-12 h-12 bg-emerald-600 text-white rounded-2xl border-2 border-white shadow-2xl flex items-center justify-center ring-4 ring-emerald-500/30">
-                    <span class="material-symbols-outlined text-2xl filled">home</span>
-                  </div>
-                  <div class="absolute -inset-2 bg-emerald-500/30 rounded-2xl animate-ping pointer-events-none"></div>
-                </div>
-                <div class="bg-emerald-700 text-white text-[11px] font-black px-3 py-1 rounded-full shadow-2xl border border-white whitespace-nowrap mt-1 flex items-center gap-1">
-                  <span>🏁 Drop Zone (Hostel)</span>
+              <div class="relative flex items-center justify-center w-8 h-8">
+                <div class="absolute -inset-1 bg-emerald-500/25 rounded-full pointer-events-none"></div>
+                <div class="w-8 h-8 rounded-full bg-emerald-600 border-2 border-white shadow-xl flex items-center justify-center text-white ring-2 ring-emerald-500/40">
+                  <span class="material-symbols-outlined text-sm font-black filled">home</span>
                 </div>
               </div>
             `,
-            iconSize: [52, 72],
-            iconAnchor: [26, 62]
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
           });
           destMarker = L.marker([destPt.lat, destPt.lng], { icon: destIcon, zIndexOffset: 1500 }).addTo(activeLeafletMap)
             .bindPopup(`<b>GL Bajaj Drop Zone</b><br/>${order.deliveryAddress || 'GL Bajaj Boys Hostel, Room 304'}`);
@@ -465,7 +421,7 @@
           // Layer A: Outer road casing (clean white background buffer for high contrast against maps)
           baseRouteCasing = L.polyline(ROAD_COORDINATES, {
             color: '#ffffff',
-            weight: 9,
+            weight: 8,
             opacity: 0.95,
             lineCap: 'round',
             lineJoin: 'round'
@@ -483,32 +439,26 @@
           // Layer C: Active remaining path (vibrant Swiggy/Zomato style delivery orange, dashed)
           remainingPolyline = L.polyline(ROAD_COORDINATES.slice(simulationIndex), {
             color: '#ff5200',
-            weight: 6,
-            dashArray: '10, 8',
+            weight: 5,
+            dashArray: '8, 6',
             opacity: 0.98,
             lineCap: 'round',
             lineJoin: 'round'
           }).addTo(activeLeafletMap);
 
-          // 4. Moving Delivery Partner (Bike) Marker
+          // 4. Moving Delivery Partner (Bike) Marker - Small, round & sleek Swiggy/Zomato live rider dot
           const bikeIcon = L.divIcon({
             className: 'custom-map-icon',
             html: `
-              <div class="flex flex-col items-center relative">
-                <div class="relative">
-                  <div class="w-14 h-14 bg-gradient-to-tr from-primary to-primary-container rounded-2xl flex items-center justify-center shadow-2xl text-white border-2 border-white ring-4 ring-primary/40">
-                    <span class="material-symbols-outlined text-3xl filled">two_wheeler</span>
-                  </div>
-                  <div class="absolute -inset-2 bg-primary/40 rounded-2xl animate-ping pointer-events-none"></div>
-                </div>
-                <div class="bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-2xl border-2 border-primary text-xs font-black text-on-surface flex items-center gap-1.5 whitespace-nowrap mt-1">
-                  <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
-                  <span>Rahul (4.9 ★)</span>
+              <div class="relative flex items-center justify-center w-8 h-8">
+                <div class="absolute -inset-1.5 bg-orange-500/30 rounded-full animate-ping pointer-events-none"></div>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-600 via-orange-500 to-amber-500 border-2 border-white shadow-xl flex items-center justify-center text-white ring-2 ring-orange-500/50">
+                  <span class="material-symbols-outlined text-sm font-black filled">two_wheeler</span>
                 </div>
               </div>
             `,
-            iconSize: [56, 80],
-            iconAnchor: [28, 62]
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
           });
 
           riderMarker = L.marker([riderPt.lat, riderPt.lng], { icon: bikeIcon, zIndexOffset: 2500 }).addTo(activeLeafletMap);

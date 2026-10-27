@@ -434,9 +434,6 @@
             if (dish) {
               store.addToCart(dish, rest);
               refreshDishesUI();
-              if (store.showToast) {
-                store.showToast(`Added ${dish.name} to cart!`, 'success');
-              }
             }
           });
         });

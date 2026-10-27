@@ -466,6 +466,13 @@
     }
 
     showToast(message, type = 'info') {
+      const now = Date.now();
+      if (this._lastToastMsg === message && (now - (this._lastToastTime || 0)) < 1500) {
+        return; // Suppress duplicate toast fired within 1.5s
+      }
+      this._lastToastMsg = message;
+      this._lastToastTime = now;
+
       const container = document.getElementById('toast-container');
       if (!container) return;
 

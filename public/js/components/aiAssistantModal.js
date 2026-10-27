@@ -252,7 +252,7 @@
                     </div>
                   </div>
                   <button 
-                    onclick="window.foodlyStore.addToCart({ id: '${item.dish.id}', name: '${item.dish.name.replace(/'/g, "\\'")}', price: ${item.dish.price}, isVeg: ${item.dish.veg ? 'true' : 'false'}, calories: ${item.dish.nutrition ? item.dish.nutrition.calories : 350}, protein: ${item.dish.nutrition ? item.dish.nutrition.protein : 18} }, { id: '${item.restaurant.id}', name: '${item.restaurant.name.replace(/'/g, "\\'")}', deliveryFee: 0 }); window.foodlyStore.showToast('Added ${item.dish.name.replace(/'/g, "\\'")} to cart!', 'success');"
+                    onclick="window.foodlyStore.addToCart({ id: '${item.dish.id}', name: '${item.dish.name.replace(/'/g, "\\'")}', price: ${item.dish.price}, isVeg: ${item.dish.veg ? 'true' : 'false'}, calories: ${item.dish.nutrition ? item.dish.nutrition.calories : 350}, protein: ${item.dish.nutrition ? item.dish.nutrition.protein : 18} }, { id: '${item.restaurant.id}', name: '${item.restaurant.name.replace(/'/g, "\\'")}', deliveryFee: 0 });"
                     class="px-2.5 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-white font-extrabold text-[11px] shrink-0 active:scale-95 shadow-sm cursor-pointer flex items-center gap-0.5"
                   >
                     <span>+ Add</span>

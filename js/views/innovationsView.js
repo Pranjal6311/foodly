@@ -564,7 +564,6 @@
           calories: 380,
           protein: 18
         });
-        window.foodlyStore.showToast(`Added ${dishTitle} to cart!`, 'success');
       });
     }
 
