@@ -6,6 +6,16 @@
   <title>Foodly — Campus Food Delivery Platform | GL Bajaj</title>
   <meta name="description" content="Discover delicious local restaurants, order food online, and track your delivery in real-time with Foodly."/>
   
+  <script>
+    try {
+      const s = localStorage.getItem('foodly_app_settings');
+      if (s && JSON.parse(s).darkMode) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      }
+    } catch(e) {}
+  </script>
+  
   <!-- Tailwind CSS CDN with forms and container queries -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   

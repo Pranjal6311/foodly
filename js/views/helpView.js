@@ -2,7 +2,7 @@
 (function () {
   function renderHelpView(container) {
     const store = window.foodlyStore;
-    const recentOrders = store.orders.slice(0, 3);
+    const recentOrders = (store && store.orders ? store.orders : []).slice(0, 3);
 
     container.innerHTML = `
       <div class="fade-in max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8">

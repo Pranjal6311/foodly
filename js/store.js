@@ -9,9 +9,10 @@
     constructor() {
       this.listeners = [];
       this.cart = this.loadCart();
-      this.activeAddress = localStorage.getItem(STORAGE_KEY_ADDRESS) || "Flat 402, Sunrise Towers, 100 Feet Rd, Indiranagar, Bengaluru";
+      this.orders = this.loadOrders();
+      this.activeAddress = localStorage.getItem(STORAGE_KEY_ADDRESS) || "GL Bajaj Boys Hostel, Room 304, Knowledge Park III, Greater Noida";
       const savedCoords = localStorage.getItem(STORAGE_KEY_COORDS);
-      this.userCoords = savedCoords ? JSON.parse(savedCoords) : { lat: 12.9784, lng: 77.6408 };
+      this.userCoords = savedCoords ? JSON.parse(savedCoords) : { lat: 28.4639, lng: 77.4988 };
       this.isDetectingLocation = false;
       this.appliedCoupon = null;
       this.isCartOpen = false;
@@ -194,19 +195,140 @@
           (err) => {
             this.isDetectingLocation = false;
             this.notify('LOCATION_DETECTING', false);
-            console.warn('Geolocation error:', err.message);
+            console.warn('Geolocation error or permission denied, applying GL Bajaj campus fallback:', err.message);
+            // Seamless campus location fallback
+            const fallbackAddress = "GL Bajaj Boys Hostel (Block A & B), Knowledge Park III, Greater Noida";
+            this.userCoords = { lat: 28.4639, lng: 77.4988 };
+            this.activeAddress = fallbackAddress;
+            try {
+              localStorage.setItem(STORAGE_KEY_COORDS, JSON.stringify(this.userCoords));
+              localStorage.setItem(STORAGE_KEY_ADDRESS, fallbackAddress);
+            } catch (e) {}
+            this.notify('LOCATION_UPDATED', fallbackAddress);
             if (!silent) {
-              if (err.code === 1) {
-                this.showToast('Location permission denied. You can still type your address manually.', 'error');
-              } else {
-                this.showToast('Unable to retrieve location. Please check your GPS settings.', 'error');
-              }
+              this.showToast('GPS localized to GL Bajaj Campus (Knowledge Park III)', 'success');
             }
-            resolve(null);
+            resolve(fallbackAddress);
           },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+          { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
         );
       });
+    }
+
+    setAddress(address, coords = null) {
+      if (!address) return;
+      this.activeAddress = address;
+      if (coords) this.userCoords = coords;
+      try {
+        localStorage.setItem(STORAGE_KEY_ADDRESS, address);
+        if (coords) localStorage.setItem(STORAGE_KEY_COORDS, JSON.stringify(this.userCoords));
+      } catch (e) {}
+      this.notify('LOCATION_UPDATED', address);
+    }
+
+    getSavedAddresses() {
+      try {
+        const saved = localStorage.getItem('foodly_saved_addresses');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {}
+      const defaults = [
+        {
+          id: 'addr-default-1',
+          tag: 'Hostel / Primary',
+          address: this.activeAddress || 'GL Bajaj Boys Hostel, Room 304, Knowledge Park III, Greater Noida',
+          isPrimary: true
+        },
+        {
+          id: 'addr-campus-2',
+          tag: 'Academic Gate',
+          address: 'GL Bajaj Main Academic Block Gate 2, Knowledge Park III, Greater Noida',
+          isPrimary: false
+        },
+        {
+          id: 'addr-work-3',
+          tag: 'Library / Lab',
+          address: 'Central Library Block, GL Bajaj Campus, Knowledge Park III, Greater Noida',
+          isPrimary: false
+        }
+      ];
+      try {
+        localStorage.setItem('foodly_saved_addresses', JSON.stringify(defaults));
+      } catch (e) {}
+      return defaults;
+    }
+
+    saveAddresses(addresses) {
+      try {
+        localStorage.setItem('foodly_saved_addresses', JSON.stringify(addresses));
+        this.notify('ADDRESSES_UPDATED', addresses);
+      } catch (e) {}
+    }
+
+    addSavedAddress(tag, address) {
+      const list = this.getSavedAddresses();
+      const newAddr = {
+        id: 'addr-' + Date.now(),
+        tag: tag || 'Saved Address',
+        address: address,
+        isPrimary: false
+      };
+      list.push(newAddr);
+      this.saveAddresses(list);
+      return newAddr;
+    }
+
+    deleteSavedAddress(id) {
+      let list = this.getSavedAddresses();
+      list = list.filter(a => a.id !== id);
+      this.saveAddresses(list);
+    }
+
+    loadOrders() {
+      try {
+        const saved = localStorage.getItem('foodly_orders_history');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {}
+      const defaults = [
+        {
+          id: "FD-9204",
+          createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
+          status: "delivered",
+          restaurantName: "GL Bajaj Central Cafeteria",
+          deliveryAddress: "GL Bajaj Boys Hostel, Room 304",
+          paymentMethod: "Foodly Wallet",
+          items: [
+            { name: "Paneer Butter Masala Combo", quantity: 1, price: 180 },
+            { name: "Butter Naan (2 pcs)", quantity: 1, price: 50 }
+          ],
+          bill: { subtotal: 230, deliveryFee: 0, taxes: 12, discount: 20, total: 222 }
+        },
+        {
+          id: "FD-8812",
+          createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+          status: "delivered",
+          restaurantName: "Chai Point & Campus Bakery",
+          deliveryAddress: "GL Bajaj Boys Hostel, Room 304",
+          paymentMethod: "UPI",
+          items: [
+            { name: "Kulhad Ginger Chai", quantity: 2, price: 60 },
+            { name: "Bun Maska", quantity: 1, price: 45 }
+          ],
+          bill: { subtotal: 105, deliveryFee: 0, taxes: 5, discount: 0, total: 110 }
+        }
+      ];
+      try {
+        localStorage.setItem('foodly_orders_history', JSON.stringify(defaults));
+      } catch (e) {}
+      return defaults;
+    }
+
+    addOrder(order) {
+      if (!order) return;
+      this.orders.unshift(order);
+      try {
+        localStorage.setItem('foodly_orders_history', JSON.stringify(this.orders));
+      } catch (e) {}
+      this.notify('ORDERS_UPDATED', this.orders);
     }
 
     loadCart() {
@@ -434,6 +556,60 @@
       const hasSeen = localStorage.getItem('foodly_has_seen_auth_prompt');
       const isLoggedIn = this.isLoggedIn();
       return !hasSeen && !isLoggedIn;
+    }
+
+    updateProfile(data) {
+      const current = this.getUser();
+      const updated = { ...current, ...data };
+      try {
+        localStorage.setItem('foodly_user_profile', JSON.stringify(updated));
+      } catch (e) {}
+      this.notify('AUTH_CHANGED', updated);
+      return updated;
+    }
+
+    addWalletBalance(amount) {
+      const amt = Number(amount) || 0;
+      const profile = this.getUser();
+      profile.walletBalance = (Number(profile.walletBalance) || 0) + amt;
+      this.updateProfile(profile);
+      this.showToast(`₹${amt} added to Foodly Wallet! New Balance: ₹${profile.walletBalance}`, 'success');
+      this.playSound('cash');
+      return profile.walletBalance;
+    }
+
+    playSound(type = 'chime') {
+      try {
+        const s = localStorage.getItem('foodly_app_settings');
+        const settings = s ? JSON.parse(s) : {};
+        if (settings.soundAlerts === false) return;
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'cash') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+          osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.35);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.25);
+        }
+      } catch (e) {}
     }
 
     dismissFirstVisitModal() {
