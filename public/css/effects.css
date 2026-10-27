@@ -479,3 +479,78 @@ button:active, a:active, .btn-bounce:active { transform: scale(0.96); }
   border-color: #ff5e18 !important;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   CREATIVE 3D DEALS BANNER STYLES
+   ══════════════════════════════════════════════════════════════════════════ */
+.deal-3d-scene {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.deal-3d-showcase {
+  transform: rotateY(-8deg) rotateX(5deg);
+  animation: dealLevitate3D 5s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.offer-slide:hover .deal-3d-showcase {
+  transform: rotateY(-2deg) rotateX(2deg) translateY(-6px) scale(1.04);
+}
+
+@keyframes dealLevitate3D {
+  0%, 100% {
+    transform: rotateY(-8deg) rotateX(5deg) translateY(0px);
+  }
+  50% {
+    transform: rotateY(-4deg) rotateX(2deg) translateY(-12px);
+  }
+}
+
+.deal-badge-float-1 {
+  animation: dealBadgeFloatA 4.4s ease-in-out infinite;
+}
+
+.deal-badge-float-2 {
+  animation: dealBadgeFloatB 5.1s ease-in-out infinite;
+}
+
+@keyframes dealBadgeFloatA {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
+}
+
+@keyframes dealBadgeFloatB {
+  0%, 100% { transform: translateY(0px) rotate(1deg); }
+  50% { transform: translateY(-10px) rotate(-1.5deg); }
+}
+
+.coupon-tag-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.coupon-tag-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  animation: couponShimmerSweep 3s infinite ease-in-out;
+}
+
+@keyframes couponShimmerSweep {
+  0% { left: -100%; }
+  40%, 100% { left: 180%; }
+}
+
+.deal-glow-aura {
+  animation: dealAuraPulse 4.5s ease-in-out infinite;
+}
+
+@keyframes dealAuraPulse {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.15); }
+}
+
+

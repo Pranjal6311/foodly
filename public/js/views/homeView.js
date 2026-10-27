@@ -69,34 +69,126 @@
     `;
   }
 
-  // ── Offer banner card ────────────────────────────────────────────────────
+  // ── Offer banner card (Creative 3D Visual Showcase) ────────────────────────
   const OFFERS = [
-    { gradient: 'linear-gradient(135deg,#ff5e18,#aa3700)', emoji: '🎉', title: '50% OFF', sub: 'Use code FOODLY50', code: 'FOODLY50', discount: 50, max: 100 },
-    { gradient: 'linear-gradient(135deg,#6366f1,#8b5cf6)', emoji: '🚀', title: 'Free Delivery', sub: 'On orders above ₹149', code: 'FREEDEL', discount: 0, max: 40 },
-    { gradient: 'linear-gradient(135deg,#059669,#0d9488)', emoji: '🥗', title: 'Healthy Meal Deals', sub: 'Save up to ₹80 on salads', code: 'HEALTHYGL', discount: 20, max: 80 },
-    { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '🪔', title: 'Navratri Special', sub: 'Use code NAVRATRI25', code: 'NAVRATRI25', discount: 25, max: 120 },
+    {
+      code: 'FREEDEL',
+      discount: 0,
+      max: 40,
+      tag: '🚀 CAMPUS EXCLUSIVE • ZERO DELIVERY FEE',
+      title: 'Zero Delivery Fee, Faster Than Ever',
+      sub: 'Unlimited free delivery across all GL Bajaj hostels & academic blocks on ₹149+',
+      gradient: 'linear-gradient(135deg, #1c084a 0%, #311475 32%, #4f46e5 72%, #7c3aed 100%)',
+      img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=400&q=80',
+      badge1: '⚡ 18 Min Drop',
+      badge2: '₹0 Delivery Fee',
+      emoji: '🚀'
+    },
+    {
+      code: 'FOODLY50',
+      discount: 50,
+      max: 100,
+      tag: '🔥 HOSTELLER FAVORITE • ALL RESTROS',
+      title: 'Flat 50% OFF Sizzling Feasts',
+      sub: 'Save up to ₹100 on Biryanis, Pizzas, Burgers & Thalis from 40+ campus kitchens',
+      gradient: 'linear-gradient(135deg, #180400 0%, #380d00 30%, #991b1b 68%, #ff5e18 100%)',
+      img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80',
+      badge1: '⭐ 4.9 Food Rating',
+      badge2: 'FLAT 50% SAVED',
+      emoji: '🍔'
+    },
+    {
+      code: 'MIDNIGHT',
+      discount: 25,
+      max: 75,
+      tag: '🌙 NIGHT OWL PASS • OPEN TILL 4 AM',
+      title: 'Late Night Munchies? 25% OFF',
+      sub: 'Hot rolls, steaming chai, Maggi & cold brew delivered straight to your room',
+      gradient: 'linear-gradient(135deg, #030712 0%, #0f172a 35%, #1e1b4b 72%, #2563eb 100%)',
+      img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80',
+      badge1: '🌙 Open Till 4:00 AM',
+      badge2: '15 Mins Hostel Drop',
+      emoji: '🧋'
+    },
+    {
+      code: 'NAVRATRI25',
+      discount: 25,
+      max: 120,
+      tag: '🪔 100% SATVIK • DESI GHEE PREPARED',
+      title: 'Shubh Navratri Fasting Feast (25% OFF)',
+      sub: 'Pure Desi Ghee Sabudana Khichdi, Kuttu Pooris & Makhana Kheer with Sendha Namak',
+      gradient: 'linear-gradient(135deg, #1b0700 0%, #451a03 30%, #9a3412 68%, #f59e0b 100%)',
+      img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=400&q=80',
+      badge1: '🪔 100% Satvik Pure',
+      badge2: 'Desi Ghee Sendha Namak',
+      emoji: '✨'
+    }
   ];
 
   function renderOfferSlide(offer, idx) {
     return `
-      <div class="offer-slide shrink-0 w-full" style="background:${offer.gradient};display:flex;align-items:center;justify-content:space-between;padding:22px 26px;cursor:pointer;position:relative;overflow:hidden;" onclick="window.foodlyStore.applyCoupon({code:'${offer.code}',discountPercent:${offer.discount},maxDiscount:${offer.max},description:'${offer.title}'}); window.foodlyStore.showToast('Coupon ${offer.code} applied!','success');">
-        <!-- Ambient circle decoration -->
-        <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.12);pointer-events:none;"></div>
+      <div class="offer-slide shrink-0 w-full" style="background:${offer.gradient};position:relative;overflow:hidden;padding:22px 24px;cursor:pointer;min-height:200px;display:flex;align-items:center;" onclick="window.foodlyStore.applyCoupon({code:'${offer.code}',discountPercent:${offer.discount},maxDiscount:${offer.max},description:'${offer.title}'}); window.foodlyStore.showToast('Coupon ${offer.code} applied!','success');">
         
-        <div style="display:flex;align-items:center;gap:18px;position:relative;z-index:2;">
-          <div style="font-size:46px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.25));">${offer.emoji}</div>
-          <div>
-            <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.15;letter-spacing:-0.02em;">${offer.title}</div>
-            <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);margin-top:4px;">${offer.sub}</div>
-            <div style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.25);border:1.5px dashed rgba(255,255,255,0.8);border-radius:8px;padding:4px 12px;font-size:11px;font-weight:900;color:#fff;letter-spacing:0.06em;">
-              <span>TAP TO APPLY:</span>
-              <span style="text-decoration:underline;">${offer.code}</span>
+        <!-- Glowing Ambient Mesh Orb in background -->
+        <div style="position:absolute;top:-50px;right:18%;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,0.14);filter:blur(35px);pointer-events:none;" class="deal-glow-aura"></div>
+        <div style="position:absolute;bottom:-30px;left:8%;width:160px;height:160px;border-radius:50%;background:rgba(0,0,0,0.25);filter:blur(25px);pointer-events:none;"></div>
+        <!-- Subtle Pattern overlay -->
+        <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);background-size:20px 20px;opacity:0.25;pointer-events:none;"></div>
+
+        <div style="position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;">
+          
+          <!-- LEFT CONTENT: Badges, Big Headline & Shimmer Coupon Pill -->
+          <div style="flex:1;max-width:560px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);border-radius:99px;padding:3.5px 12px;margin-bottom:8px;">
+              <span style="font-size:11px;">${offer.emoji}</span>
+              <span style="color:#fff;font-size:10.5px;font-weight:900;letter-spacing:0.04em;">${offer.tag}</span>
+            </div>
+
+            <h3 style="color:#fff;font-size:22px;font-weight:900;line-height:1.2;margin-bottom:5px;letter-spacing:-0.02em;" class="sm:text-2xl">
+              ${offer.title}
+            </h3>
+
+            <p style="color:rgba(255,255,255,0.85);font-size:11.5px;font-weight:500;line-height:1.45;margin-bottom:12px;max-width:480px;">
+              ${offer.sub}
+            </p>
+
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <!-- Shimmering Coupon Capsule -->
+              <div class="coupon-tag-shimmer" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.22);backdrop-filter:blur(12px);border:1.5px dashed rgba(255,255,255,0.85);border-radius:12px;padding:5px 14px;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+                <span style="font-size:10.5px;font-weight:900;color:rgba(255,255,255,0.9);letter-spacing:0.06em;">TAP TO APPLY:</span>
+                <span style="font-size:12.5px;font-weight:900;color:#fde047;letter-spacing:0.08em;text-decoration:underline;">${offer.code}</span>
+              </div>
+              <span style="background:#fff;color:#151c27;font-size:11px;font-weight:900;padding:6px 14px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,0.2);display:inline-flex;align-items:center;gap:4px;" class="hidden sm:inline-flex">
+                <span>Claim Deal</span>
+                <span>→</span>
+              </span>
             </div>
           </div>
-        </div>
 
-        <div style="position:relative;z-index:2;display:none;" class="sm:block">
-          <span style="background:#fff;color:#151c27;font-size:11px;font-weight:900;padding:8px 16px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.15);">Claim Deal →</span>
+          <!-- RIGHT 3D CREATIVE SHOWCASE & FLOATING BADGES (Desktop & Tablet) -->
+          <div class="deal-3d-scene hidden md:flex shrink-0" style="position:relative;width:240px;height:170px;align-items:center;justify-content:center;">
+            
+            <!-- 3D Levitating Image Card -->
+            <div class="deal-3d-showcase" style="width:170px;height:135px;border-radius:20px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.4);box-shadow:0 20px 45px rgba(0,0,0,0.45);position:relative;background:rgba(0,0,0,0.3);">
+              <img src="${offer.img}" alt="${offer.title}" style="width:100%;height:100%;object-fit:cover;"/>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 60%);"></div>
+              <div style="position:absolute;bottom:8px;left:10px;color:#fff;font-size:10px;font-weight:800;">
+                Foodly Verified
+              </div>
+            </div>
+
+            <!-- Floating 3D Badge Top-Left -->
+            <div class="deal-badge-float-1" style="position:absolute;top:-4px;left:-8px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.8);border-radius:12px;padding:5px 10px;box-shadow:0 10px 25px rgba(0,0,0,0.25);display:flex;align-items:center;gap:6px;pointer-events:none;">
+              <span style="font-size:13px;">⚡</span>
+              <span style="font-size:10px;font-weight:900;color:#151c27;white-space:nowrap;">${offer.badge1}</span>
+            </div>
+
+            <!-- Floating 3D Badge Bottom-Right -->
+            <div class="deal-badge-float-2" style="position:absolute;bottom:-6px;right:-10px;background:rgba(21,28,39,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:5px 12px;box-shadow:0 10px 25px rgba(0,0,0,0.35);color:#fff;pointer-events:none;">
+              <span style="font-size:10px;font-weight:900;color:#fde047;white-space:nowrap;">${offer.badge2}</span>
+            </div>
+          </div>
+
         </div>
       </div>
     `;
