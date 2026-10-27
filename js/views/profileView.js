@@ -58,6 +58,10 @@
                   </p>
                 </div>
                 <div class="flex items-center justify-center gap-2">
+                  <a href="#settings" class="px-3.5 py-1.5 bg-surface-container-high hover:bg-surface-container border border-surface-variant hover:border-primary rounded-xl text-xs font-bold text-on-surface hover:text-primary transition-all flex items-center gap-1.5 shadow-sm">
+                    <span class="material-symbols-outlined text-base text-primary">settings</span>
+                    <span>Settings</span>
+                  </a>
                   <a href="#help" class="px-3.5 py-1.5 border border-surface-variant hover:border-primary rounded-xl text-xs font-bold text-on-surface hover:text-primary transition-all flex items-center gap-1 shadow-sm">
                     <span class="material-symbols-outlined text-base">support_agent</span>
                     <span>Need Help?</span>

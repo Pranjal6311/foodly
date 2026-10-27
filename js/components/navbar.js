@@ -39,8 +39,11 @@
               <span class="material-symbols-outlined">shopping_cart</span>
               <span class="absolute top-1 right-1 bg-primary-container text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">${cartCount}</span>
             </button>
-            <a href="#profile" class="p-2 rounded-full hover:bg-surface-container-low transition-colors duration-200 cursor-pointer active:scale-95" title="Profile">
+            <a href="#profile" class="p-2 rounded-full hover:bg-surface-container-low transition-colors duration-200 cursor-pointer active:scale-95 ${currentHash === '#profile' ? 'bg-surface-container-low text-primary font-bold' : ''}" title="Profile">
               <span class="material-symbols-outlined">person</span>
+            </a>
+            <a href="#settings" class="p-2 rounded-full hover:bg-surface-container-low transition-colors duration-200 cursor-pointer active:scale-95 ${currentHash === '#settings' ? 'bg-surface-container-low text-primary font-bold' : ''}" title="Settings">
+              <span class="material-symbols-outlined">settings</span>
             </a>
           </div>
         </div>

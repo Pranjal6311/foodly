@@ -67,6 +67,8 @@
       window.renderInnovationsView(appContainer);
     } else if (route === 'profile') {
       window.renderProfileView(appContainer);
+    } else if (route === 'settings') {
+      window.renderSettingsView(appContainer);
     } else if (route === 'partners' || route === 'partner') {
       window.renderPartnerView(appContainer);
     } else if (route === 'help') {
