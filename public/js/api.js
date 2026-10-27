@@ -82,16 +82,72 @@
 
       let list = [...data.restaurants];
       if (filters.q) {
-        const q = filters.q.toLowerCase();
-        list = list.filter(r => r.name.toLowerCase().includes(q) || (r.cuisines || []).some(c => c.toLowerCase().includes(q)));
+        const q = filters.q.toLowerCase().trim();
+        list = list.filter(r => {
+          const matchName = r.name.toLowerCase().includes(q);
+          const matchCuisines = (r.cuisines || []).some(c => c.toLowerCase().includes(q));
+          const matchArea = (r.area || '').toLowerCase().includes(q);
+          const matchType = (r.type || '').toLowerCase().includes(q);
+          const matchHeadline = (r.headline || '').toLowerCase().includes(q);
+          const matchMenu = (r.menu || []).some(m => m.name.toLowerCase().includes(q) || (m.description || '').toLowerCase().includes(q) || (m.category || '').toLowerCase().includes(q));
+          const matchCafe = (q.includes('cafe') || q.includes('coffee')) && (r.isCafe || r.type === 'cafe' || (r.cuisines || []).some(c => c.toLowerCase().includes('cafe')));
+          const matchHotel = (q.includes('hotel') || q.includes('stay') || q.includes('lounge')) && (r.name.toLowerCase().includes('hotel') || (r.cuisines || []).some(c => c.toLowerCase().includes('hotel')));
+          const matchRestro = (q.includes('restro') || q.includes('resta')) && (r.type === 'restaurant' || (r.cuisines || []).some(c => c.toLowerCase().includes('restro')));
+
+          return matchName || matchCuisines || matchArea || matchType || matchHeadline || matchMenu || matchCafe || matchHotel || matchRestro;
+        });
       }
+
       if (filters.cuisine) {
-        const c = filters.cuisine.toLowerCase();
-        list = list.filter(r => (r.cuisines || []).some(item => item.toLowerCase().includes(c)));
+        const c = filters.cuisine.toLowerCase().trim();
+        list = list.filter(r => {
+          if (c === 'cafe' || c === 'cafes & coffee' || c === 'coffee') {
+            return r.isCafe || r.type === 'cafe' || (r.cuisines || []).some(x => x.toLowerCase().includes('cafe'));
+          }
+          if (c === 'hotel' || c === 'hotel kitchens' || c === 'hotel dining') {
+            return (r.cuisines || []).some(x => x.toLowerCase().includes('hotel')) || r.name.toLowerCase().includes('hotel');
+          }
+          if (c === 'restro' || c === 'restaurant' || c === 'restros & dining') {
+            return r.type === 'restaurant' || (r.cuisines || []).some(x => x.toLowerCase().includes('restro'));
+          }
+          if (c === 'vrat-special' || c === 'navratri vrat special' || c === 'satvik') {
+            return (r.cuisines || []).some(x => x.toLowerCase().includes('vrat') || x.toLowerCase().includes('satvik'));
+          }
+          if (c === 'south-indian' || c === 'south indian') {
+            return (r.cuisines || []).some(x => x.toLowerCase().includes('south indian') || x.toLowerCase().includes('dosa'));
+          }
+          if (c === 'north-indian' || c === 'north indian') {
+            return (r.cuisines || []).some(x => x.toLowerCase().includes('north indian') || x.toLowerCase().includes('thali'));
+          }
+          if (c === 'street-food' || c === 'food-cart' || c === 'cart') {
+            return r.type === 'food-cart' || (r.cuisines || []).some(x => x.toLowerCase().includes('street') || x.toLowerCase().includes('cart') || x.toLowerCase().includes('chaat'));
+          }
+          return (r.cuisines || []).some(item => item.toLowerCase().includes(c));
+        });
       }
-      if (filters.dietary && filters.dietary.toLowerCase() === 'satvik') {
-        list = list.filter(r => r.isPureVeg || (r.dietaryFlags || []).includes('Satvik'));
+
+      if (filters.dietary) {
+        const d = filters.dietary.toLowerCase();
+        if (d === 'satvik') {
+          list = list.filter(r => (r.dietary || []).some(flag => flag.toLowerCase().includes('satvik')) || (r.cuisines || []).some(c => c.toLowerCase().includes('satvik') || c.toLowerCase().includes('vrat')));
+        } else if (d === 'vegetarian' || d === 'veg') {
+          list = list.filter(r => (r.dietary || []).some(flag => flag.toLowerCase().includes('veg')) || (r.menu || []).some(m => m.veg === true));
+        }
       }
+
+      if (filters.rating) {
+        const minRating = parseFloat(filters.rating);
+        if (!isNaN(minRating)) {
+          list = list.filter(r => (r.rating || 0) >= minRating);
+        }
+      }
+
+      if (filters.sortBy === 'rating') {
+        list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      } else if (filters.sortBy === 'deliveryTime') {
+        list.sort((a, b) => parseInt(a.deliveryTime || '99') - parseInt(b.deliveryTime || '99'));
+      }
+
       return { success: true, count: list.length, data: list };
     },
 
@@ -105,8 +161,26 @@
       // Static fallback
       const data = await getStaticData();
       if (data && data.restaurants) {
-        const found = data.restaurants.find(r => r.id === id);
-        if (found) return { success: true, data: found };
+        // Direct ID match
+        let found = data.restaurants.find(r => r.id === id);
+        
+        // Smart fuzzy / normalized match (e.g. 'gl-bajaj-central-cafeteria' -> 'gl-bajaj-cafeteria')
+        if (!found) {
+          const normTarget = (id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          found = data.restaurants.find(r => {
+            const normId = r.id.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const normName = r.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return normId === normTarget || normName.includes(normTarget) || normTarget.includes(normId);
+          });
+        }
+
+        if (found) {
+          // Guarantee menuCategories is an array
+          if (!found.menuCategories || found.menuCategories.length === 0) {
+            found.menuCategories = [...new Set((found.menu || []).map(m => m.category).filter(Boolean))];
+          }
+          return { success: true, data: found };
+        }
       }
       throw new Error('Restaurant not found');
     },
@@ -162,6 +236,7 @@
           createdAt: new Date().toISOString(),
           status: "out_for_delivery",
           restaurantName: "GL Bajaj Central Cafeteria",
+          restaurantId: "gl-bajaj-cafeteria",
           deliveryAddress: "GL Bajaj Boys Hostel (Block A & B), Knowledge Park III, Greater Noida",
           paymentMethod: "Foodly Wallet",
           items: [

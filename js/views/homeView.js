@@ -341,14 +341,20 @@
 
             <!-- Quick Category Filter Chips -->
             <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="home-filter-chips">
-              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-primary text-white shadow-sm cursor-pointer whitespace-nowrap" data-filter="all">All (36)</button>
-              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer flex items-center gap-1 whitespace-nowrap" data-filter="cart">
-                <span class="material-symbols-outlined text-xs text-amber-600">storefront</span>Food Carts (7)
-              </button>
+              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-primary text-white shadow-sm cursor-pointer whitespace-nowrap" data-filter="all">All (43)</button>
               <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer flex items-center gap-1 whitespace-nowrap" data-filter="cafe">
-                <span class="material-symbols-outlined text-xs text-indigo-600">local_cafe</span>Cafes (14)
+                <span class="material-symbols-outlined text-xs text-indigo-600">local_cafe</span>Cafes &amp; Coffee (16)
               </button>
-              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer whitespace-nowrap" data-filter="south-indian">South Indian &amp; Dosa</button>
+              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer flex items-center gap-1 whitespace-nowrap" data-filter="hotel">
+                <span class="material-symbols-outlined text-xs text-emerald-600">hotel</span>Hotels &amp; Buffets
+              </button>
+              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer flex items-center gap-1 whitespace-nowrap" data-filter="restro">
+                <span class="material-symbols-outlined text-xs text-orange-600">restaurant</span>Restros &amp; Dining
+              </button>
+              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer flex items-center gap-1 whitespace-nowrap" data-filter="cart">
+                <span class="material-symbols-outlined text-xs text-amber-600">storefront</span>Campus Carts (7)
+              </button>
+              <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer whitespace-nowrap" data-filter="south-indian">South Indian</button>
               <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer whitespace-nowrap" data-filter="biryani">Biryani &amp; Kebabs</button>
               <button class="home-chip px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-surface-container hover:bg-surface-container-high text-on-surface shadow-sm cursor-pointer whitespace-nowrap flex items-center gap-1" data-filter="top-rated">
                 <span class="material-symbols-outlined text-xs text-amber-500 filled">star</span>Top Rated (4.7+)
@@ -465,7 +471,11 @@
             if (filter === 'cart') {
               filtered = allRestaurants.filter(r => r.type === 'food-cart');
             } else if (filter === 'cafe') {
-              filtered = allRestaurants.filter(r => r.type === 'cafe' || r.isCafe);
+              filtered = allRestaurants.filter(r => r.type === 'cafe' || r.isCafe || (r.cuisines || []).some(c => c.toLowerCase().includes('cafe')));
+            } else if (filter === 'hotel') {
+              filtered = allRestaurants.filter(r => (r.cuisines || []).some(c => c.toLowerCase().includes('hotel')) || r.name.toLowerCase().includes('hotel'));
+            } else if (filter === 'restro') {
+              filtered = allRestaurants.filter(r => r.type === 'restaurant' || (r.cuisines || []).some(c => c.toLowerCase().includes('restro')));
             } else if (filter === 'south-indian') {
               filtered = allRestaurants.filter(r => r.cuisines.some(c => c.toLowerCase().includes('south indian') || c.toLowerCase().includes('dosa')));
             } else if (filter === 'biryani') {

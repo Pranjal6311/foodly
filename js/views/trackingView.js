@@ -6,11 +6,14 @@
   let destMarker = null;
   let restMarker = null;
   let routePolyline = null;
+  let traversedPolyline = null;
+  let remainingPolyline = null;
+  let baseRouteCasing = null;
   let distanceLine = null;
   let simulationTimer = null;
-  let simulationIndex = 2; // Default starting index: in-transit (1.4 km away)
+  let simulationIndex = 18; // Default starting index: in-transit (0.8 km away)
   let isSimulating = false;
-  let simulationSpeed = 2600;
+  let simulationSpeed = 900;
   let currentTileLayer = null;
   let currentStyle = 'street'; // 'street' or 'sat'
 
@@ -53,18 +56,83 @@
 
       const deliveryOtp = order.otp || String(Math.floor(1000 + Math.random() * 9000));
 
-      // Realistic road waypoints from Kitchen -> Knowledge Park III -> GL Bajaj Hostel
-      const routeWaypoints = [
-        { lat: 28.4715, lng: 77.4915, name: order.restaurantName || "Kitchen", eta: 16, dist: "2.3 km", speed: 0, status: "confirmed", statusText: "Order packed in thermal tamper-proof bag at kitchen" },
-        { lat: 28.4702, lng: 77.4925, name: "Knowledge Park III Circle", eta: 13, dist: "1.9 km", speed: 24, status: "preparing", statusText: "Rahul picked up meal; leaving restaurant parking" },
-        { lat: 28.4686, lng: 77.4940, name: "Tech Hub Boulevard", eta: 9, dist: "1.4 km", speed: 36, status: "out_for_delivery", statusText: "Rahul is riding down Knowledge Park III Main Road on EV" },
-        { lat: 28.4668, lng: 77.4958, name: "GL Bajaj Academic Approach", eta: 5, dist: "0.8 km", speed: 28, status: "out_for_delivery", statusText: "Approaching GL Bajaj Academic Block & Gate 2 roundabout" },
-        { lat: 28.4651, lng: 77.4973, name: "GL Bajaj Gate 2 Checkpost", eta: 2, dist: "0.3 km", speed: 18, status: "out_for_delivery", statusText: "Rahul entered GL Bajaj Campus Gate 2 with campus pass" },
-        { lat: 28.4639, lng: 77.4988, name: order.deliveryAddress || "GL Bajaj Campus Drop Zone", eta: 0, dist: "0.0 km", speed: 0, status: "delivered", statusText: "Arrived at your designated drop zone! Share OTP to collect meal." }
+      // 47 Turn-by-Turn Road Coordinates snapped 100% to Knowledge Park roads, roundabouts, and GL Bajaj avenues (Zero straight lines cutting through buildings)
+      const ROAD_COORDINATES = [
+        [28.471428, 77.492418], [28.471856, 77.493055], [28.471738, 77.493171],
+        [28.470689, 77.493910], [28.471097, 77.494685], [28.471517, 77.495480],
+        [28.471563, 77.495568], [28.471429, 77.495609], [28.470906, 77.495802],
+        [28.470246, 77.496050], [28.470005, 77.496077], [28.469499, 77.496110],
+        [28.469356, 77.496119], [28.469022, 77.496140], [28.468800, 77.496154],
+        [28.468361, 77.496177], [28.467935, 77.496199], [28.467845, 77.496183],
+        [28.467329, 77.496073], [28.466971, 77.495974], [28.466598, 77.495902],
+        [28.466436, 77.495889], [28.466254, 77.495904], [28.466097, 77.495978],
+        [28.465954, 77.496064], [28.465655, 77.496328], [28.465565, 77.496402],
+        [28.465383, 77.496655], [28.465256, 77.497023], [28.465256, 77.497278],
+        [28.465319, 77.497573], [28.465376, 77.497638], [28.465412, 77.497722],
+        [28.465422, 77.497814], [28.465409, 77.497891], [28.465378, 77.497961],
+        [28.465329, 77.498293], [28.465289, 77.498457], [28.465234, 77.498624],
+        [28.465184, 77.498743], [28.465052, 77.499023], [28.464958, 77.499163],
+        [28.464865, 77.499282], [28.464644, 77.499541], [28.464419, 77.499722],
+        [28.464320, 77.499777], [28.463900, 77.498800]
       ];
 
-      // Start at waypoint 2 (1.4 km away from campus drop zone)
-      simulationIndex = 2;
+      function haversineDist(c1, c2) {
+        const R = 6371;
+        const dLat = (c2[0] - c1[0]) * Math.PI / 180;
+        const dLng = (c2[1] - c1[1]) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(c1[0] * Math.PI / 180) * Math.cos(c2[0] * Math.PI / 180) *
+                  Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+      }
+
+      // Compute cumulative remaining road distance backwards from destination
+      const distRemaining = new Array(ROAD_COORDINATES.length);
+      distRemaining[ROAD_COORDINATES.length - 1] = 0;
+      for (let i = ROAD_COORDINATES.length - 2; i >= 0; i--) {
+        distRemaining[i] = distRemaining[i + 1] + haversineDist(ROAD_COORDINATES[i], ROAD_COORDINATES[i + 1]);
+      }
+
+      // Generate detailed waypoints along the street curves
+      const routeWaypoints = ROAD_COORDINATES.map((c, i) => {
+        const rem = distRemaining[i];
+        const isStart = i === 0;
+        const isEnd = i === ROAD_COORDINATES.length - 1;
+        const eta = isEnd ? 0 : Math.max(1, Math.round(rem * 3.8 + 1));
+        const speed = isEnd ? 0 : (isStart ? 12 : (i < 24 ? 34 : (i < 38 ? 26 : 16)));
+        let status = 'out_for_delivery';
+        let statusText = 'Rahul is cruising down Knowledge Park III Boulevard on EV';
+        if (isEnd) {
+          status = 'delivered';
+          statusText = 'Arrived at your designated drop zone! Share OTP to collect meal.';
+        } else if (i < 3) {
+          status = 'preparing';
+          statusText = 'Order collected fresh from kitchen; leaving restaurant parking';
+        } else if (i < 18) {
+          statusText = 'Riding down Knowledge Park III Main Road with thermal tamper-proof box';
+        } else if (i < 28) {
+          statusText = 'Passing Tech Hub circle towards GL Bajaj campus gate';
+        } else if (i < 36) {
+          statusText = 'Navigating GL Bajaj Roundabout & Campus Academic Avenue';
+        } else if (i < 43) {
+          statusText = 'Rahul entered GL Bajaj Campus Gate 2 with verified security pass';
+        } else {
+          statusText = 'Approaching GL Bajaj Boys Hostel (Block A & B) drop zone courtyard';
+        }
+
+        return {
+          lat: c[0],
+          lng: c[1],
+          eta,
+          dist: rem < 0.05 ? '0.0 km' : `${rem.toFixed(1)} km`,
+          speed,
+          status,
+          statusText
+        };
+      });
+
+      // Start at waypoint index 18 (in-transit along Knowledge Park boulevard, ~0.8 km away)
+      simulationIndex = 18;
       const initialPt = routeWaypoints[simulationIndex];
 
       container.innerHTML = `
@@ -393,24 +461,31 @@
           destMarker = L.marker([destPt.lat, destPt.lng], { icon: destIcon, zIndexOffset: 1500 }).addTo(activeLeafletMap)
             .bindPopup(`<b>GL Bajaj Drop Zone</b><br/>${order.deliveryAddress || 'GL Bajaj Boys Hostel, Room 304'}`);
 
-          // 3. Road Route Polylines
-          const latlngs = routeWaypoints.map(pt => [pt.lat, pt.lng]);
-          
-          // Outer casing
-          L.polyline(latlngs, {
-            color: '#ffdbcf',
-            weight: 12,
+          // 3. Real Turn-by-Turn Road Route Polylines (Snaps 100% to Knowledge Park roads, roundabouts & GL Bajaj campus gates)
+          // Layer A: Outer road casing (clean white background buffer for high contrast against maps)
+          baseRouteCasing = L.polyline(ROAD_COORDINATES, {
+            color: '#ffffff',
+            weight: 9,
+            opacity: 0.95,
+            lineCap: 'round',
+            lineJoin: 'round'
+          }).addTo(activeLeafletMap);
+
+          // Layer B: Completed path (subtle slate road path)
+          traversedPolyline = L.polyline(ROAD_COORDINATES.slice(0, simulationIndex + 1), {
+            color: '#64748b',
+            weight: 5,
             opacity: 0.85,
             lineCap: 'round',
             lineJoin: 'round'
           }).addTo(activeLeafletMap);
 
-          // Inner vibrant route line
-          routePolyline = L.polyline(latlngs, {
-            color: '#aa3700',
+          // Layer C: Active remaining path (vibrant Swiggy/Zomato style delivery orange, dashed)
+          remainingPolyline = L.polyline(ROAD_COORDINATES.slice(simulationIndex), {
+            color: '#ff5200',
             weight: 6,
             dashArray: '10, 8',
-            opacity: 0.95,
+            opacity: 0.98,
             lineCap: 'round',
             lineJoin: 'round'
           }).addTo(activeLeafletMap);
@@ -505,6 +580,12 @@
 
         if (riderMarker) {
           riderMarker.setLatLng([pt.lat, pt.lng]);
+        }
+
+        // Dynamically update road path segments: traversed vs remaining
+        if (traversedPolyline && remainingPolyline) {
+          traversedPolyline.setLatLngs(ROAD_COORDINATES.slice(0, index + 1));
+          remainingPolyline.setLatLngs(ROAD_COORDINATES.slice(index));
         }
 
         // Keep both in view smoothly
@@ -629,22 +710,22 @@
         else startSimulation();
       });
 
-      // 3. Fast-forward (2x / 3x)
+      // 3. Fast-forward (2x / 4x)
       document.getElementById('sim-ff-btn')?.addEventListener('click', () => {
-        simulationSpeed = simulationSpeed === 2600 ? 1100 : (simulationSpeed === 1100 ? 500 : 2600);
+        simulationSpeed = simulationSpeed === 900 ? 450 : (simulationSpeed === 450 ? 220 : 900);
         const speedText = document.getElementById('sim-speed-text');
-        if (speedText) speedText.textContent = simulationSpeed === 500 ? '3x' : (simulationSpeed === 1100 ? '2x' : '1x');
+        if (speedText) speedText.textContent = simulationSpeed === 220 ? '4x' : (simulationSpeed === 450 ? '2x' : '1x');
         if (isSimulating) startSimulation();
       });
 
-      // 4. Replay from Kitchen (2.3 km)
+      // 4. Replay from Kitchen (1.6 km)
       document.getElementById('sim-reset-btn')?.addEventListener('click', () => {
         stopSimulation();
         simulationIndex = 0;
         updateRiderPosition(0);
         fitBothInView();
         if (window.foodlyStore && window.foodlyStore.showToast) {
-          window.foodlyStore.showToast('Replaying journey from Kitchen (2.3 km away)', 'info');
+          window.foodlyStore.showToast('Replaying journey from Kitchen (1.6 km away along road)', 'info');
         }
         setTimeout(startSimulation, 600);
       });

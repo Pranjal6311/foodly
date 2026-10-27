@@ -38,6 +38,27 @@
                 </span>
               </label>
               <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
+                <input type="radio" name="cuisine" value="Cafe" ${store.filters.cuisine === 'Cafe' || store.filters.cuisine === 'cafe' ? 'checked' : ''} class="accent-primary"/>
+                <span class="text-on-surface flex items-center gap-1.5">
+                  <span class="text-indigo-600 font-bold">☕</span>
+                  <span>Cafes & Coffee</span>
+                </span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
+                <input type="radio" name="cuisine" value="Restro" ${store.filters.cuisine === 'Restro' || store.filters.cuisine === 'restro' ? 'checked' : ''} class="accent-primary"/>
+                <span class="text-on-surface flex items-center gap-1.5">
+                  <span class="text-orange-600 font-bold">🍽️</span>
+                  <span>Restros & Dining</span>
+                </span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
+                <input type="radio" name="cuisine" value="Hotel" ${store.filters.cuisine === 'Hotel' || store.filters.cuisine === 'hotel' ? 'checked' : ''} class="accent-primary"/>
+                <span class="text-on-surface flex items-center gap-1.5">
+                  <span class="text-emerald-600 font-bold">🏨</span>
+                  <span>Hotel Kitchens & Buffets</span>
+                </span>
+              </label>
+              <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
                 <input type="radio" name="cuisine" value="South Indian" ${store.filters.cuisine === 'South Indian' || store.filters.cuisine === 'south-indian' ? 'checked' : ''} class="accent-primary"/>
                 <span class="text-on-surface">South Indian & Dosa</span>
               </label>
@@ -48,10 +69,6 @@
               <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
                 <input type="radio" name="cuisine" value="Street Food" ${store.filters.cuisine === 'Street Food' || store.filters.cuisine === 'street-food' ? 'checked' : ''} class="accent-primary"/>
                 <span class="text-on-surface">Street Food & Food Carts</span>
-              </label>
-              <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
-                <input type="radio" name="cuisine" value="Cafe" ${store.filters.cuisine === 'Cafe' || store.filters.cuisine === 'cafe' ? 'checked' : ''} class="accent-primary"/>
-                <span class="text-on-surface">Cafes & Desserts</span>
               </label>
               <label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
                 <input type="radio" name="cuisine" value="North Indian" ${store.filters.cuisine === 'North Indian' || store.filters.cuisine === 'north-indian' ? 'checked' : ''} class="accent-primary"/>

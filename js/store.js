@@ -294,6 +294,7 @@
           createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
           status: "out_for_delivery",
           restaurantName: "GL Bajaj Central Cafeteria",
+          restaurantId: "gl-bajaj-cafeteria",
           deliveryAddress: "GL Bajaj Boys Hostel, Room 304",
           paymentMethod: "Foodly Wallet",
           items: [

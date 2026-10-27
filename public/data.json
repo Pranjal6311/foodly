@@ -41,9 +41,858 @@
       "name": "Navratri Vrat Special",
       "icon": "flare",
       "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      "id": "restro",
+      "name": "Restros & Dining",
+      "icon": "restaurant",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      "id": "hotel",
+      "name": "Hotel Kitchens",
+      "icon": "hotel",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80"
     }
   ],
   "restaurants": [
+    {
+      "id": "sagar-ratna-kp",
+      "name": "Sagar Ratna Restro",
+      "type": "restaurant",
+      "isCafe": false,
+      "headline": "South Indian Restro & Filter Coffee: Crispy Paper Butter Dosas, Medu Vada, Rava Masala & Filter Kaapi",
+      "rating": 4.8,
+      "reviewsCount": "7.8k+",
+      "deliveryTime": "15-25 min",
+      "priceTier": "₹₹",
+      "priceTierNumeric": 2,
+      "minOrder": 120,
+      "deliveryFee": 15,
+      "cuisines": [
+        "South Indian",
+        "Dosa",
+        "Restro",
+        "Breakfast",
+        "Beverages"
+      ],
+      "dietary": [
+        "Pure Veg",
+        "Authentic South Indian"
+      ],
+      "featured": true,
+      "bestseller": true,
+      "area": "Knowledge Park III, Greater Noida",
+      "city": "Greater Noida",
+      "lat": 28.4705,
+      "lng": 77.4945,
+      "heroImage": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=1200&q=80",
+      "menuCategories": [
+        "Crispy Dosas",
+        "Steaming Idlis & Vadas",
+        "South Indian Combos",
+        "Traditional Beverages"
+      ],
+      "menu": [
+        {
+          "id": "sr-1",
+          "name": "Butter Masala Dosa with Sambar & 3 Chutneys",
+          "category": "Crispy Dosas",
+          "price": 140,
+          "description": "Large crisp fermented crepe roasted in golden Amul butter, filled with spiced onion potato filling, accompanied by drumstick sambar and coconut chutneys.",
+          "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Bestseller",
+            "Crispy Golden"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 390,
+            "protein": 9,
+            "carbs": 64
+          }
+        },
+        {
+          "id": "sr-2",
+          "name": "Idli Vada Combo (2 Fluffy Idlis + 1 Crisp Medu Vada)",
+          "category": "Steaming Idlis & Vadas",
+          "price": 110,
+          "description": "Steaming soft fermented rice cakes and crisp urad dal doughnut vada with aromatic hot sambar and spicy tomato chutney.",
+          "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Healthy Breakfast",
+            "Light Meal"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 310,
+            "protein": 11,
+            "carbs": 54
+          }
+        },
+        {
+          "id": "sr-3",
+          "name": "Onion Rava Masala Dosa",
+          "category": "Crispy Dosas",
+          "price": 160,
+          "description": "Ultra-crisp semolina crepe peppered with chopped onions, green chillies, curry leaves, and cumin, served with aloo masala.",
+          "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Extra Crunchy"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 430,
+            "protein": 10,
+            "carbs": 68
+          }
+        },
+        {
+          "id": "sr-4",
+          "name": "Traditional South Indian Filter Kaapi",
+          "category": "Traditional Beverages",
+          "price": 55,
+          "description": "Strong chicory-blended filter decoction frothed high with hot full cream milk, served in classic stainless steel davarah and tumbler.",
+          "image": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Filter Coffee",
+            "Morning Energy"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 120,
+            "protein": 5,
+            "carbs": 14
+          }
+        }
+      ]
+    },
+    {
+      "id": "ccd-knowledge-park",
+      "name": "Cafe Coffee Day (CCD) - Campus Lounge",
+      "type": "cafe",
+      "isCafe": true,
+      "headline": "Iconic Coffee Lounge: Creamy Cold Frappes, Artisanal Cappuccinos, Garlic Bread Supreme & Sizzling Brownies",
+      "rating": 4.7,
+      "reviewsCount": "5.1k+",
+      "deliveryTime": "15-25 min",
+      "priceTier": "₹₹",
+      "priceTierNumeric": 2,
+      "minOrder": 99,
+      "deliveryFee": 15,
+      "cuisines": [
+        "Cafe",
+        "Coffee",
+        "Beverages",
+        "Fast Food",
+        "Desserts"
+      ],
+      "dietary": [
+        "Cafe Culture",
+        "Student Hangout"
+      ],
+      "featured": true,
+      "bestseller": false,
+      "area": "Knowledge Park II, Greater Noida",
+      "city": "Greater Noida",
+      "lat": 28.4695,
+      "lng": 77.493,
+      "heroImage": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "menuCategories": [
+        "Cold Frappes & Shakes",
+        "Hot Coffees & Teas",
+        "Garlic Breads & Sandwiches",
+        "Cakes & Sizzling Brownie"
+      ],
+      "menu": [
+        {
+          "id": "ccd-1",
+          "name": "Classic CCD Devil's Own Thick Frappe",
+          "category": "Cold Frappes & Shakes",
+          "price": 180,
+          "description": "Rich cold coffee blended with chocolate sauce, topped with creamy dairy whip and dark chocolate drizzle.",
+          "image": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Iconic CCD",
+            "Chilled Hit"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 340,
+            "protein": 8,
+            "carbs": 46
+          }
+        },
+        {
+          "id": "ccd-2",
+          "name": "Rich Creamy Cappuccino (Large)",
+          "category": "Hot Coffees & Teas",
+          "price": 130,
+          "description": "Dark roasted Arabica espresso poured over silky steamed milk with a thick crown of velvety foam.",
+          "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Hot Brew",
+            "Arabica"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 140,
+            "protein": 6,
+            "carbs": 12
+          }
+        },
+        {
+          "id": "ccd-3",
+          "name": "Garlic Bread Supreme with Melted Cheese",
+          "category": "Garlic Breads & Sandwiches",
+          "price": 120,
+          "description": "Fresh French baguette slices toasted with herb garlic butter, sweet corn, jalapeños, and melted mozzarella cheese.",
+          "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Cheesy",
+            "Best with Coffee"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 360,
+            "protein": 12,
+            "carbs": 42
+          }
+        },
+        {
+          "id": "ccd-4",
+          "name": "CCD Sizzling Brownie with Vanilla Scoop",
+          "category": "Cakes & Sizzling Brownie",
+          "price": 160,
+          "description": "Dense fudgy walnut brownie served on a piping hot cast iron sizzler with vanilla ice cream and bubbly melted chocolate sauce.",
+          "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Signature Dessert",
+            "Choco Fantasy"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 460,
+            "protein": 7,
+            "carbs": 58
+          }
+        }
+      ]
+    },
+    {
+      "id": "bikanervala-pari-chowk",
+      "name": "Bikanervala Sweets, Restro & Chaat",
+      "type": "restaurant",
+      "isCafe": false,
+      "headline": "Legendary Family Restro & Sweets: Raj Kachori, Chole Bhature, North Indian Thalis, Kaju Katli & Desi Ghee Mithai",
+      "rating": 4.8,
+      "reviewsCount": "11.5k+",
+      "deliveryTime": "15-25 min",
+      "priceTier": "₹₹",
+      "priceTierNumeric": 2,
+      "minOrder": 99,
+      "deliveryFee": 0,
+      "cuisines": [
+        "North Indian",
+        "Chaat",
+        "Street Food",
+        "Restro",
+        "Sweets"
+      ],
+      "dietary": [
+        "100% Pure Veg",
+        "Desi Ghee Certified"
+      ],
+      "featured": true,
+      "bestseller": true,
+      "area": "Pari Chowk, Greater Noida",
+      "city": "Greater Noida",
+      "lat": 28.467,
+      "lng": 77.505,
+      "heroImage": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1200&q=80",
+      "menuCategories": [
+        "Famous Street Chaats",
+        "All-Time Favorite Meals",
+        "South Indian Snacks",
+        "Desi Ghee Sweets"
+      ],
+      "menu": [
+        {
+          "id": "bv-1",
+          "name": "Famous Bikanervala Royal Raj Kachori",
+          "category": "Famous Street Chaats",
+          "price": 130,
+          "description": "Crisp giant hollow sphere stuffed with boiled potatoes, sprouted beans, dahi bhalla bits, sweet curd, tangy tamarind, and mint chutney.",
+          "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Legendary",
+            "Must Have Chaat"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 420,
+            "protein": 12,
+            "carbs": 58
+          }
+        },
+        {
+          "id": "bv-2",
+          "name": "Special Pindi Chole Bhature (Desi Ghee)",
+          "category": "All-Time Favorite Meals",
+          "price": 160,
+          "description": "Dark spiced Amritsari chickpea curry cooked with anardana and desi ghee, served with 2 crispy puffed bhaturas, aloo masala, and pickled carrots.",
+          "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Bestseller",
+            "Desi Ghee"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 620,
+            "protein": 19,
+            "carbs": 76
+          }
+        },
+        {
+          "id": "bv-3",
+          "name": "Bikanervala Special Deluxe Thali",
+          "category": "All-Time Favorite Meals",
+          "price": 240,
+          "description": "Complete wholesome feast: Paneer Butter Masala, Dal Makhani, Mix Veg, Jeera Pulao, 2 Laccha Parathas, Raita, Papad, and Gulab Jamun.",
+          "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Grand Thali",
+            "Full Meal"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 750,
+            "protein": 26,
+            "carbs": 88
+          }
+        },
+        {
+          "id": "bv-4",
+          "name": "Crispy Mysore Masala Dosa with Sambar & 3 Chutneys",
+          "category": "South Indian Snacks",
+          "price": 150,
+          "description": "Crisp golden fermented rice crepe smeared with fiery red garlic chutney, filled with potato onion bhaji, served with steaming sambar.",
+          "image": "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "South Indian",
+            "Crisp"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 380,
+            "protein": 9,
+            "carbs": 62
+          }
+        },
+        {
+          "id": "bv-5",
+          "name": "Desi Ghee Kaju Katli Box (250g)",
+          "category": "Desi Ghee Sweets",
+          "price": 280,
+          "description": "Diamond-shaped traditional Indian sweet made with premium Goan cashews and pure desi ghee, dressed with edible silver foil.",
+          "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Festive Classic",
+            "Gift Box"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 520,
+            "protein": 14,
+            "carbs": 60
+          }
+        }
+      ]
+    },
+    {
+      "id": "crowne-plaza-hotel",
+      "name": "Crowne Plaza Hotel & Kitchen",
+      "type": "restaurant",
+      "isCafe": false,
+      "headline": "Gourmet Hotel Restro: Wood-Fired Neapolitan Pizza, Asian Wok Delights, Dim Sums & Sizzlers",
+      "rating": 4.8,
+      "reviewsCount": "4.8k+",
+      "deliveryTime": "25-35 min",
+      "priceTier": "₹₹₹",
+      "priceTierNumeric": 3,
+      "minOrder": 250,
+      "deliveryFee": 35,
+      "cuisines": [
+        "Hotel Dining",
+        "Restro",
+        "Italian",
+        "Asian",
+        "Continental"
+      ],
+      "dietary": [
+        "Gourmet",
+        "Multi-Cuisine"
+      ],
+      "featured": false,
+      "bestseller": false,
+      "area": "Surajpur Chowk, Greater Noida",
+      "city": "Greater Noida",
+      "lat": 28.472,
+      "lng": 77.499,
+      "heroImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "menuCategories": [
+        "Hotel Wood-Fired Pizzas",
+        "Asian Dim Sums & Baos",
+        "Wok Tossed Noodles",
+        "Decadent Desserts"
+      ],
+      "menu": [
+        {
+          "id": "cp-1",
+          "name": "Truffle Mushroom & Mozzarella Wood-Fired Pizza",
+          "category": "Hotel Wood-Fired Pizzas",
+          "price": 380,
+          "description": "Artisanal 48-hr slow-fermented crust topped with San Marzano tomatoes, button and porcini mushrooms, fresh basil, and white truffle oil.",
+          "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Gourmet",
+            "Wood-Fired"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 650,
+            "protein": 22,
+            "carbs": 75
+          }
+        },
+        {
+          "id": "cp-2",
+          "name": "Crystal Veg Dim Sum Platter (6 pcs)",
+          "category": "Asian Dim Sums & Baos",
+          "price": 280,
+          "description": "Translucent steamed dumplings stuffed with water chestnuts, bok choy, and shiitake mushrooms with sweet chilli and soy dips.",
+          "image": "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Healthy",
+            "Steamed"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 240,
+            "protein": 10,
+            "carbs": 38
+          }
+        },
+        {
+          "id": "cp-3",
+          "name": "Hakka Chilli Garlic Noodles with Exotic Veggies",
+          "category": "Wok Tossed Noodles",
+          "price": 260,
+          "description": "Hand-stretched noodles wok-tossed with red bell peppers, baby corn, spring onions, and spicy dark soya chilli sauce.",
+          "image": "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Spicy",
+            "Wok Tossed"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 480,
+            "protein": 12,
+            "carbs": 78
+          }
+        },
+        {
+          "id": "cp-4",
+          "name": "Belgian Dark Chocolate Mousse Dome",
+          "category": "Decadent Desserts",
+          "price": 210,
+          "description": "Silky 70% Callebaut dark chocolate mousse coated in chocolate mirror glaze with roasted hazelnut crunch.",
+          "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Dessert",
+            "Imported Chocolate"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 340,
+            "protein": 6,
+            "carbs": 36
+          }
+        }
+      ]
+    },
+    {
+      "id": "radisson-blu-hotel",
+      "name": "Radisson Blu Hotel Restro & Lounge",
+      "type": "restaurant",
+      "isCafe": false,
+      "headline": "Luxury 5-Star Hotel Dining: Signature Dal Makhani, Dum Biryanis, Paneer Tikka Lababdar & Gourmet Pastas",
+      "rating": 4.9,
+      "reviewsCount": "6.2k+",
+      "deliveryTime": "25-35 min",
+      "priceTier": "₹₹₹",
+      "priceTierNumeric": 3,
+      "minOrder": 299,
+      "deliveryFee": 40,
+      "cuisines": [
+        "Hotel Dining",
+        "Restro",
+        "North Indian",
+        "Mughlai",
+        "Continental"
+      ],
+      "dietary": [
+        "Pure Veg & Non-Veg",
+        "Gourmet Certified",
+        "Hygiene Assured"
+      ],
+      "featured": true,
+      "bestseller": false,
+      "area": "Jaypee Greens / Surajpur Chowk, Greater Noida",
+      "city": "Greater Noida",
+      "lat": 28.468,
+      "lng": 77.502,
+      "heroImage": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+      "menuCategories": [
+        "Hotel Signature Mains",
+        "Tandoori Kebabs & Starters",
+        "Artisanal Breads & Rice",
+        "Continental & Italian",
+        "Royal Hotel Desserts"
+      ],
+      "menu": [
+        {
+          "id": "rad-1",
+          "name": "Dal Makhani Radisson Grand (24-Hr Slow Simmered)",
+          "category": "Hotel Signature Mains",
+          "price": 320,
+          "description": "Black lentils slow cooked overnight on charcoal embers with fresh tomato puree, white butter, and rich cream.",
+          "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Signature Dish",
+            "5-Star Chef Special"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 450,
+            "protein": 18,
+            "carbs": 42
+          }
+        },
+        {
+          "id": "rad-2",
+          "name": "Paneer Tikka Lababdar",
+          "category": "Hotel Signature Mains",
+          "price": 340,
+          "description": "Char-grilled cottage cheese cubes cooked in a velvety tomato-onion gravy infused with crushed coriander seeds and kasuri methi.",
+          "image": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Chef Recommended",
+            "Rich Gravy"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 510,
+            "protein": 22,
+            "carbs": 32
+          }
+        },
+        {
+          "id": "rad-3",
+          "name": "Angara Tandoori Paneer Tikka (6 Pcs)",
+          "category": "Tandoori Kebabs & Starters",
+          "price": 290,
+          "description": "Succulent cubes of cottage cheese marinated in spiced hung curd, mustard oil, and kashmiri deggi mirch, grilled in traditional clay oven.",
+          "image": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Smoky",
+            "Tandoor Hot"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 380,
+            "protein": 24,
+            "carbs": 14
+          }
+        },
+        {
+          "id": "rad-4",
+          "name": "Awadhi Nizami Dum Biryani with Burani Raita",
+          "category": "Artisanal Breads & Rice",
+          "price": 360,
+          "description": "Long-grain aged basmati rice layered with aromatic spices, brown onions, fresh mint, and choice vegetables sealed with dough.",
+          "image": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Dum Pukht",
+            "Aromatic"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 580,
+            "protein": 16,
+            "carbs": 84
+          }
+        },
+        {
+          "id": "rad-5",
+          "name": "Penne Alfredo Gourmet White Sauce Pasta",
+          "category": "Continental & Italian",
+          "price": 330,
+          "description": "Imported durum wheat penne tossed in rich parmesan garlic cream sauce with broccoli, zucchini, bell peppers, and fresh herbs.",
+          "image": "https://images.unsplash.com/photo-1621996346565-e3d5d6281691?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Continental",
+            "Italian Heritage"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 490,
+            "protein": 14,
+            "carbs": 62
+          }
+        },
+        {
+          "id": "rad-6",
+          "name": "Shahi Angoori Rasmalai with Kesar Milk",
+          "category": "Royal Hotel Desserts",
+          "price": 180,
+          "description": "Soft melt-in-mouth chenna patties immersed in reduced saffron-cardamom clotted milk, garnished with Iranian pistachios and silver leaf.",
+          "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Royal Dessert",
+            "Kesar Rich"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 280,
+            "protein": 8,
+            "carbs": 38
+          }
+        }
+      ]
+    },
+    {
+      "id": "gl-bajaj-cafeteria",
+      "name": "GL Bajaj Central Cafeteria & Food Court",
+      "type": "cafe",
+      "isCafe": true,
+      "headline": "Official Campus Cafeteria: Hot North Indian Thalis, Grilled Sandwiches, Cold Coffee & Quick Bites",
+      "rating": 4.8,
+      "reviewsCount": "8.4k+",
+      "deliveryTime": "10-20 min",
+      "priceTier": "₹",
+      "priceTierNumeric": 1,
+      "minOrder": 49,
+      "deliveryFee": 0,
+      "cuisines": [
+        "Campus Cafeteria",
+        "North Indian",
+        "Cafe",
+        "Restro",
+        "Fast Food",
+        "Beverages"
+      ],
+      "dietary": [
+        "Veg Friendly",
+        "Student Budget",
+        "Campus Certified"
+      ],
+      "featured": true,
+      "bestseller": true,
+      "area": "GL Bajaj Campus, Knowledge Park III",
+      "city": "Greater Noida",
+      "lat": 28.4714,
+      "lng": 77.4924,
+      "heroImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+      "menuCategories": [
+        "Student Combos & Thalis",
+        "Sandwiches & Burgers",
+        "Snacks & Maggie",
+        "Cold & Hot Beverages",
+        "Desserts"
+      ],
+      "menu": [
+        {
+          "id": "glb-1",
+          "name": "Paneer Butter Masala Combo (with 2 Butter Naan + Rice)",
+          "category": "Student Combos & Thalis",
+          "price": 180,
+          "description": "Rich cottage cheese cubes simmered in spiced tomato cashew butter gravy, served with 2 tandoori butter naans, jeera rice, and fresh onion salad.",
+          "image": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Bestseller",
+            "Campus Favorite",
+            "Complete Meal"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 620,
+            "protein": 26,
+            "carbs": 68
+          }
+        },
+        {
+          "id": "glb-2",
+          "name": "Deluxe Campus Student Thali",
+          "category": "Student Combos & Thalis",
+          "price": 150,
+          "description": "Dal Makhani, Shahi Paneer, Jeera Rice, 4 Butter Tawa Rotis, Boondi Raita, Salad & Gulab Jamun.",
+          "image": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Value Deal",
+            "Student Favorite"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 680,
+            "protein": 24,
+            "carbs": 85
+          }
+        },
+        {
+          "id": "glb-3",
+          "name": "Special Amritsari Chole Bhature (2 pcs)",
+          "category": "Student Combos & Thalis",
+          "price": 120,
+          "description": "Authentic spiced chickpea curry served with 2 oversized fluffy bhaturas, pickled carrots, and green chillies.",
+          "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "All-Day Breakfast",
+            "Must Try"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 550,
+            "protein": 18,
+            "carbs": 72
+          }
+        },
+        {
+          "id": "glb-4",
+          "name": "Cheese Grilled Club Sandwich",
+          "category": "Sandwiches & Burgers",
+          "price": 90,
+          "description": "Triple-decker grilled sandwich stuffed with capsicum, sweet corn, melted mozzarella cheese, and mint chutney.",
+          "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Cheesy",
+            "Quick Bite"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 410,
+            "protein": 16,
+            "carbs": 48
+          }
+        },
+        {
+          "id": "glb-5",
+          "name": "Crispy Veg Patty Burger with Fries",
+          "category": "Sandwiches & Burgers",
+          "price": 99,
+          "description": "Golden spiced potato-herb patty topped with lettuce, fresh tomatoes, mayo, and cheddar cheese slice.",
+          "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Snack Hit"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 460,
+            "protein": 14,
+            "carbs": 54
+          }
+        },
+        {
+          "id": "glb-6",
+          "name": "Hostel Double Cheese Masala Maggie",
+          "category": "Snacks & Maggie",
+          "price": 70,
+          "description": "Classic Maggie noodles tossed with sautéed butter onions, tomatoes, green capsicum, and loaded with grated Amul cheese.",
+          "image": "https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Late Night Hit",
+            "Hostel Special"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 380,
+            "protein": 11,
+            "carbs": 52
+          }
+        },
+        {
+          "id": "glb-7",
+          "name": "Steamed Paneer Momos (8 pcs) + Spicy Red Chutney",
+          "category": "Snacks & Maggie",
+          "price": 90,
+          "description": "Thin delicate wrappers packed with spiced paneer, onions, and spring garlic, served with authentic fiery hot garlic dip.",
+          "image": "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Spicy",
+            "Crowd Favorite"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 320,
+            "protein": 15,
+            "carbs": 42
+          }
+        },
+        {
+          "id": "glb-8",
+          "name": "Campus Special Thick Cold Coffee with Ice Cream",
+          "category": "Cold & Hot Beverages",
+          "price": 80,
+          "description": "Frothy, creamy blended espresso shaken with chilled milk and topped with a scoop of rich vanilla ice cream and chocolate drizzle.",
+          "image": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Chilled",
+            "Bestseller Beverage"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 260,
+            "protein": 7,
+            "carbs": 36
+          }
+        },
+        {
+          "id": "glb-9",
+          "name": "Kulhad Adrak Elaichi Chai (2 Cups) + 2 Samosas",
+          "category": "Cold & Hot Beverages",
+          "price": 60,
+          "description": "Slow-brewed ginger-cardamom tea served in earthen clay kulhad with crisp hot Punjabi aloo samosas.",
+          "image": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Morning Booster",
+            "Desi Chai"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 290,
+            "protein": 6,
+            "carbs": 40
+          }
+        },
+        {
+          "id": "glb-10",
+          "name": "Hot Chocolate Brownie with Fudge Sauce",
+          "category": "Desserts",
+          "price": 85,
+          "description": "Warm, gooey dark chocolate walnut brownie smothered in warm chocolate fudge sauce.",
+          "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+          "tags": [
+            "Sweet Cravings"
+          ],
+          "veg": true,
+          "nutrition": {
+            "calories": 350,
+            "protein": 5,
+            "carbs": 48
+          }
+        }
+      ]
+    },
     {
       "id": "navratri-vrat-rasoi",
       "name": "Navratri Vrat & Satvik Rasoi 🪔",
@@ -183,6 +1032,13 @@
           "veg": true,
           "isVrat": true
         }
+      ],
+      "menuCategories": [
+        "Navratri Vrat Specials",
+        "Crispy Vrat Snacks",
+        "Festive Grand Thalis",
+        "Satvik Desserts",
+        "Hydration & Energy"
       ]
     },
     {
