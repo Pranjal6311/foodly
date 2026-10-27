@@ -1,135 +1,518 @@
-/* public/css/styles.css - Foodly Design System Enhancements */
+/* ══════════════════════════════════════════════════════════════════════════
+   FOODLY PREMIUM DESIGN SYSTEM — Full Mobile + Desktop Overhaul
+   Designed to be better than Swiggy & Zomato
+   ══════════════════════════════════════════════════════════════════════════ */
 
+/* ── GOOGLE FONT ────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
+
+/* ── MATERIAL ICONS ─────────────────────────────────────────────────────── */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   vertical-align: middle;
   line-height: 1;
 }
-
 .material-symbols-outlined.filled {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
-/* Tactile Soft Shadow & Hover Effects */
-.card-shadow {
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-shadow:hover {
-  box-shadow: 0px 12px 32px rgba(170, 55, 0, 0.08);
-  transform: translateY(-3px);
-}
-
-/* Hide scrollbar while keeping scrollability */
-.hide-scroll::-webkit-scrollbar {
-  display: none;
-}
-.hide-scroll {
+/* ── SCROLLBAR HIDE ─────────────────────────────────────────────────────── */
+.hide-scroll::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.hide-scroll, .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* Pulse animation for delivery rider marker on live map */
+/* ── CARD SHADOWS ───────────────────────────────────────────────────────── */
+.card-shadow {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-shadow:hover {
+  box-shadow: 0 8px 28px rgba(170,55,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+}
+
+/* ── RESTAURANT CARD ────────────────────────────────────────────────────── */
+.rest-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.rest-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+.rest-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.rest-card:hover img { transform: scale(1.04); }
+
+/* ── SWIGGY-STYLE CATEGORY PILL ─────────────────────────────────────────── */
+.cat-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.cat-pill:hover { transform: translateY(-3px); }
+.cat-pill-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid transparent;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.cat-pill:hover .cat-pill-img {
+  border-color: #ff5e18;
+  transform: scale(1.06);
+}
+.cat-pill-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #151c27;
+  white-space: nowrap;
+}
+
+/* ── DELIVERY AGENT MARKER PULSE ────────────────────────────────────────── */
 @keyframes pulse-ring {
-  0% {
-    transform: scale(0.8);
-    opacity: 0.6;
-  }
-  80%, 100% {
-    transform: scale(2.8);
-    opacity: 0;
-  }
+  0%   { transform: scale(0.8); opacity: 0.7; }
+  80%, 100% { transform: scale(2.4); opacity: 0; }
 }
+.pulse-ring { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
 
-.pulse-ring {
-  animation: pulse-ring 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-}
-
-/* Animated dashed delivery path */
-@keyframes dash-flow {
-  to {
-    stroke-dashoffset: -32;
-  }
-}
-
+/* ── ANIMATED ROUTE DASH ────────────────────────────────────────────────── */
+@keyframes dash-flow { to { stroke-dashoffset: -32; } }
 .route-dash-animated {
   stroke-dasharray: 8 8;
   animation: dash-flow 1.5s linear infinite;
 }
 
-/* Timeline connecting line */
-.timeline-item {
-  position: relative;
-}
-
+/* ── TIMELINE ───────────────────────────────────────────────────────────── */
+.timeline-item { position: relative; }
 .timeline-item:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: 20px;
-  top: 36px;
-  bottom: -16px;
+  left: 20px; top: 36px; bottom: -16px;
   width: 2px;
   background-color: #e2e8f8;
   z-index: 1;
 }
+.timeline-item.completed:not(:last-child)::after { background-color: #ff5e18; }
 
-.timeline-item.completed:not(:last-child)::after {
-  background-color: #ff5e18;
-}
-
-/* View transitions */
+/* ── PAGE TRANSITIONS ───────────────────────────────────────────────────── */
 .fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeInUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Toast animation */
+/* ── TOAST ──────────────────────────────────────────────────────────────── */
 @keyframes toastSlideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+.toast-animate { animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.foodly-toast {
+  animation: toastSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes toastSlideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.toast-animate {
-  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Payment panel smooth reveal */
+/* ── PAYMENT PANEL ──────────────────────────────────────────────────────── */
 @keyframes panelReveal {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 500px;
-  }
+  from { opacity: 0; transform: translateY(-6px); max-height: 0; }
+  to   { opacity: 1; transform: translateY(0); max-height: 500px; }
 }
-
 .payment-method-card [class*="-panel"]:not(.hidden) {
   animation: panelReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+#card-number-input { font-family: 'Courier New', monospace; letter-spacing: 0.15em; }
 
-/* Card number mono font */
-#card-number-input {
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.15em;
+/* ── GRADIENT TEXT ──────────────────────────────────────────────────────── */
+.gradient-text-animate {
+  background: linear-gradient(135deg, #aa3700 0%, #ff5e18 50%, #d95300 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── SWIGGY/ZOMATO HOME HERO — MOBILE FIRST ─────────────────────────────── */
+.hero-swiggy {
+  background: linear-gradient(135deg, #ff5e18 0%, #aa3700 100%);
+  min-height: 220px;
+  border-radius: 0 0 24px 24px;
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px 32px;
+}
+.hero-swiggy::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+
+/* ── MOBILE BOTTOM NAV IMPROVEMENTS ─────────────────────────────────────── */
+#mobile-bottom-nav {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(220,226,243,0.8);
+  padding-bottom: env(safe-area-inset-bottom, 6px);
+}
+#mobile-bottom-nav a, #mobile-bottom-nav button {
+  min-width: 56px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+#mobile-bottom-nav a.active-tab, #mobile-bottom-nav button.active-tab {
+  background: rgba(255, 94, 24, 0.1);
+  color: #ff5e18 !important;
+}
+
+/* ── MOBILE FLOATING CART ────────────────────────────────────────────────── */
+#mobile-floating-cart-bar {
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.25);
+  backdrop-filter: blur(12px);
+}
+
+/* ── SEARCH BAR SWIGGY STYLE ─────────────────────────────────────────────── */
+.search-bar-hero {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 10px;
+}
+.search-bar-hero input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #151c27;
+  font-family: inherit;
+  background: transparent;
+}
+.search-bar-hero input::placeholder { color: #9ca3af; font-weight: 500; }
+
+/* ── RESTAURANT HORIZONTAL CARD ─────────────────────────────────────────── */
+.rest-card-h {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.rest-card-h:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.rest-card-h img {
+  width: 90px; height: 90px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ── OFFER BANNER CAROUSEL ───────────────────────────────────────────────── */
+.offer-banner {
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 320px;
+  height: 140px;
+  position: relative;
+  cursor: pointer;
+}
+@media (max-width: 640px) {
+  .offer-banner { width: 260px; height: 120px; }
+}
+
+/* ── VEG/NON-VEG BADGE ───────────────────────────────────────────────────── */
+.veg-badge {
+  width: 14px; height: 14px;
+  border-radius: 2px;
+  border: 1.5px solid #22c55e;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.veg-badge::after {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+.nonveg-badge {
+  width: 14px; height: 14px;
+  border-radius: 2px;
+  border: 1.5px solid #ef4444;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.nonveg-badge::after {
+  content: '';
+  width: 0; height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 7px solid #ef4444;
+}
+
+/* ── QUANTITY STEPPER ────────────────────────────────────────────────────── */
+.qty-stepper {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid #ff5e18;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.qty-stepper button {
+  width: 30px; height: 30px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ff5e18;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s ease;
+}
+.qty-stepper button:hover { background: #fff5f0; }
+.qty-stepper span {
+  min-width: 28px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #151c27;
+}
+
+/* ── ADD BUTTON ──────────────────────────────────────────────────────────── */
+.add-btn {
+  background: #fff;
+  color: #ff5e18;
+  border: 1.5px solid #ff5e18;
+  border-radius: 8px;
+  padding: 6px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  letter-spacing: 0.02em;
+}
+.add-btn:hover { background: #fff5f0; }
+
+/* ── FESTIVE NAVRATRI ────────────────────────────────────────────────────── */
+.navratri-ticker {
+  background: linear-gradient(90deg, #8a1515 0%, #b83300 30%, #d95300 70%, #8a1515 100%);
+  color: #fff9e6;
+}
+.navratri-card-gold {
+  background: #fff;
+  border: 1px solid #fed7aa;
+  box-shadow: 0 4px 16px -2px rgba(234,88,12,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.navratri-card-gold:hover {
+  transform: translateY(-3px);
+  border-color: #f97316;
+  box-shadow: 0 12px 24px -4px rgba(234,88,12,0.16);
+}
+.diya-flame-glow { display: inline-block; animation: diyaSoftGlow 2.5s ease-in-out infinite; }
+@keyframes diyaSoftGlow {
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(255,152,0,0.6)); }
+  50%       { filter: drop-shadow(0 0 7px rgba(255,87,34,0.8)); }
+}
+
+/* ── SECTION TITLE ───────────────────────────────────────────────────────── */
+.section-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #151c27;
+  letter-spacing: -0.3px;
+}
+.section-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: #575e70;
+  margin-top: 2px;
+}
+
+/* ── FILTER CHIP ─────────────────────────────────────────────────────────── */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1.5px solid #dce2f3;
+  background: #fff;
+  color: #151c27;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.filter-chip:hover { border-color: #ff5e18; color: #ff5e18; }
+.filter-chip.active {
+  background: #ff5e18;
+  border-color: #ff5e18;
+  color: #fff;
+}
+
+/* ── STAR RATING ─────────────────────────────────────────────────────────── */
+.star-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #006c4a;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ── MOBILE RESPONSIVE SPACING ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .section-title { font-size: 17px; }
+  .rest-card img { height: 150px; }
+  .cat-pill-img  { width: 62px; height: 62px; }
+  #app { padding-top: 64px !important; padding-bottom: 72px !important; }
+}
+
+/* ── SWIGGY-STYLE PROMO TAGS ─────────────────────────────────────────────── */
+.promo-tag {
+  background: linear-gradient(90deg, #60a5fa 0%, #818cf8 100%);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── DARK MODE SUPPORT ───────────────────────────────────────────────────── */
+.dark .rest-card,
+.dark .rest-card-h,
+.dark .search-bar-hero { background: #1e2130; }
+.dark .section-title { color: #e8eaf6; }
+.dark .filter-chip { background: #1e2130; border-color: #3a3f5c; color: #c5cae9; }
+.dark .add-btn { background: #1e2130; color: #ff5e18; border-color: #ff5e18; }
+.dark .qty-stepper { background: #1e2130; }
+
+/* ── SHIMMER LOADING SKELETON ────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #f0f3ff 25%, #e7eefe 50%, #f0f3ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e2130 25%, #252a40 50%, #1e2130 75%);
+  background-size: 200% 100%;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ── PROFILE & SETTINGS CARD ─────────────────────────────────────────────── */
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+.dark .profile-card { background: #1e2130; }
+
+/* ── SMOOTH SCROLL SNAP ──────────────────────────────────────────────────── */
+.snap-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-scroll > * { scroll-snap-align: start; }
+
+/* ── LEAFLET MAP MOBILE FIX ──────────────────────────────────────────────── */
+.leaflet-container { z-index: 1 !important; }
+.leaflet-control-zoom { border-radius: 12px !important; overflow: hidden; }
+.leaflet-control-zoom a {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 0 !important;
+}
+/* Remove default Leaflet attribution on mobile */
+@media (max-width: 768px) {
+  .leaflet-control-attribution { font-size: 8px !important; }
+}
+
+/* ── IMAGE PLACEHOLDER GRADIENT ──────────────────────────────────────────── */
+.img-placeholder {
+  background: linear-gradient(135deg, #f0f3ff 0%, #dce2f3 100%);
+}
+
+/* ── SWIGGY-STYLE BANNER DOTS ─────────────────────────────────────────────── */
+.banner-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transition: all 0.2s ease;
+}
+.banner-dot.active {
+  width: 18px;
+  border-radius: 3px;
+  background: #fff;
+}
+
+/* ── MOBILE SAFE AREA ─────────────────────────────────────────────────────── */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+.pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+
+/* ── ORDER STATUS PROGRESS ───────────────────────────────────────────────── */
+.order-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.order-step-dot {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }

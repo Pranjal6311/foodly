@@ -1,86 +1,158 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   FOODLY CLEAN DESIGN SYSTEM & LIGHTWEIGHT UI STYLES
-   Optimized for high performance, smooth 60fps rendering, and clean aesthetics.
+   FOODLY EFFECTS & ANIMATIONS — Premium UI Polish
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* Standard natural cursor everywhere */
-html, body {
-  cursor: auto !important;
-}
+html, body { cursor: auto !important; }
+button, a, [role="button"], input[type="button"], input[type="submit"] { cursor: pointer !important; }
 
-button, a, input[type="button"], input[type="submit"], [role="button"] {
-  cursor: pointer !important;
-}
-
-/* ── SCROLL PROGRESS BAR (Slim, clean & performant) ───────────────────────── */
+/* ── SCROLL PROGRESS BAR ──────────────────────────────────────────────── */
 #scroll-progress {
   position: fixed;
   top: 0; left: 0;
-  height: 2.5px;
-  background: linear-gradient(90deg, #aa3700, #ff5e18, #2aa778);
-  z-index: 9999;
-  transition: width 0.1s linear;
+  height: 3px;
+  background: linear-gradient(90deg, #ff5e18, #aa3700, #22c55e);
+  z-index: 99999;
+  transition: width 0.12s linear;
   pointer-events: none;
+  border-radius: 0 99px 99px 0;
 }
 
-/* ── PROFESSIONAL CARD HOVER ELEVATION ───────────────────────────────────── */
+/* ── CARD HOVER ELEVATION ─────────────────────────────────────────────── */
 .card-hover, .card-3d, .spotlight-card, .restaurant-card-3d {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow;
 }
-
 .card-hover:hover, .card-3d:hover, .spotlight-card:hover, .restaurant-card-3d:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* ── BUTTON CLICK FEEDBACK ───────────────────────────────────────────────── */
-button:active, .btn-bounce:active {
-  transform: scale(0.97);
-}
+/* ── BUTTON ACTIVE FEEDBACK ───────────────────────────────────────────── */
+button:active, a:active, .btn-bounce:active { transform: scale(0.96); }
 
-/* ── FESTIVE NAVRATRI THEME TOKENS ───────────────────────────────────────── */
+/* ── NAVRATRI THEMED ELEMENTS ─────────────────────────────────────────── */
 .navratri-ticker {
   background: linear-gradient(90deg, #8a1515 0%, #b83300 30%, #d95300 70%, #8a1515 100%);
   color: #fff9e6;
 }
-
 .navratri-card-gold {
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #fed7aa;
-  box-shadow: 0 4px 16px -2px rgba(234, 88, 12, 0.08);
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
-
 .navratri-card-gold:hover {
   transform: translateY(-3px);
   border-color: #f97316;
-  box-shadow: 0 12px 24px -4px rgba(234, 88, 12, 0.16);
+  box-shadow: 0 12px 24px rgba(234, 88, 12, 0.18);
 }
-
 .diya-flame-glow {
   display: inline-block;
   animation: diyaSoftGlow 2.5s ease-in-out infinite;
 }
-
 @keyframes diyaSoftGlow {
-  0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 152, 0, 0.6)); }
-  50%      { filter: drop-shadow(0 0 7px rgba(255, 87, 34, 0.8)); }
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 152, 0, 0.65)); }
+  50%       { filter: drop-shadow(0 0 10px rgba(255, 87, 34, 0.9)); }
 }
+.dandiya-left  { display: inline-block; animation: dandiyaL 1.2s ease-in-out infinite; }
+.dandiya-right { display: inline-block; animation: dandiyaR 1.2s ease-in-out infinite; }
+@keyframes dandiyaL  { 0%,100%{transform:rotate(-18deg);} 50%{transform:rotate(10deg);} }
+@keyframes dandiyaR  { 0%,100%{transform:rotate(18deg);}  50%{transform:rotate(-10deg);} }
 
-/* ── CLEAN TOAST NOTIFICATIONS ───────────────────────────────────────────── */
+/* ── PREMIUM TOAST ────────────────────────────────────────────────────── */
 .foodly-toast {
-  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: toastBounceIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+@keyframes toastBounceIn {
+  from { opacity: 0; transform: translateX(60px) scale(0.9); }
+  to   { opacity: 1; transform: translateX(0)   scale(1); }
 }
 
-@keyframes toastSlideIn {
-  from { opacity: 0; transform: translateY(12px) scale(0.96); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+/* ── SHIMMER LOADING ──────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #f0f3ff 25%, #e7eefe 50%, #f0f3ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e2130 25%, #252a40 50%, #1e2130 75%);
+  background-size: 200% 100%;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-/* ── SMOOTH ACCENT GRADIENTS ─────────────────────────────────────────────── */
+/* ── GRADIENT TEXT ────────────────────────────────────────────────────── */
 .gradient-text-animate {
   background: linear-gradient(135deg, #aa3700 0%, #ff5e18 50%, #d95300 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── SPIN ANIMATION FOR ICONS ─────────────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin, [style*="animation:spin"] { animation: spin 1s linear infinite; }
+
+/* ── PING ANIMATION ──────────────────────────────────────────────────── */
+@keyframes ping {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+/* ── PULSE ANIMATION ──────────────────────────────────────────────────── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+.animate-pulse { animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+
+/* ── SWIGGY STYLED ACTIVE NAV DOT ─────────────────────────────────────── */
+#mobile-bottom-nav a .active-dot,
+#mobile-bottom-nav button .active-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: #ff5e18;
+  margin: 0 auto;
+  animation: fadeInUp 0.2s ease both;
+}
+
+/* ── LEAFLET OVERRIDE ─────────────────────────────────────────────────── */
+.leaflet-container {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  border-radius: 16px;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+}
+.leaflet-control-zoom {
+  border: none !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+.leaflet-control-zoom a {
+  border: none !important;
+  width: 34px !important; height: 34px !important;
+  line-height: 34px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #151c27 !important;
+}
+
+/* ── FOOD PLACEHOLDER BG ─────────────────────────────────────────────── */
+.food-placeholder-bg {
+  background: radial-gradient(ellipse at 30% 40%, #ffe9d4 0%, #f0f3ff 100%);
+}
+
+/* ── RESPONSIVE MOBILE FIXES ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hide-on-mobile { display: none !important; }
+  .leaflet-control-attribution { font-size: 8px !important; }
+}
+@media (min-width: 769px) {
+  .show-on-mobile-only { display: none !important; }
 }

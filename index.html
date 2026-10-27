@@ -2,9 +2,13 @@
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Foodly — Campus Food Delivery Platform | GL Bajaj</title>
-  <meta name="description" content="Discover delicious local restaurants, order food online, and track your delivery in real-time with Foodly."/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="theme-color" content="#ff5e18"/>
+  <title>Foodly — Campus Food Delivery | GL Bajaj, Greater Noida</title>
+  <meta name="description" content="Order food online from GL Bajaj campus restaurants, cafes & food carts. Track delivery live. Free campus delivery."/>
   
   <script>
     try {
@@ -107,7 +111,7 @@
   <header id="navbar-container" class="fixed top-0 w-full z-40 transition-all"></header>
 
   <!-- Main View Router Container -->
-  <main id="app" class="flex-grow pt-20 md:pt-24 pb-20 md:pb-0"></main>
+  <main id="app" class="flex-grow" style="padding-top:64px;padding-bottom:72px;" id="app"></main>
 
   <!-- Swiggy / Zomato Signature Mobile Floating Mini Cart Bar -->
   <div id="mobile-floating-cart-bar" class="hidden md:hidden fixed bottom-16 left-3 right-3 z-40 bg-gradient-to-r from-emerald-700 via-teal-800 to-emerald-950 text-white rounded-2xl p-3 shadow-2xl flex items-center justify-between border-2 border-emerald-400/50 backdrop-blur-md">
@@ -129,29 +133,57 @@
     </button>
   </div>
 
-  <!-- Mobile Bottom Navigation Bar (Swiggy / Zomato native bar style) -->
-  <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-variant/80 z-40 flex justify-around items-center py-2 px-2 shadow-2xl">
-    <a href="#home" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-home">
-      <span class="material-symbols-outlined text-2xl">electric_moped</span>
-      <span>Delivery</span>
+  <!-- Mobile Bottom Navigation Bar — Premium Swiggy/Zomato Style -->
+  <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40" style="background:rgba(255,255,255,0.97);backdrop-filter:blur(20px) saturate(200%);-webkit-backdrop-filter:blur(20px) saturate(200%);border-top:1px solid rgba(220,226,243,0.8);box-shadow:0 -2px 20px rgba(0,0,0,0.08);display:flex;justify-content:space-around;align-items:center;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));">
+    <a href="#home" id="mob-nav-home" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
+      <span class="material-symbols-outlined" style="font-size:22px;">electric_moped</span>
+      <span style="font-size:10px;font-weight:800;">Delivery</span>
     </a>
-    <a href="#search?cuisine=cafe" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-dining">
-      <span class="material-symbols-outlined text-2xl">restaurant</span>
-      <span>Dining</span>
+    <a href="#search" id="mob-nav-dining" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
+      <span class="material-symbols-outlined" style="font-size:22px;">restaurant</span>
+      <span style="font-size:10px;font-weight:800;">Dining</span>
     </a>
-    <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : location.hash='#innovations'" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-purple-700 hover:text-purple-900 transition-colors cursor-pointer" id="mob-nav-ai">
-      <span class="material-symbols-outlined text-2xl animate-pulse">auto_awesome</span>
-      <span>Foodly AI</span>
+    <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : location.hash='#innovations'" id="mob-nav-ai" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;border:none;background:transparent;cursor:pointer;transition:all 0.15s ease;color:#7c3aed;">
+      <span class="material-symbols-outlined animate-pulse" style="font-size:22px;color:#7c3aed;">auto_awesome</span>
+      <span style="font-size:10px;font-weight:800;color:#7c3aed;">Foodly AI</span>
     </button>
-    <a href="#orders" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-orders">
-      <span class="material-symbols-outlined text-2xl">receipt_long</span>
-      <span>Orders</span>
+    <a href="#orders" id="mob-nav-orders" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
+      <span class="material-symbols-outlined" style="font-size:22px;">receipt_long</span>
+      <span style="font-size:10px;font-weight:800;">Orders</span>
     </a>
-    <a href="#profile" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-profile">
-      <span class="material-symbols-outlined text-2xl">person</span>
-      <span>Profile</span>
+    <a href="#profile" id="mob-nav-profile" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
+      <span class="material-symbols-outlined" style="font-size:22px;">person</span>
+      <span style="font-size:10px;font-weight:800;">Profile</span>
     </a>
   </nav>
+
+  <!-- Bottom Nav Active State Script -->
+  <script>
+    function updateBottomNavActive() {
+      const hash = window.location.hash || '#home';
+      const active = 'color:#ff5e18;background:rgba(255,94,24,0.08);';
+      const inactive = 'color:#575e70;background:transparent;';
+      ['mob-nav-home','mob-nav-dining','mob-nav-ai','mob-nav-orders','mob-nav-profile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.cssText = el.style.cssText.replace(/color:[^;]+;/g,'').replace(/background:[^;]+;/g,'');
+      });
+      const h = document.getElementById('mob-nav-home');
+      const d = document.getElementById('mob-nav-dining');
+      const o = document.getElementById('mob-nav-orders');
+      const p = document.getElementById('mob-nav-profile');
+      if (h && (hash === '#home' || hash === '' || hash.startsWith('#restaurant'))) { h.style.color='#ff5e18'; h.style.background='rgba(255,94,24,0.08)'; }
+      else if (h) { h.style.color='#575e70'; h.style.background='transparent'; }
+      if (d && hash.startsWith('#search')) { d.style.color='#ff5e18'; d.style.background='rgba(255,94,24,0.08)'; }
+      else if (d) { d.style.color='#575e70'; d.style.background='transparent'; }
+      if (o && (hash.startsWith('#orders') || hash.startsWith('#track'))) { o.style.color='#ff5e18'; o.style.background='rgba(255,94,24,0.08)'; }
+      else if (o) { o.style.color='#575e70'; o.style.background='transparent'; }
+      if (p && (hash === '#profile' || hash === '#settings')) { p.style.color='#ff5e18'; p.style.background='rgba(255,94,24,0.08)'; }
+      else if (p) { p.style.color='#575e70'; p.style.background='transparent'; }
+    }
+    window.addEventListener('hashchange', updateBottomNavActive);
+    window.addEventListener('load', updateBottomNavActive);
+  </script>
 
   <!-- Slide-over Cart Drawer -->
   <div id="cart-drawer-container"></div>
@@ -160,7 +192,7 @@
   <div id="group-order-modal-container"></div>
 
   <!-- Toast Notification Container -->
-  <div id="toast-container" class="fixed bottom-20 md:bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+  <div id="toast-container" style="position:fixed;bottom:88px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;" class="md:bottom-6 md:right-6"></div>
 
   <!-- Shared Footer -->
   <footer id="footer-container" class="mt-auto pb-20 md:pb-0"></footer>

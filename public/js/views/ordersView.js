@@ -1,20 +1,20 @@
-﻿// public/js/views/ordersView.js - Order History View
+// js/views/ordersView.js - Premium Swiggy/Zomato Style Orders View
 (function () {
   async function renderOrdersView(container) {
     container.innerHTML = `
-      <div class="fade-in max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-8">
-        <div class="flex justify-between items-center mb-6">
-          <div>
-            <h1 class="text-2xl md:text-3xl font-extrabold text-on-surface">Your Orders</h1>
-            <p class="text-xs md:text-sm text-on-surface-variant mt-0.5">Track your active deliveries or repeat your favorite feasts</p>
-          </div>
+      <div class="fade-in" style="max-width:720px;margin:0 auto;padding:20px 16px 32px;">
+        
+        <!-- Header -->
+        <div style="margin-bottom:20px;">
+          <h1 style="font-size:22px;font-weight:900;color:#151c27;">Your Orders</h1>
+          <p style="font-size:12px;color:#575e70;font-weight:500;margin-top:3px;">Track deliveries & reorder your favorites</p>
         </div>
 
-        <div id="orders-list-container" class="flex flex-col gap-4">
-          <div class="py-16 text-center text-secondary">
-            <span class="material-symbols-outlined text-4xl animate-spin text-primary mb-2">progress_activity</span>
-            <p class="text-sm font-semibold">Loading orders...</p>
-          </div>
+        <!-- Loading state -->
+        <div id="orders-list-container">
+          ${[1,2,3].map(() => `
+            <div class="skeleton" style="height:120px;border-radius:16px;margin-bottom:12px;"></div>
+          `).join('')}
         </div>
       </div>
     `;
@@ -24,15 +24,13 @@
       const listContainer = document.getElementById('orders-list-container');
       if (!listContainer) return;
 
-      if (!res.success || res.data.length === 0) {
+      if (!res.success || !res.data || res.data.length === 0) {
         listContainer.innerHTML = `
-          <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-12 text-center text-secondary">
-            <span class="material-symbols-outlined text-5xl mb-2 opacity-50">receipt_long</span>
-            <h3 class="text-lg font-bold text-on-surface mb-1">No orders yet</h3>
-            <p class="text-xs text-on-surface-variant max-w-xs mx-auto mb-6">Explore our curated menus and place your very first order.</p>
-            <a href="#search" class="bg-primary text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors inline-block">
-              Browse Restaurants
-            </a>
+          <div style="background:#fff;border-radius:20px;padding:48px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <div style="font-size:56px;margin-bottom:12px;">🛵</div>
+            <h3 style="font-size:18px;font-weight:900;color:#151c27;margin-bottom:6px;">No orders yet!</h3>
+            <p style="font-size:13px;color:#575e70;font-weight:500;max-width:240px;margin:0 auto 20px;">Explore our campus cafes, restros & food carts and place your first order.</p>
+            <a href="#search" style="background:#ff5e18;color:#fff;font-size:13px;font-weight:800;padding:12px 28px;border-radius:12px;display:inline-block;text-decoration:none;box-shadow:0 4px 12px rgba(255,94,24,0.3);">Explore Restaurants →</a>
           </div>
         `;
         return;
@@ -40,42 +38,73 @@
 
       listContainer.innerHTML = res.data.map(order => {
         const isLive = order.status !== 'delivered';
-        const statusBadge = order.status === 'delivered' ? 
-          '<span class="bg-tertiary-container/20 text-tertiary px-3 py-1 rounded-full text-xs font-bold">Delivered</span>' :
-          '<span class="bg-primary-container text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> Live Tracking</span>';
+        const statusColor = isLive ? '#ff5e18' : '#006c4a';
+        const statusBg   = isLive ? 'rgba(255,94,24,0.1)' : 'rgba(0,108,74,0.1)';
+        const statusLabel = isLive ? '🔴 Live Tracking' : '✅ Delivered';
+        const timeStr = order.createdAt ? new Date(order.createdAt).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : 'Just now';
 
         return `
-          <div class="bg-surface-container-lowest border border-surface-variant rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-primary/40 transition-colors">
-            <div class="flex-1">
-              <div class="flex items-center gap-3 mb-1.5">
-                <h3 class="font-extrabold text-lg text-on-surface">${order.restaurantName}</h3>
-                ${statusBadge}
+          <div style="background:#fff;border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,0.07);overflow:hidden;margin-bottom:12px;transition:box-shadow 0.2s ease;" class="card-shadow">
+            <!-- Top row -->
+            <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f3ff;">
+              <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#ff5e18,#aa3700);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span class="material-symbols-outlined" style="font-size:22px;color:#fff;">electric_moped</span>
+                </div>
+                <div style="min-width:0;">
+                  <h3 style="font-size:14px;font-weight:900;color:#151c27;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">${order.restaurantName}</h3>
+                  <p style="font-size:11px;color:#575e70;font-weight:600;margin-top:1px;">Order #${order.id} • ${timeStr}</p>
+                </div>
               </div>
-              <p class="text-xs text-secondary mb-2">Order #${order.id} • Placed ${new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-              
-              <div class="text-xs text-on-surface-variant font-medium">
-                ${order.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}
-              </div>
+              <div style="background:${statusBg};color:${statusColor};font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;">${statusLabel}</div>
             </div>
 
-            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end pt-3 md:pt-0 border-t md:border-t-0 border-surface-variant/40">
-              <div class="text-right">
-                <span class="text-xs text-secondary block">Total Amount</span>
-                <span class="text-lg font-extrabold text-primary">&#8377;${order.bill.total.toFixed(0)}</span>
-              </div>
+            <!-- Items -->
+            <div style="padding:10px 16px;border-bottom:1px solid #f0f3ff;">
+              <p style="font-size:12px;color:#575e70;font-weight:600;line-clamp:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+                ${order.items.map(i => `${i.quantity}x ${i.name}`).join(' • ')}
+              </p>
+            </div>
 
-              <div class="flex items-center gap-2">
-                <a href="#track/${order.id}" class="bg-primary-container text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-primary transition-colors flex items-center gap-1 shadow-sm">
-                  <span class="material-symbols-outlined text-sm">near_me</span>
-                  <span>Track</span>
-                </a>
+            <!-- Bottom row -->
+            <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div>
+                <span style="font-size:11px;color:#575e70;font-weight:500;display:block;">Order Total</span>
+                <span style="font-size:18px;font-weight:900;color:#aa3700;">₹${order.bill && order.bill.total ? order.bill.total.toFixed(0) : '---'}</span>
+              </div>
+              <div style="display:flex;gap:8px;">
+                ${isLive ? `
+                  <a href="#track/${order.id}" style="background:#ff5e18;color:#fff;font-size:12px;font-weight:800;padding:9px 18px;border-radius:10px;display:flex;align-items:center;gap:5px;text-decoration:none;box-shadow:0 3px 10px rgba(255,94,24,0.3);">
+                    <span class="material-symbols-outlined" style="font-size:15px;">near_me</span>
+                    <span>Track Live</span>
+                  </a>
+                ` : `
+                  <button onclick="window.reorderFromHistory && window.reorderFromHistory('${order.id}')" style="background:#f0f3ff;color:#575e70;font-size:12px;font-weight:800;padding:9px 16px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;">
+                    <span class="material-symbols-outlined" style="font-size:15px;">replay</span>
+                    <span>Reorder</span>
+                  </button>
+                  <a href="#track/${order.id}" style="background:#151c27;color:#fff;font-size:12px;font-weight:800;padding:9px 16px;border-radius:10px;display:flex;align-items:center;gap:5px;text-decoration:none;">
+                    <span class="material-symbols-outlined" style="font-size:15px;">receipt_long</span>
+                    <span>Details</span>
+                  </a>
+                `}
               </div>
             </div>
           </div>
         `;
       }).join('');
+
     } catch (e) {
-      console.error("Error loading orders", e);
+      console.error('Error loading orders', e);
+      const listContainer = document.getElementById('orders-list-container');
+      if (listContainer) {
+        listContainer.innerHTML = `
+          <div style="background:#fff;border-radius:20px;padding:32px;text-align:center;color:#575e70;">
+            <span class="material-symbols-outlined" style="font-size:40px;display:block;margin-bottom:8px;color:#ef4444;">error_outline</span>
+            <p style="font-size:13px;font-weight:600;">Could not load orders. Please try again.</p>
+          </div>
+        `;
+      }
     }
   }
 
