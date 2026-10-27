@@ -9,17 +9,6 @@
     }
 
     container.innerHTML = `
-      <!-- Floating Trigger Button (Bottom Left on Mobile/Desktop) -->
-      <button 
-        id="open-ai-assistant-btn" 
-        class="fixed bottom-20 md:bottom-8 left-4 md:left-8 z-40 bg-gradient-to-r from-purple-600 via-indigo-600 to-primary text-white font-extrabold text-xs px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 border-2 border-white/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-        title="Ask Foodly AI Campus Assistant"
-      >
-        <span class="text-base animate-pulse">✨</span>
-        <span class="tracking-wide">Ask Foodly AI</span>
-        <span class="bg-white/25 text-[10px] px-1.5 py-0.5 rounded-full font-black uppercase">Gemini</span>
-      </button>
-
       <!-- Full Modal Backdrop -->
       <div id="ai-assistant-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity">
         <div class="bg-surface-container-lowest w-full max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl border border-surface-variant flex flex-col max-h-[85vh] sm:max-h-[80vh] overflow-hidden fade-in">

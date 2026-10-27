@@ -187,18 +187,9 @@
             <div class="flex items-center justify-between mb-3">
               <div>
                 <h2 class="section-title">Deals for you 🔥</h2>
-                <p class="section-sub">Swipe or tap to apply exclusive campus coupons</p>
+                <p class="section-sub">Exclusive campus coupon specials</p>
               </div>
-              <!-- Carousel Controls: Prev / Next Buttons -->
-              <div class="flex items-center gap-1.5">
-                <button id="offer-carousel-prev" class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container border border-surface-variant flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer" title="Previous Deal">
-                  <span class="material-symbols-outlined text-sm">chevron_left</span>
-                </button>
-                <button id="offer-carousel-next" class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container border border-surface-variant flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer" title="Next Deal">
-                  <span class="material-symbols-outlined text-sm">chevron_right</span>
-                </button>
-                <a href="#offers" class="text-xs font-bold text-primary flex items-center gap-0.5 ml-2 hover:underline">All offers <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
-              </div>
+              <a href="#offers" class="text-xs font-bold text-primary flex items-center gap-0.5 hover:underline">All offers <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
             </div>
 
             <!-- Viewport & Sliding Track -->
@@ -316,15 +307,11 @@
                 <div>
                   <div style="display:flex;align-items:center;gap:8px;">
                     <span style="font-size:20px;">🔮</span>
-                    <h2 class="section-title">AI Craving Matcher</h2>
+                    <h2 class="section-title">Craving Matcher</h2>
                     <span style="background:rgba(170,55,0,0.1);color:#aa3700;font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:0.06em;">Smart</span>
                   </div>
-                  <p class="section-sub">Tell Foodly your vibe, get perfect dish recs</p>
+                  <p class="section-sub">Select your craving vibe to get instant campus dish recommendations</p>
                 </div>
-                <button onclick="window.openFoodlyAiAssistant && window.openFoodlyAiAssistant()" style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:99px;padding:7px 16px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:5px;">
-                  <span class="material-symbols-outlined" style="font-size:14px;">auto_awesome</span>
-                  <span>Chat with Foodly AI</span>
-                </button>
               </div>
               <!-- Mood Pills -->
               <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;" class="scrollbar-none" id="ai-mood-pills">
@@ -554,8 +541,6 @@
   function initOfferCarousel() {
     const track = document.getElementById('offer-carousel-track');
     const viewport = document.getElementById('offer-carousel-viewport');
-    const prevBtn = document.getElementById('offer-carousel-prev');
-    const nextBtn = document.getElementById('offer-carousel-next');
     const dots = document.querySelectorAll('.offer-carousel-dot');
     if (!track || !viewport) return;
 
@@ -569,6 +554,7 @@
 
     function goToSlide(index) {
       currentIndex = (index + totalSlides) % totalSlides;
+      track.style.transition = 'transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)';
       track.style.transform = `translateX(-${currentIndex * 100}%)`;
 
       dots.forEach((dot, idx) => {
@@ -582,19 +568,6 @@
       });
     }
 
-    if (prevBtn) {
-      prevBtn.onclick = (e) => {
-        e.stopPropagation();
-        goToSlide(currentIndex - 1);
-      };
-    }
-    if (nextBtn) {
-      nextBtn.onclick = (e) => {
-        e.stopPropagation();
-        goToSlide(currentIndex + 1);
-      };
-    }
-
     dots.forEach(dot => {
       dot.onclick = (e) => {
         e.stopPropagation();
@@ -603,27 +576,10 @@
       };
     });
 
-    // Auto-slide every 3.5 seconds
-    function startAutoSlide() {
-      if (offerSlideTimer) clearInterval(offerSlideTimer);
-      offerSlideTimer = setInterval(() => {
-        goToSlide(currentIndex + 1);
-      }, 3500);
-    }
-
-    function stopAutoSlide() {
-      if (offerSlideTimer) {
-        clearInterval(offerSlideTimer);
-        offerSlideTimer = null;
-      }
-    }
-
-    viewport.addEventListener('mouseenter', stopAutoSlide);
-    viewport.addEventListener('mouseleave', startAutoSlide);
-    viewport.addEventListener('touchstart', stopAutoSlide, { passive: true });
-    viewport.addEventListener('touchend', startAutoSlide, { passive: true });
-
-    startAutoSlide();
+    // Automatically moves continuously on its own (never paused by cursor hover or touch)
+    offerSlideTimer = setInterval(() => {
+      goToSlide(currentIndex + 1);
+    }, 2800);
   }
 
   window.renderHomeView = renderHomeView;

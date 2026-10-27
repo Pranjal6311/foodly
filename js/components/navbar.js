@@ -108,10 +108,6 @@
 
           <!-- Actions -->
           <div class="flex items-center gap-stack-md text-primary">
-            <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : (window.location.hash='#innovations')" class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition-all cursor-pointer shadow-sm active:scale-95" title="Ask Foodly AI">
-              <span class="material-symbols-outlined text-sm animate-pulse">auto_awesome</span>
-              <span>Foodly AI</span>
-            </button>
             <a href="#search" class="p-2 rounded-full hover:bg-surface-container-low transition-colors duration-200 cursor-pointer active:scale-95" title="Search Dishes & Restros">
               <span class="material-symbols-outlined">search</span>
             </a>
@@ -146,11 +142,8 @@
             </div>
           </div>
 
-          <!-- Right: Mobile Quick Actions (AI Sparkle, Search, Cart) -->
+          <!-- Right: Mobile Quick Actions (Search, Cart, Profile) -->
           <div class="flex items-center gap-1.5">
-            <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : (window.location.hash='#innovations')" class="w-8 h-8 rounded-full bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200 shadow-sm cursor-pointer active:scale-90 transition-transform" title="Foodly AI">
-              <span class="material-symbols-outlined text-base">auto_awesome</span>
-            </button>
             <a href="#search" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface flex items-center justify-center cursor-pointer active:scale-90 transition-transform" title="Search">
               <span class="material-symbols-outlined text-base">search</span>
             </a>

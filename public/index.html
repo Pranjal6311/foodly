@@ -203,10 +203,6 @@
       <span class="material-symbols-outlined" style="font-size:22px;">restaurant</span>
       <span style="font-size:10px;font-weight:800;">Dining</span>
     </a>
-    <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : location.hash='#innovations'" id="mob-nav-ai" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;border:none;background:transparent;cursor:pointer;transition:all 0.15s ease;color:#7c3aed;">
-      <span class="material-symbols-outlined animate-pulse" style="font-size:22px;color:#7c3aed;">auto_awesome</span>
-      <span style="font-size:10px;font-weight:800;color:#7c3aed;">Foodly AI</span>
-    </button>
     <a href="#orders" id="mob-nav-orders" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 12px;border-radius:12px;text-decoration:none;transition:all 0.15s ease;">
       <span class="material-symbols-outlined" style="font-size:22px;">receipt_long</span>
       <span style="font-size:10px;font-weight:800;">Orders</span>
@@ -221,9 +217,7 @@
   <script>
     function updateBottomNavActive() {
       const hash = window.location.hash || '#home';
-      const active = 'color:#ff5e18;background:rgba(255,94,24,0.08);';
-      const inactive = 'color:#575e70;background:transparent;';
-      ['mob-nav-home','mob-nav-dining','mob-nav-ai','mob-nav-orders','mob-nav-profile'].forEach(id => {
+      ['mob-nav-home','mob-nav-dining','mob-nav-orders','mob-nav-profile'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         el.style.cssText = el.style.cssText.replace(/color:[^;]+;/g,'').replace(/background:[^;]+;/g,'');
@@ -263,7 +257,6 @@
   <script src="./js/components/navbar.js"></script>
   <script src="./js/components/cartDrawer.js"></script>
   <script src="./js/components/groupOrderModal.js"></script>
-  <script src="./js/components/aiAssistantModal.js"></script>
   <script src="./js/components/footer.js"></script>
   <script src="./js/views/homeView.js"></script>
   <script src="./js/views/searchView.js"></script>
