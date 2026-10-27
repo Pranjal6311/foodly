@@ -3,15 +3,13 @@
 (function () {
   'use strict';
 
-  // Ensure any old legacy cursor elements are removed from DOM
-  const oldCursor = document.getElementById('foodly-cursor');
-  const oldRing = document.getElementById('foodly-cursor-ring');
-  const oldFloat = document.getElementById('floating-food-container');
-  const oldDiya = document.getElementById('navratri-diya-widget');
-  if (oldCursor) oldCursor.remove();
-  if (oldRing) oldRing.remove();
-  if (oldFloat) oldFloat.remove();
-  if (oldDiya) oldDiya.remove();
+  // Ensure any old legacy cursor elements are removed from DOM safely
+  ['foodly-cursor', 'foodly-cursor-ring', 'floating-food-container', 'navratri-diya-widget'].forEach(id => {
+    try {
+      const el = document.getElementById(id);
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    } catch (e) {}
+  });
 
   // 1. Slim & Fast Scroll Progress Bar
   let progressBar = document.getElementById('scroll-progress');

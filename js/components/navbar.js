@@ -25,32 +25,45 @@
   }
 
   function updateMobileFloatingCart() {
-    const cartBar = document.getElementById('mobile-floating-cart-bar');
-    if (!cartBar) return;
+    try {
+      const cartBar = document.getElementById('mobile-floating-cart-bar');
+      if (!cartBar) return;
 
-    const store = window.foodlyStore;
-    const currentHash = window.location.hash || '#home';
+      const store = window.foodlyStore;
+      const currentHash = window.location.hash || '#home';
 
-    // Hide if cart is empty or user is already on checkout
-    if (!store || store.getCartCount() === 0 || currentHash === '#checkout') {
-      cartBar.classList.add('hidden');
-      return;
+      // Hide if cart is empty or user is already on checkout
+      if (!store || !store.getCartCount || store.getCartCount() === 0 || currentHash === '#checkout') {
+        cartBar.classList.add('hidden');
+        return;
+      }
+
+      const count = store.getCartCount();
+      let total = 0;
+      if (typeof store.getCartTotal === 'function') {
+        total = store.getCartTotal();
+      } else if (typeof store.getBillDetails === 'function') {
+        const b = store.getBillDetails();
+        total = b ? b.total : 0;
+      } else if (store.cart && store.cart.items) {
+        total = store.cart.items.reduce((s, i) => s + ((i.price || 0) * (i.quantity || 1)), 0);
+      }
+      const safeTotal = typeof total === 'number' && !isNaN(total) ? total : 0;
+      const items = (store.cart && store.cart.items) ? store.cart.items : [];
+      const restName = (items[0] && items[0].restaurantName) ? items[0].restaurantName : 'GL Bajaj Campus Express';
+
+      const countBadge = document.getElementById('mobile-cart-count-badge');
+      const totalText = document.getElementById('mobile-cart-total-text');
+      const subText = document.getElementById('mobile-cart-rest-sub');
+
+      if (countBadge) countBadge.innerText = count;
+      if (totalText) totalText.innerText = `₹${safeTotal.toFixed(0)}`;
+      if (subText) subText.innerText = restName;
+
+      cartBar.classList.remove('hidden');
+    } catch (e) {
+      console.warn('updateMobileFloatingCart safe error caught:', e);
     }
-
-    const count = store.getCartCount();
-    const total = store.getCartTotal();
-    const items = store.cart.items || [];
-    const restName = (items[0] && items[0].restaurantName) ? items[0].restaurantName : 'GL Bajaj Campus Express';
-
-    const countBadge = document.getElementById('mobile-cart-count-badge');
-    const totalText = document.getElementById('mobile-cart-total-text');
-    const subText = document.getElementById('mobile-cart-rest-sub');
-
-    if (countBadge) countBadge.innerText = count;
-    if (totalText) totalText.innerText = `₹${total.toFixed(0)}`;
-    if (subText) subText.innerText = restName;
-
-    cartBar.classList.remove('hidden');
   }
 
   function renderNavbar() {

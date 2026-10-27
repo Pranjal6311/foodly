@@ -140,6 +140,17 @@
       };
     }
 
+    getCartSubtotal() {
+      if (!this.cart || !this.cart.items) return 0;
+      return this.cart.items.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 1)), 0);
+    }
+
+    getCartTotal() {
+      if (!this.cart || !this.cart.items || this.cart.items.length === 0) return 0;
+      const bill = this.getBillDetails();
+      return bill && typeof bill.total === 'number' ? bill.total : this.getCartSubtotal();
+    }
+
     async detectCurrentLocation(silent = false) {
       if (!navigator.geolocation) {
         if (!silent) this.showToast('Geolocation is not supported by your browser', 'error');
