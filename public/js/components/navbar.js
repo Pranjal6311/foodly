@@ -86,10 +86,9 @@
         
         <!-- Desktop Layout (md:flex) -->
         <div class="hidden md:flex justify-between items-center h-20 px-margin-desktop max-w-container-max mx-auto">
-          <!-- Brand Logo -->
-          <a href="#home" class="font-display-lg text-headline-md font-extrabold text-primary cursor-pointer active:scale-95 transition-transform flex items-center gap-1.5">
-            <span class="text-2xl">🍔</span>
-            <span>Foodly</span>
+          <!-- Brand Logo with Starting Animation Replay -->
+          <a href="#home" class="flex items-center gap-2 cursor-pointer group active:scale-95 transition-transform" title="Foodly — Fast Fresh Food, Delivered">
+            <img src="./images/foodly-logo.png" alt="Foodly Logo" class="foodly-nav-logo h-12 w-auto object-contain drop-shadow-sm"/>
           </a>
 
           <!-- Location Selector on Desktop -->
@@ -130,18 +129,20 @@
         </div>
 
         <!-- Mobile Layout: Authentic Swiggy / Zomato Top Bar (md:hidden) -->
-        <div class="flex md:hidden items-center justify-between h-16 px-4">
-          <!-- Left: Swiggy/Zomato Location Switcher -->
-          <div id="mob-top-location-btn" class="flex items-center gap-2 cursor-pointer active:opacity-80 max-w-[62%]">
-            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-primary text-base filled">location_on</span>
-            </div>
-            <div class="truncate">
-              <div class="flex items-center gap-1">
-                <span class="text-xs font-black text-on-surface truncate">${activeAddress.split(',')[0]}</span>
-                <span class="material-symbols-outlined text-xs text-secondary shrink-0">expand_more</span>
+        <div class="flex md:hidden items-center justify-between h-16 px-3">
+          <!-- Left: Brand Logo & Swiggy/Zomato Location Switcher -->
+          <div class="flex items-center gap-2 max-w-[68%]">
+            <a href="#home" class="shrink-0 active:scale-95 transition-transform" title="Foodly">
+              <img src="./images/foodly-logo.png" alt="Foodly" class="foodly-nav-logo h-9 w-auto object-contain drop-shadow-sm"/>
+            </a>
+            <div id="mob-top-location-btn" class="flex items-center gap-1.5 cursor-pointer active:opacity-80 truncate border-l border-surface-variant/60 pl-2">
+              <div class="truncate">
+                <div class="flex items-center gap-1">
+                  <span class="text-[11px] font-black text-on-surface truncate">${activeAddress.split(',')[0]}</span>
+                  <span class="material-symbols-outlined text-xs text-secondary shrink-0">expand_more</span>
+                </div>
+                <p class="text-[9px] text-secondary font-medium truncate">Knowledge Park III, Gr. Noida</p>
               </div>
-              <p class="text-[10px] text-secondary font-medium truncate">Knowledge Park III, Gr. Noida</p>
             </div>
           </div>
 

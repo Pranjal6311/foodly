@@ -9,7 +9,9 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
           <!-- Brand -->
           <div class="col-span-1">
-            <div class="text-2xl font-extrabold text-primary mb-3">Foodly</div>
+            <div class="mb-3">
+              <img src="./images/foodly-logo.png" alt="Foodly — Fast Fresh Food, Delivered" class="h-12 w-auto object-contain drop-shadow-sm"/>
+            </div>
             <p class="text-on-surface-variant text-xs leading-relaxed max-w-xs mb-3">
               Premium food delivery made effortless. Fresh flavors, chef-crafted recipes, and real-time GPS tracking.
             </p>

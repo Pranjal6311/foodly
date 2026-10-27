@@ -103,10 +103,70 @@
     };
   </script>
 
+  <link rel="icon" type="image/png" href="./images/favicon.png"/>
+  <link rel="apple-touch-icon" href="./images/foodly-icon.png"/>
   <link rel="stylesheet" href="./css/styles.css"/>
   <link rel="stylesheet" href="./css/effects.css"/>
 </head>
 <body class="bg-background text-on-background antialiased min-h-screen flex flex-col font-sans selection:bg-primary-fixed selection:text-primary">
+  <!-- Foodly Premium Starting Logo Animation Splash Screen -->
+  <div id="foodly-splash-screen" class="foodly-splash-overlay" onclick="window.dismissFoodlySplash && window.dismissFoodlySplash()" title="Click to enter Foodly">
+    <div class="foodly-splash-glow"></div>
+    <div class="foodly-splash-container">
+      <!-- Animated Logo Wrapper -->
+      <div class="foodly-splash-logo-wrapper">
+        <img src="./images/foodly-logo.png" alt="Foodly — Fast Fresh Food, Delivered" class="foodly-splash-logo-img"/>
+        <div class="foodly-splash-shimmer-sweep"></div>
+        <div class="foodly-pin-pulse"></div>
+      </div>
+
+      <!-- Tagline & Campus Badge -->
+      <div class="foodly-splash-text-group">
+        <div class="foodly-splash-tagline">Fast Fresh Food, Delivered</div>
+        <div class="foodly-splash-campus-pill">
+          <span class="foodly-live-dot"></span>
+          <span>GL Bajaj Campus Express • Live GPS</span>
+        </div>
+      </div>
+
+      <!-- Sleek Progress Loader Line -->
+      <div class="foodly-splash-loader-bar">
+        <div class="foodly-splash-loader-fill"></div>
+      </div>
+      <p style="font-size:10px;color:#9ca3af;margin-top:12px;font-weight:600;letter-spacing:0.04em;">Tap anywhere to enter</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function dismissSplash() {
+        var splash = document.getElementById('foodly-splash-screen');
+        if (!splash || splash.classList.contains('splash-hide')) return;
+        splash.classList.add('splash-hide');
+        setTimeout(function () {
+          if (splash) splash.style.display = 'none';
+        }, 500);
+      }
+      window.dismissFoodlySplash = dismissSplash;
+      window.playFoodlySplash = function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var splash = document.getElementById('foodly-splash-screen');
+        if (!splash) return;
+        splash.style.display = 'flex';
+        splash.classList.remove('splash-hide');
+        setTimeout(dismissSplash, 1600);
+      };
+
+      // Auto dismiss initial splash after 1.4s
+      if (document.readyState === 'complete') {
+        setTimeout(dismissSplash, 1400);
+      } else {
+        window.addEventListener('load', function () { setTimeout(dismissSplash, 1400); });
+        setTimeout(dismissSplash, 2200);
+      }
+    })();
+  </script>
+
   <!-- Shared Top Navigation -->
   <header id="navbar-container" class="fixed top-0 w-full z-40 transition-all"></header>
 
