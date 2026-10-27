@@ -194,6 +194,32 @@
         updateSideCart();
       }
 
+      function renderDishActionButton(item) {
+        const cartItem = store.cart.items.find(i => i.id === item.id);
+        if (cartItem && cartItem.quantity > 0) {
+          return `
+            <div class="dish-stepper flex items-center justify-between w-full bg-emerald-600 text-white rounded-xl shadow-md overflow-hidden p-0.5 border border-emerald-500">
+              <button data-dish-id="${item.id}" class="dish-qty-dec flex-1 py-1.5 flex items-center justify-center font-black text-sm hover:bg-emerald-700 active:scale-90 transition-all cursor-pointer" title="Decrease">
+                <span class="material-symbols-outlined text-sm">remove</span>
+              </button>
+              <span class="px-2 font-black text-xs min-w-[20px] text-center">${cartItem.quantity}</span>
+              <button data-dish-id="${item.id}" class="dish-qty-inc flex-1 py-1.5 flex items-center justify-center font-black text-sm hover:bg-emerald-700 active:scale-90 transition-all cursor-pointer" title="Increase">
+                <span class="material-symbols-outlined text-sm">add</span>
+              </button>
+            </div>
+          `;
+        }
+        return `
+          <button 
+            data-dish-id="${item.id}"
+            class="add-to-cart-btn w-full bg-surface-container-lowest border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-600 hover:text-white font-black text-xs py-1.5 rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-1"
+          >
+            <span class="material-symbols-outlined text-sm">add</span>
+            <span>ADD</span>
+          </button>
+        `;
+      }
+
       function renderFilteredSections() {
         let q = searchQuery.toLowerCase().trim();
         let renderedSectionsHtml = '';
@@ -275,12 +301,9 @@
                           onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'"
                         />
                       </div>
-                      <button 
-                        data-dish-id="${item.id}"
-                        class="add-to-cart-btn w-full bg-surface-container-lowest border border-primary-container text-primary-container font-bold text-xs py-2 rounded-xl hover:bg-primary-container hover:text-white transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-1"
-                      >
-                        <span class="material-symbols-outlined text-sm">add</span> Add
-                      </button>
+                      <div class="w-full" id="dish-action-slot-${item.id}">
+                        ${renderDishActionButton(item)}
+                      </div>
                       ${window.foodlyStore.activeGroupRoom ? `
                         <button 
                           data-dish-id="${item.id}"
@@ -335,9 +358,9 @@
                       <div class="w-28 h-28 md:w-32 md:h-32 rounded-xl overflow-hidden bg-surface-container-high relative">
                         <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover"/>
                       </div>
-                      <button data-dish-id="${item.id}" class="add-to-cart-btn w-full bg-surface-container-lowest border border-primary-container text-primary-container font-bold text-xs py-2 rounded-xl hover:bg-primary-container hover:text-white transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-1">
-                        <span class="material-symbols-outlined text-sm">add</span> Add
-                      </button>
+                      <div class="w-full">
+                        ${renderDishActionButton(item)}
+                      </div>
                     </div>
                   </div>
                 `).join('')}
@@ -393,18 +416,53 @@
         bindCartButtons();
       }
 
+      function refreshDishesUI() {
+        const wrapper = document.getElementById('menu-sections-wrapper');
+        if (wrapper) wrapper.innerHTML = renderFilteredSections();
+        bindCartButtons();
+        updateSideCart();
+        if (window.updateMobileFloatingCart) window.updateMobileFloatingCart();
+      }
+
       function bindCartButtons() {
         // Add to Cart buttons
         container.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const dishId = btn.dataset.dishId;
             const dish = menu.find(d => d.id === dishId);
             if (dish) {
               store.addToCart(dish, rest);
-              updateSideCart();
+              refreshDishesUI();
               if (store.showToast) {
                 store.showToast(`Added ${dish.name} to cart!`, 'success');
               }
+            }
+          });
+        });
+
+        // Stepper Quantity Increase
+        container.querySelectorAll('.dish-qty-inc').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dishId = btn.dataset.dishId;
+            const item = store.cart.items.find(i => i.id === dishId);
+            if (item) {
+              store.updateQuantity(dishId, item.quantity + 1);
+              refreshDishesUI();
+            }
+          });
+        });
+
+        // Stepper Quantity Decrease
+        container.querySelectorAll('.dish-qty-dec').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dishId = btn.dataset.dishId;
+            const item = store.cart.items.find(i => i.id === dishId);
+            if (item) {
+              store.updateQuantity(dishId, item.quantity - 1);
+              refreshDishesUI();
             }
           });
         });

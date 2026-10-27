@@ -80,6 +80,85 @@
           </div>
         </section>
 
+        <!-- SWIGGY / ZOMATO SIGNATURE: What's on your mind? Circular Food Carousel -->
+        <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-8">
+          <div class="flex items-center justify-between mb-3.5">
+            <div>
+              <h2 class="text-lg md:text-2xl font-black text-on-surface tracking-tight">What's on your mind?</h2>
+              <p class="text-[11px] md:text-xs text-secondary font-medium">Explore top food categories across campus</p>
+            </div>
+            <a href="#search" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
+              <span>See all</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+
+          <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-none py-1">
+            <a href="#search?cuisine=biryani" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=300&q=80" alt="Biryani" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Biryani</span>
+            </a>
+
+            <a href="#search?cuisine=cafe" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80" alt="Cafes" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Cafes</span>
+            </a>
+
+            <a href="#search?cuisine=pizza" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=300&q=80" alt="Pizza" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Pizza</span>
+            </a>
+
+            <a href="#search?cuisine=burger" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80" alt="Burgers" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Burgers</span>
+            </a>
+
+            <a href="#search?cuisine=thali" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=300&q=80" alt="Thalis" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Thalis</span>
+            </a>
+
+            <a href="#search?cuisine=south-indian" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=300&q=80" alt="South Indian" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">South Indian</span>
+            </a>
+
+            <a href="#search?cuisine=rolls" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=300&q=80" alt="Rolls" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Rolls</span>
+            </a>
+
+            <a href="#search?cuisine=dessert" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-transparent group-hover:border-primary transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=300&q=80" alt="Desserts" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-on-surface group-hover:text-primary transition-colors">Desserts</span>
+            </a>
+
+            <a href="#search?cuisine=vrat-special" class="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer text-center">
+              <div class="w-18 h-18 md:w-22 md:h-22 rounded-full overflow-hidden p-0.5 border-2 border-amber-500 group-hover:border-amber-400 transition-all shadow-md bg-surface-container-low">
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=300&q=80" alt="Navratri Fasting" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300"/>
+              </div>
+              <span class="text-xs font-extrabold text-amber-600 transition-colors">🪔 Vrat Feasts</span>
+            </a>
+          </div>
+        </section>
+
         <!-- NAVRATRI 2026 FESTIVAL FEATURE: Vrat & Satvik Feasts Showcase -->
         <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-10">
           <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-red-950 via-amber-950 to-orange-950 border-2 border-amber-500/40 p-6 md:p-8 shadow-2xl text-white">

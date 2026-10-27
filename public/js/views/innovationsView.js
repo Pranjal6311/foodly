@@ -196,8 +196,12 @@
               </div>
             </div>
 
-            <div class="text-center">
-              <span class="text-[11px] text-secondary font-medium">Powered by Gemini AI Semantic Food Vectors</span>
+            <div class="text-center mt-3">
+              <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : null" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all active:scale-95">
+                <span class="material-symbols-outlined text-sm animate-pulse">auto_awesome</span>
+                <span>Launch Interactive Gemini AI Food Assistant</span>
+              </button>
+              <span class="text-[10px] text-secondary font-medium block mt-1.5">Powered by Google Gemini 1.5 Flash & Offline Neural Matcher</span>
             </div>
           </div>
 

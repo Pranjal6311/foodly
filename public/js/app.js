@@ -40,6 +40,7 @@
     window.renderNavbar();
     window.renderCartDrawer();
     window.renderFooter();
+    if (window.updateMobileFloatingCart) window.updateMobileFloatingCart();
 
     if (route === 'home') {
       window.renderHomeView(appContainer);

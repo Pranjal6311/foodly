@@ -109,26 +109,46 @@
   <!-- Main View Router Container -->
   <main id="app" class="flex-grow pt-20 md:pt-24 pb-20 md:pb-0"></main>
 
-  <!-- Mobile Bottom Navigation Bar (Visible on mobile/tablet) -->
-  <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-lg border-t border-surface-variant z-40 flex justify-around items-center py-2 px-3 shadow-2xl">
-    <a href="#home" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
-      <span class="material-symbols-outlined text-xl">home</span>
-      <span>Home</span>
+  <!-- Swiggy / Zomato Signature Mobile Floating Mini Cart Bar -->
+  <div id="mobile-floating-cart-bar" class="hidden md:hidden fixed bottom-16 left-3 right-3 z-40 bg-gradient-to-r from-emerald-700 via-teal-800 to-emerald-950 text-white rounded-2xl p-3 shadow-2xl flex items-center justify-between border-2 border-emerald-400/50 backdrop-blur-md">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center font-black text-xs shadow-inner" id="mobile-cart-count-badge">
+        0
+      </div>
+      <div>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-xs font-black" id="mobile-cart-total-text">₹0</span>
+          <span class="text-[10px] text-emerald-200 uppercase font-bold tracking-wider">• Campus Free Drop</span>
+        </div>
+        <p class="text-[10px] text-emerald-100/90 font-medium truncate max-w-[160px]" id="mobile-cart-rest-sub">Foodly Campus Feast</p>
+      </div>
+    </div>
+    <button onclick="window.location.hash='#checkout'" class="bg-white text-emerald-950 hover:bg-emerald-50 px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1 shadow-lg active:scale-95 cursor-pointer">
+      <span>View Cart</span>
+      <span class="material-symbols-outlined text-sm">arrow_forward</span>
+    </button>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (Swiggy / Zomato native bar style) -->
+  <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-variant/80 z-40 flex justify-around items-center py-2 px-2 shadow-2xl">
+    <a href="#home" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-home">
+      <span class="material-symbols-outlined text-2xl">electric_moped</span>
+      <span>Delivery</span>
     </a>
-    <a href="#search" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
-      <span class="material-symbols-outlined text-xl">search</span>
-      <span>Search</span>
+    <a href="#search?cuisine=cafe" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-dining">
+      <span class="material-symbols-outlined text-2xl">restaurant</span>
+      <span>Dining</span>
     </a>
-    <a href="#orders" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
-      <span class="material-symbols-outlined text-xl">receipt_long</span>
+    <button onclick="window.openFoodlyAiAssistant ? window.openFoodlyAiAssistant() : location.hash='#innovations'" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-purple-700 hover:text-purple-900 transition-colors cursor-pointer" id="mob-nav-ai">
+      <span class="material-symbols-outlined text-2xl animate-pulse">auto_awesome</span>
+      <span>Foodly AI</span>
+    </button>
+    <a href="#orders" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-orders">
+      <span class="material-symbols-outlined text-2xl">receipt_long</span>
       <span>Orders</span>
     </a>
-    <a href="#innovations" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
-      <span class="material-symbols-outlined text-xl">auto_awesome</span>
-      <span>Innovations</span>
-    </a>
-    <a href="#profile" class="flex flex-col items-center gap-0.5 text-[11px] font-bold text-secondary hover:text-primary transition-colors">
-      <span class="material-symbols-outlined text-xl">person</span>
+    <a href="#profile" class="flex flex-col items-center gap-0.5 text-[10px] font-bold text-secondary hover:text-primary transition-colors" id="mob-nav-profile">
+      <span class="material-symbols-outlined text-2xl">person</span>
       <span>Profile</span>
     </a>
   </nav>
@@ -140,10 +160,10 @@
   <div id="group-order-modal-container"></div>
 
   <!-- Toast Notification Container -->
-  <div id="toast-container" class="fixed bottom-16 md:bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+  <div id="toast-container" class="fixed bottom-20 md:bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
   <!-- Shared Footer -->
-  <footer id="footer-container" class="mt-auto pb-16 md:pb-0"></footer>
+  <footer id="footer-container" class="mt-auto pb-20 md:pb-0"></footer>
 
   <!-- Scripts -->
   <script src="./js/store.js"></script>
@@ -151,6 +171,7 @@
   <script src="./js/components/navbar.js"></script>
   <script src="./js/components/cartDrawer.js"></script>
   <script src="./js/components/groupOrderModal.js"></script>
+  <script src="./js/components/aiAssistantModal.js"></script>
   <script src="./js/components/footer.js"></script>
   <script src="./js/views/homeView.js"></script>
   <script src="./js/views/searchView.js"></script>
